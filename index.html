@@ -907,7 +907,8 @@ function compute(){
   data=raw.map(r=>{
     const ceN=r.ce/100,ppN=nPPP(r.ppp),ctN=Math.max(0,r.ct)/100,coN=r.co/100;
     const comp=((w1*ceN+w2*ppN+w3*ctN+w4*coN)/wT)*100;
-    return{...r,ceN,ppN,ctN,coN,ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,composite:comp,eSov:(ceN+ctN)/2*100,ePow:(ppN+coN)/2*100,pf:prof({ceN,ppN,ctN,coN})};
+    const eW=w1+w3||1,pW=w2+w4||1;
+    return{...r,ceN,ppN,ctN,coN,ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,composite:comp,eSov:(w1*ceN+w3*ctN)/eW*100,ePow:(w2*ppN+w4*coN)/pW*100,pf:prof({ceN,ppN,ctN,coN})};
   });
   data.sort((a,b)=>{
     const va=a[sortCol],vb=b[sortCol];
