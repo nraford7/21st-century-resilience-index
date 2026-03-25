@@ -42,7 +42,7 @@ html,body{height:100%;overflow:hidden;}
 /* ═══ BRIDGE LAYOUT ═══ */
 .bridge {
   display: grid;
-  grid-template-rows: 36px 1fr 1fr 26px;
+  grid-template-rows: 36px 1fr 220px 26px;
   height: 100vh;
   background: var(--border);
   gap: 1px;
@@ -373,7 +373,8 @@ html,body{height:100%;overflow:hidden;}
   min-height: 0;
 }
 
-.rp-section { flex: 1; }
+.rp-section:first-child { flex: 0 0 auto; }
+.rp-section.rp-findings { flex: 1; min-height: 0; }
 
 .rankings-scroll { overflow-y: auto; }
 .findings-scroll { overflow-y: auto; flex: 1; min-height: 0; }
@@ -466,31 +467,7 @@ html,body{height:100%;overflow:hidden;}
 
 .finding strong { color: var(--text-2); font-weight: 600; }
 
-/* ═══ BOTTOM DECK (50/50 split) ═══ */
-.bottom-deck {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1px;
-  background: var(--border);
-  min-height: 0;
-  overflow: hidden;
-}
-
-.deck-analysis {
-  background: var(--surface);
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.deck-analysis .findings-scroll {
-  flex: 1;
-  overflow-y: auto;
-  min-height: 0;
-  padding: 0.5rem 0.8rem;
-}
-
+/* ═══ DATA DECK ═══ */
 .data-deck {
   background: var(--surface);
   display: flex;
@@ -681,7 +658,6 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
     grid-template-rows: auto 400px auto;
   }
   .viewscreen { min-height: 400px; }
-  .bottom-deck { grid-template-columns: 1fr; }
   .data-deck { height: 300px; }
 }
 </style>
@@ -788,35 +764,31 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
 
   <!-- RIGHT PANEL -->
   <aside class="right-panel">
-    <div class="rp-section" style="flex:1;">
+    <div class="rp-section">
       <div class="section-label">Top 10</div>
       <div id="topCards" class="rankings-scroll"></div>
+    </div>
+    <div class="rp-section rp-findings">
+      <div class="section-label">Analysis</div>
+      <div id="findings" class="findings-scroll"></div>
     </div>
   </aside>
 
 </main>
 
-<!-- ═══ BOTTOM DECK: Analysis + Data Table 50/50 ═══ -->
-<div class="bottom-deck">
-  <div class="deck-analysis">
-    <div class="deck-header">
-      <div class="section-label" style="margin:0">Analysis // Key Findings</div>
-    </div>
-    <div id="findings" class="findings-scroll"></div>
+<!-- ═══ DATA DECK ═══ -->
+<section class="data-deck">
+  <div class="deck-header">
+    <div class="section-label" style="margin:0">Data Matrix // Full Rankings</div>
+    <span class="deck-count" id="countLabel"></span>
   </div>
-  <section class="data-deck">
-    <div class="deck-header">
-      <div class="section-label" style="margin:0">Data Matrix // Full Rankings</div>
-      <span class="deck-count" id="countLabel"></span>
-    </div>
-    <div class="deck-scroll">
+  <div class="deck-scroll">
     <table>
       <thead id="tHead"></thead>
       <tbody id="tBody"></tbody>
     </table>
-    </div>
-  </section>
-</div>
+  </div>
+</section>
 
 <!-- ═══ BOTTOM STATUS BAR ═══ -->
 <footer class="status-bar bottom-bar">
