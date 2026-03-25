@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>21st Century Resilience Index</title>
+<style>
+  :root {
+    --bg: #08090d;
+    --surface: #0f1117;
+    --surface2: #161822;
+    --border: #1e2030;
+    --text: #e2e4ed;
+    --text-dim: #7a7f96;
+    --accent: #00d4aa;
+    --accent2: #0099ff;
+    --energy: #22c55e;
+    --ppp: #f59e0b;
+    --cleantech: #8b5cf6;
+    --compute: #06b6d4;
+    --danger: #ef4444;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 1400px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+  header {
+    text-align: center;
+    padding: 3rem 0 2rem;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 2rem;
+  }
+
+  header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+
+  header .subtitle {
+    font-size: 1.05rem;
+    color: var(--text-dim);
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .methodology {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    line-height: 1.7;
+  }
+
+  .methodology h3 {
+    color: var(--text);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.75rem;
+  }
+
+  .dimensions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .dim-card {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 1rem;
+    border-left: 3px solid;
+  }
+
+  .dim-card.energy { border-color: var(--energy); }
+  .dim-card.ppp { border-color: var(--ppp); }
+  .dim-card.cleantech { border-color: var(--cleantech); }
+  .dim-card.compute { border-color: var(--compute); }
+
+  .dim-card h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.3rem;
+  }
+
+  .dim-card.energy h4 { color: var(--energy); }
+  .dim-card.ppp h4 { color: var(--ppp); }
+  .dim-card.cleantech h4 { color: var(--cleantech); }
+  .dim-card.compute h4 { color: var(--compute); }
+
+  .dim-card p { font-size: 0.8rem; color: var(--text-dim); }
+
+  .controls {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .controls h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 1rem;
+    color: var(--text-dim);
+  }
+
+  .sliders {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .slider-group label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+
+  .slider-group.energy label { color: var(--energy); }
+  .slider-group.ppp label { color: var(--ppp); }
+  .slider-group.cleantech label { color: var(--cleantech); }
+  .slider-group.compute label { color: var(--compute); }
+
+  .slider-group .weight-val {
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--surface2);
+    outline: none;
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 6px rgba(0,0,0,0.4);
+  }
+
+  .slider-group.energy input::-webkit-slider-thumb { background: var(--energy); }
+  .slider-group.ppp input::-webkit-slider-thumb { background: var(--ppp); }
+  .slider-group.cleantech input::-webkit-slider-thumb { background: var(--cleantech); }
+  .slider-group.compute input::-webkit-slider-thumb { background: var(--compute); }
+
+  .chart-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .chart-panel {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-height: 420px;
+    position: relative;
+  }
+
+  .chart-panel h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  #scatterChart {
+    width: 100%;
+    height: 380px;
+  }
+
+  .top-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .top-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 0.7rem 1rem;
+    transition: background 0.2s;
+  }
+
+  .top-card:hover { background: #1c1e2e; }
+
+  .top-rank {
+    font-size: 1.2rem;
+    font-weight: 800;
+    width: 2rem;
+    text-align: center;
+    color: var(--accent);
+  }
+
+  .top-rank.r1 { color: #ffd700; }
+  .top-rank.r2 { color: #c0c0c0; }
+  .top-rank.r3 { color: #cd7f32; }
+
+  .top-name {
+    flex: 1;
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+
+  .top-score {
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .top-bars {
+    display: flex;
+    gap: 3px;
+    align-items: flex-end;
+    height: 24px;
+  }
+
+  .mini-bar {
+    width: 4px;
+    border-radius: 2px;
+    min-height: 2px;
+  }
+
+  .mini-bar.energy { background: var(--energy); }
+  .mini-bar.ppp { background: var(--ppp); }
+  .mini-bar.cleantech { background: var(--cleantech); }
+  .mini-bar.compute { background: var(--compute); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+
+  .table-wrapper {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .table-wrapper h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    padding: 1.5rem 1.5rem 1rem;
+  }
+
+  thead th {
+    text-align: left;
+    padding: 0.7rem 1rem;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+    background: var(--surface);
+    z-index: 2;
+  }
+
+  thead th:hover { color: var(--text); }
+  thead th.sorted { color: var(--accent); }
+  thead th .sort-arrow { margin-left: 4px; font-size: 0.65rem; }
+
+  tbody tr {
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+  }
+
+  tbody tr:hover { background: var(--surface2); }
+  tbody tr:last-child { border-bottom: none; }
+
+  td {
+    padding: 0.6rem 1rem;
+    font-variant-numeric: tabular-nums;
+    vertical-align: middle;
+  }
+
+  .rank-cell {
+    font-weight: 700;
+    width: 3rem;
+    text-align: center;
+    color: var(--text-dim);
+  }
+
+  .country-cell {
+    font-weight: 600;
+    min-width: 140px;
+  }
+
+  .flag { margin-right: 0.4rem; }
+
+  .score-cell {
+    width: 140px;
+  }
+
+  .score-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .score-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--surface2);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .score-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .score-bar-fill.energy { background: var(--energy); }
+  .score-bar-fill.ppp { background: var(--ppp); }
+  .score-bar-fill.cleantech { background: var(--cleantech); }
+  .score-bar-fill.compute { background: var(--compute); }
+
+  .score-val {
+    font-size: 0.8rem;
+    min-width: 30px;
+    text-align: right;
+    color: var(--text-dim);
+  }
+
+  .composite-cell {
+    width: 160px;
+  }
+
+  .composite-score {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .composite-val {
+    font-weight: 800;
+    font-size: 1.05rem;
+    min-width: 35px;
+  }
+
+  .composite-bar {
+    flex: 1;
+    height: 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .composite-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    transition: width 0.4s ease;
+  }
+
+  .profile-tag {
+    display: inline-block;
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    font-weight: 600;
+  }
+
+  .profile-balanced { background: rgba(0,212,170,0.15); color: var(--accent); }
+  .profile-energy { background: rgba(34,197,94,0.15); color: var(--energy); }
+  .profile-economic { background: rgba(245,158,11,0.15); color: var(--ppp); }
+  .profile-producer { background: rgba(139,92,246,0.15); color: var(--cleantech); }
+  .profile-compute { background: rgba(6,182,212,0.15); color: var(--compute); }
+  .profile-vulnerable { background: rgba(239,68,68,0.15); color: var(--danger); }
+
+  .scatter-dot {
+    cursor: pointer;
+    transition: r 0.2s, opacity 0.2s;
+  }
+
+  .scatter-dot:hover { opacity: 1 !important; }
+
+  .scatter-label {
+    font-size: 9px;
+    fill: var(--text-dim);
+    pointer-events: none;
+  }
+
+  .axis-label {
+    font-size: 11px;
+    fill: var(--text-dim);
+    text-anchor: middle;
+  }
+
+  .grid-line {
+    stroke: var(--border);
+    stroke-dasharray: 3,3;
+  }
+
+  .tooltip {
+    position: absolute;
+    background: #1a1c2e;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    font-size: 0.8rem;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s;
+    z-index: 10;
+    min-width: 200px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  }
+
+  .tooltip.visible { opacity: 1; }
+
+  .tooltip .tt-name { font-weight: 700; margin-bottom: 0.4rem; font-size: 0.9rem; }
+  .tooltip .tt-row { display: flex; justify-content: space-between; gap: 1rem; padding: 2px 0; }
+  .tooltip .tt-label { color: var(--text-dim); }
+  .tooltip .tt-val { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .insights {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-top: 2rem;
+  }
+
+  .insights h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  .insight-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+
+  .insight-card {
+    background: var(--surface2);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+  }
+
+  .insight-card h4 {
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-bottom: 0.4rem;
+  }
+
+  .insight-card p {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem 0;
+    color: var(--text-dim);
+    font-size: 0.75rem;
+    border-top: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  @media (max-width: 1024px) {
+    .dimensions { grid-template-columns: repeat(2, 1fr); }
+    .sliders { grid-template-columns: repeat(2, 1fr); }
+    .chart-section { grid-template-columns: 1fr; }
+    .insight-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .dimensions { grid-template-columns: 1fr; }
+    .sliders { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>21st Century Resilience Index</h1>
+  <p class="subtitle">A compound measure of national resilience to oil shocks and readiness for 21st century energy, economic, and technological transitions.</p>
+</header>
+
+<div class="methodology">
+  <h3>Four Dimensions</h3>
+  <div class="dimensions">
+    <div class="dim-card energy">
+      <h4>Clean Energy Share</h4>
+      <p>% of primary energy from renewables + nuclear. Measures structural insulation from fossil fuel price volatility.</p>
+    </div>
+    <div class="dim-card ppp">
+      <h4>Purchasing Power</h4>
+      <p>GDP per capita at PPP (log-normalized). Economic capacity to absorb shocks and invest in transition.</p>
+    </div>
+    <div class="dim-card cleantech">
+      <h4>Clean Tech Production</h4>
+      <p>Net production and export of solar, batteries, EVs, wind turbines. Industrial position in the transition economy.</p>
+    </div>
+    <div class="dim-card compute">
+      <h4>Compute & Automation</h4>
+      <p>Data centers, semiconductors, supercomputing, AI infrastructure. Capacity for the automation economy.</p>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <h3>Adjust Weights</h3>
+  <div class="sliders">
+    <div class="slider-group energy">
+      <label>Clean Energy <span class="weight-val" id="w1-val">25%</span></label>
+      <input type="range" id="w1" min="0" max="100" value="25" oninput="updateIndex()">
+    </div>
+    <div class="slider-group ppp">
+      <label>Purchasing Power <span class="weight-val" id="w2-val">25%</span></label>
+      <input type="range" id="w2" min="0" max="100" value="25" oninput="updateIndex()">
+    </div>
+    <div class="slider-group cleantech">
+      <label>Clean Tech <span class="weight-val" id="w3-val">25%</span></label>
+      <input type="range" id="w3" min="0" max="100" value="25" oninput="updateIndex()">
+    </div>
+    <div class="slider-group compute">
+      <label>Compute <span class="weight-val" id="w4-val">25%</span></label>
+      <input type="range" id="w4" min="0" max="100" value="25" oninput="updateIndex()">
+    </div>
+  </div>
+</div>
+
+<div class="chart-section">
+  <div class="chart-panel">
+    <h3>Energy Sovereignty vs Economic Power</h3>
+    <svg id="scatterChart"></svg>
+    <div class="tooltip" id="tooltip"></div>
+  </div>
+  <div class="chart-panel">
+    <h3>Top 10</h3>
+    <div class="top-cards" id="topCards"></div>
+  </div>
+</div>
+
+<div class="table-wrapper">
+  <h3>Full Rankings &mdash; <span id="countryCount"></span> Countries</h3>
+  <div style="overflow-x: auto; max-height: 700px; overflow-y: auto;">
+    <table>
+      <thead id="tableHead"></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="insights" id="insightsSection"></div>
+
+<footer>
+  Data: Our World in Data / Energy Institute 2025 (clean energy), World Bank 2023 (PPP), IEA/BloombergNEF/UNCTAD 2024 (clean tech), Synergy/TOP500/SIA 2024 (compute). Composite scores normalized 0&ndash;100.
+</footer>
+
+</div>
+
+<script>
+const PPP_MIN = 1150;
+const PPP_MAX = 150508;
+const LOG_MIN = Math.log(PPP_MIN);
+const LOG_MAX = Math.log(PPP_MAX);
+const LOG_RANGE = LOG_MAX - LOG_MIN;
+
+const raw = [
+  { name:"Iceland", code:"IS", ce:80.5, ppp:81608, ct:0, comp:1 },
+  { name:"Sweden", code:"SE", ce:72.2, ppp:69226, ct:3, comp:8.5 },
+  { name:"Norway", code:"NO", ce:71.8, ppp:103638, ct:0, comp:5 },
+  { name:"Finland", code:"FI", ce:63.2, ppp:63415, ct:0, comp:9.5 },
+  { name:"Switzerland", code:"CH", ce:56.8, ppp:95142, ct:0, comp:7.5 },
+  { name:"France", code:"FR", ce:53.9, ppp:60839, ct:2, comp:14 },
+  { name:"Brazil", code:"BR", ce:50.6, ppp:21176, ct:0, comp:6.5 },
+  { name:"Austria", code:"AT", ce:43.3, ppp:73545, ct:0, comp:2 },
+  { name:"New Zealand", code:"NZ", ce:42.6, ppp:54697, ct:0, comp:2 },
+  { name:"Denmark", code:"DK", ce:41.7, ppp:77892, ct:10, comp:3 },
+  { name:"Portugal", code:"PT", ce:39.7, ppp:49353, ct:2, comp:2 },
+  { name:"Slovakia", code:"SK", ce:36.1, ppp:39840, ct:2, comp:1 },
+  { name:"Spain", code:"ES", ce:34.2, ppp:55682, ct:5, comp:7.5 },
+  { name:"Canada", code:"CA", ce:32.6, ppp:64219, ct:3, comp:12 },
+  { name:"Chile", code:"CL", ce:32.3, ppp:33145, ct:0, comp:1 },
+  { name:"Czech Republic", code:"CZ", ce:28.3, ppp:55761, ct:2, comp:2 },
+  { name:"Hungary", code:"HU", ce:27.8, ppp:46592, ct:4, comp:2 },
+  { name:"Romania", code:"RO", ce:26.7, ppp:45982, ct:0, comp:1 },
+  { name:"Peru", code:"PE", ce:26.7, ppp:17011, ct:0, comp:0.5 },
+  { name:"United Kingdom", code:"GB", ce:26.5, ppp:59911, ct:0, comp:18 },
+  { name:"Colombia", code:"CO", ce:26.1, ppp:21246, ct:0, comp:0.5 },
+  { name:"Germany", code:"DE", ce:24.0, ppp:71684, ct:28, comp:20 },
+  { name:"Belgium", code:"BE", ce:23.4, ppp:71946, ct:5, comp:3 },
+  { name:"Ireland", code:"IE", ce:22.2, ppp:129683, ct:0, comp:16 },
+  { name:"Vietnam", code:"VN", ce:21.5, ppp:15034, ct:9, comp:3 },
+  { name:"Italy", code:"IT", ce:20.9, ppp:60030, ct:2, comp:8.5 },
+  { name:"Turkey", code:"TR", ce:19.8, ppp:42786, ct:2, comp:2 },
+  { name:"China", code:"CN", ce:19.7, ppp:25179, ct:100, comp:60 },
+  { name:"United States", code:"US", ce:19.7, ppp:82305, ct:0, comp:100 },
+  { name:"Netherlands", code:"NL", ce:19.1, ppp:81729, ct:2, comp:16 },
+  { name:"Pakistan", code:"PK", ce:18.8, ppp:6014, ct:0, comp:0.5 },
+  { name:"South Korea", code:"KR", ce:17.5, ppp:57430, ct:16, comp:27.5 },
+  { name:"Argentina", code:"AR", ce:17.4, ppp:30221, ct:0, comp:1 },
+  { name:"Japan", code:"JP", ce:17.0, ppp:50662, ct:14, comp:25 },
+  { name:"Australia", code:"AU", ce:14.7, ppp:72273, ct:0, comp:10 },
+  { name:"Poland", code:"PL", ce:13.0, ppp:48473, ct:4, comp:5 },
+  { name:"Philippines", code:"PH", ce:12.8, ppp:10986, ct:0, comp:0.5 },
+  { name:"Russia", code:"RU", ce:11.8, ppp:44269, ct:0, comp:4 },
+  { name:"Indonesia", code:"ID", ce:11.0, ppp:15416, ct:3, comp:4 },
+  { name:"India", code:"IN", ce:10.3, ppp:10323, ct:8, comp:11 },
+  { name:"Israel", code:"IL", ce:9.8, ppp:55171, ct:0, comp:8.5 },
+  { name:"Mexico", code:"MX", ce:9.6, ppp:25243, ct:5, comp:4 },
+  { name:"UAE", code:"AE", ce:9.0, ppp:77955, ct:0, comp:6 },
+  { name:"Morocco", code:"MA", ce:8.7, ppp:9895, ct:0, comp:0.5 },
+  { name:"Taiwan", code:"TW", ce:8.6, ppp:73344, ct:3, comp:40 },
+  { name:"Malaysia", code:"MY", ce:8.3, ppp:36467, ct:6, comp:7.5 },
+  { name:"Thailand", code:"TH", ce:7.4, ppp:23519, ct:7, comp:2.5 },
+  { name:"Egypt", code:"EG", ce:5.8, ppp:18525, ct:0, comp:1 },
+  { name:"South Africa", code:"ZA", ce:5.0, ppp:15200, ct:0, comp:3 },
+  { name:"Singapore", code:"SG", ce:0.5, ppp:143786, ct:4, comp:13 },
+  { name:"Saudi Arabia", code:"SA", ce:0.7, ppp:71565, ct:0, comp:6.5 },
+  { name:"Iran", code:"IR", ce:1.9, ppp:18917, ct:0, comp:0.5 },
+  { name:"Bangladesh", code:"BD", ce:1.1, ppp:9148, ct:0, comp:0.5 },
+  { name:"Qatar", code:"QA", ce:0.8, ppp:129368, ct:0, comp:0.5 },
+  { name:"Kuwait", code:"KW", ce:0.1, ppp:52000, ct:0, comp:0.5 },
+  { name:"Algeria", code:"DZ", ce:0.2, ppp:16824, ct:0, comp:0.5 },
+  { name:"Iraq", code:"IQ", ce:0.6, ppp:14653, ct:0, comp:0.5 },
+  { name:"Nigeria", code:"NG", ce:0.5, ppp:8705, ct:0, comp:0.5 },
+  { name:"Kenya", code:"KE", ce:4.0, ppp:6317, ct:0, comp:0.5 },
+  { name:"Ethiopia", code:"ET", ce:3.0, ppp:3061, ct:0, comp:0.5 },
+];
+
+function normPPP(ppp) {
+  return Math.max(0, Math.min(1, (Math.log(ppp) - LOG_MIN) / LOG_RANGE));
+}
+
+function normCE(ce) { return ce / 100; }
+function normCT(ct) { return Math.max(0, ct) / 100; }
+function normComp(c) { return c / 100; }
+
+function getProfile(d) {
+  const scores = [
+    { key: 'energy', val: d.ceNorm },
+    { key: 'ppp', val: d.pppNorm },
+    { key: 'cleantech', val: d.ctNorm },
+    { key: 'compute', val: d.compNorm }
+  ].sort((a,b) => b.val - a.val);
+
+  const max = scores[0];
+  const avg = (d.ceNorm + d.pppNorm + d.ctNorm + d.compNorm) / 4;
+  const spread = Math.max(d.ceNorm, d.pppNorm, d.ctNorm, d.compNorm) - Math.min(d.ceNorm, d.pppNorm, d.ctNorm, d.compNorm);
+
+  if (avg < 0.12) return { label: 'Vulnerable', cls: 'vulnerable' };
+  if (spread < 0.25 && avg > 0.2) return { label: 'Balanced', cls: 'balanced' };
+  if (max.key === 'energy') return { label: 'Energy Led', cls: 'energy' };
+  if (max.key === 'ppp') return { label: 'Economic', cls: 'economic' };
+  if (max.key === 'cleantech') return { label: 'Producer', cls: 'producer' };
+  if (max.key === 'compute') return { label: 'Compute', cls: 'compute' };
+  return { label: 'Mixed', cls: 'balanced' };
+}
+
+let countries = [];
+let sortCol = 'composite';
+let sortDir = -1;
+
+function computeScores() {
+  const w1 = +document.getElementById('w1').value;
+  const w2 = +document.getElementById('w2').value;
+  const w3 = +document.getElementById('w3').value;
+  const w4 = +document.getElementById('w4').value;
+  const wTotal = w1 + w2 + w3 + w4 || 1;
+
+  document.getElementById('w1-val').textContent = Math.round(w1/wTotal*100) + '%';
+  document.getElementById('w2-val').textContent = Math.round(w2/wTotal*100) + '%';
+  document.getElementById('w3-val').textContent = Math.round(w3/wTotal*100) + '%';
+  document.getElementById('w4-val').textContent = Math.round(w4/wTotal*100) + '%';
+
+  countries = raw.map(r => {
+    const ceNorm = normCE(r.ce);
+    const pppNorm = normPPP(r.ppp);
+    const ctNorm = normCT(r.ct);
+    const compNorm = normComp(r.comp);
+
+    const composite = ((w1 * ceNorm + w2 * pppNorm + w3 * ctNorm + w4 * compNorm) / wTotal) * 100;
+
+    const energySov = (ceNorm + ctNorm) / 2 * 100;
+    const econPower = (pppNorm + compNorm) / 2 * 100;
+
+    return {
+      ...r,
+      ceNorm, pppNorm, ctNorm, compNorm,
+      ceScore: ceNorm * 100,
+      pppScore: pppNorm * 100,
+      ctScore: ctNorm * 100,
+      compScore: compNorm * 100,
+      composite,
+      energySov,
+      econPower,
+      profile: getProfile({ ceNorm, pppNorm, ctNorm, compNorm })
+    };
+  });
+
+  countries.sort((a, b) => {
+    const va = a[sortCol], vb = b[sortCol];
+    if (typeof va === 'string') return sortDir * va.localeCompare(vb);
+    return sortDir * (va - vb);
+  });
+}
+
+function renderTopCards() {
+  const top10 = [...countries].sort((a,b) => b.composite - a.composite).slice(0, 10);
+  const el = document.getElementById('topCards');
+  el.innerHTML = top10.map((c, i) => {
+    const rankCls = i < 3 ? ` r${i+1}` : '';
+    return `
+      <div class="top-card">
+        <div class="top-rank${rankCls}">${i+1}</div>
+        <div class="top-name">${c.name}</div>
+        <div class="top-bars">
+          <div class="mini-bar energy" style="height:${Math.max(2, c.ceScore/100*24)}px" title="Energy: ${c.ceScore.toFixed(0)}"></div>
+          <div class="mini-bar ppp" style="height:${Math.max(2, c.pppScore/100*24)}px" title="PPP: ${c.pppScore.toFixed(0)}"></div>
+          <div class="mini-bar cleantech" style="height:${Math.max(2, c.ctScore/100*24)}px" title="CleanTech: ${c.ctScore.toFixed(0)}"></div>
+          <div class="mini-bar compute" style="height:${Math.max(2, c.compScore/100*24)}px" title="Compute: ${c.compScore.toFixed(0)}"></div>
+        </div>
+        <div class="top-score" style="color: hsl(${c.composite * 1.4}, 80%, 60%)">${c.composite.toFixed(1)}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderTable() {
+  const cols = [
+    { key: 'rank', label: '#', width: '3rem' },
+    { key: 'name', label: 'Country' },
+    { key: 'ceScore', label: 'Clean Energy' },
+    { key: 'pppScore', label: 'PPP' },
+    { key: 'ctScore', label: 'Clean Tech' },
+    { key: 'compScore', label: 'Compute' },
+    { key: 'profile', label: 'Profile' },
+    { key: 'composite', label: 'Composite' },
+  ];
+
+  const thead = document.getElementById('tableHead');
+  thead.innerHTML = '<tr>' + cols.map(c => {
+    const sorted = sortCol === c.key;
+    const arrow = sorted ? (sortDir === -1 ? ' ▼' : ' ▲') : '';
+    return `<th class="${sorted ? 'sorted' : ''}" data-col="${c.key}">${c.label}<span class="sort-arrow">${arrow}</span></th>`;
+  }).join('') + '</tr>';
+
+  thead.querySelectorAll('th').forEach(th => {
+    th.addEventListener('click', () => {
+      const col = th.dataset.col;
+      if (col === 'rank') return;
+      if (col === 'profile') return;
+      if (sortCol === col) sortDir *= -1;
+      else { sortCol = col; sortDir = col === 'name' ? 1 : -1; }
+      updateIndex();
+    });
+  });
+
+  document.getElementById('countryCount').textContent = countries.length;
+
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = countries.map((c, i) => {
+    const rank = i + 1;
+    return `<tr>
+      <td class="rank-cell">${rank}</td>
+      <td class="country-cell">${c.name}</td>
+      <td class="score-cell">
+        <div class="score-bar-container">
+          <div class="score-bar"><div class="score-bar-fill energy" style="width:${c.ceScore}%"></div></div>
+          <span class="score-val">${c.ceScore.toFixed(0)}</span>
+        </div>
+      </td>
+      <td class="score-cell">
+        <div class="score-bar-container">
+          <div class="score-bar"><div class="score-bar-fill ppp" style="width:${c.pppScore}%"></div></div>
+          <span class="score-val">${c.pppScore.toFixed(0)}</span>
+        </div>
+      </td>
+      <td class="score-cell">
+        <div class="score-bar-container">
+          <div class="score-bar"><div class="score-bar-fill cleantech" style="width:${c.ctScore}%"></div></div>
+          <span class="score-val">${c.ctScore.toFixed(0)}</span>
+        </div>
+      </td>
+      <td class="score-cell">
+        <div class="score-bar-container">
+          <div class="score-bar"><div class="score-bar-fill compute" style="width:${c.compScore}%"></div></div>
+          <span class="score-val">${c.compScore.toFixed(0)}</span>
+        </div>
+      </td>
+      <td><span class="profile-tag profile-${c.profile.cls}">${c.profile.label}</span></td>
+      <td class="composite-cell">
+        <div class="composite-score">
+          <span class="composite-val" style="color: hsl(${c.composite * 1.4}, 80%, 60%)">${c.composite.toFixed(1)}</span>
+          <div class="composite-bar"><div class="composite-bar-fill" style="width:${c.composite}%"></div></div>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function renderScatter() {
+  const svg = document.getElementById('scatterChart');
+  const rect = svg.parentElement.getBoundingClientRect();
+  const w = rect.width - 32;
+  const h = 380;
+  const pad = { top: 20, right: 30, bottom: 45, left: 50 };
+  const pw = w - pad.left - pad.right;
+  const ph = h - pad.top - pad.bottom;
+
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+  svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+
+  let html = '';
+
+  // Grid
+  for (let i = 0; i <= 4; i++) {
+    const x = pad.left + (pw * i / 4);
+    const y = pad.top + (ph * i / 4);
+    html += `<line class="grid-line" x1="${pad.left}" y1="${y}" x2="${w-pad.right}" y2="${y}" />`;
+    html += `<line class="grid-line" x1="${x}" y1="${pad.top}" x2="${x}" y2="${h-pad.bottom}" />`;
+    html += `<text class="axis-label" x="${x}" y="${h-pad.bottom+20}" text-anchor="middle" style="font-size:9px">${(i*25).toFixed(0)}</text>`;
+    html += `<text class="axis-label" x="${pad.left-12}" y="${h-pad.bottom-(ph*i/4)+4}" text-anchor="end" style="font-size:9px">${(i*25).toFixed(0)}</text>`;
+  }
+
+  // Axis labels
+  html += `<text class="axis-label" x="${pad.left + pw/2}" y="${h-2}">Energy Sovereignty (Clean Energy + Clean Tech)</text>`;
+  html += `<text class="axis-label" x="${14}" y="${pad.top + ph/2}" transform="rotate(-90,14,${pad.top+ph/2})">Economic Power (PPP + Compute)</text>`;
+
+  const sorted = [...countries].sort((a,b) => a.composite - b.composite);
+
+  sorted.forEach(c => {
+    const x = pad.left + (c.energySov / 100) * pw;
+    const y = pad.top + ph - (c.econPower / 100) * ph;
+    const r = 4 + (c.composite / 100) * 12;
+    const hue = c.composite * 1.4;
+    const opacity = 0.7;
+
+    html += `<circle class="scatter-dot" cx="${x}" cy="${y}" r="${r}"
+      fill="hsl(${hue},70%,55%)" fill-opacity="${opacity}" stroke="hsl(${hue},70%,70%)" stroke-width="1"
+      data-name="${c.name}" data-ce="${c.ceScore.toFixed(0)}" data-ppp="${c.pppScore.toFixed(0)}"
+      data-ct="${c.ctScore.toFixed(0)}" data-comp="${c.compScore.toFixed(0)}" data-composite="${c.composite.toFixed(1)}"
+      data-esov="${c.energySov.toFixed(0)}" data-econ="${c.econPower.toFixed(0)}"
+    />`;
+
+    // Labels for notable countries
+    const showLabel = c.composite > 35 || ['China','United States','Saudi Arabia','India','Singapore','Taiwan','Iceland','Brazil','Iran','Nigeria'].includes(c.name);
+    if (showLabel) {
+      const lx = x + r + 3;
+      const ly = y - r - 2;
+      html += `<text class="scatter-label" x="${lx}" y="${ly}">${c.name}</text>`;
+    }
+  });
+
+  svg.innerHTML = html;
+
+  // Tooltip
+  const tooltip = document.getElementById('tooltip');
+  svg.querySelectorAll('.scatter-dot').forEach(dot => {
+    dot.addEventListener('mouseenter', e => {
+      const d = e.target.dataset;
+      tooltip.innerHTML = `
+        <div class="tt-name">${d.name}</div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--energy)">Clean Energy</span><span class="tt-val">${d.ce}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--ppp)">PPP</span><span class="tt-val">${d.ppp}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Clean Tech</span><span class="tt-val">${d.ct}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute</span><span class="tt-val">${d.comp}</span></div>
+        <hr style="border-color:var(--border);margin:4px 0">
+        <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--accent)">${d.composite}</span></div>
+      `;
+      tooltip.classList.add('visible');
+    });
+    dot.addEventListener('mousemove', e => {
+      const panel = svg.closest('.chart-panel');
+      const pr = panel.getBoundingClientRect();
+      tooltip.style.left = (e.clientX - pr.left + 12) + 'px';
+      tooltip.style.top = (e.clientY - pr.top - 10) + 'px';
+    });
+    dot.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+  });
+}
+
+function renderInsights() {
+  const sorted = [...countries].sort((a,b) => b.composite - a.composite);
+  const top5 = sorted.slice(0, 5).map(c => c.name).join(', ');
+  const bottom5 = sorted.slice(-5).map(c => c.name).join(', ');
+
+  const petroStates = countries.filter(c => ['Saudi Arabia','Qatar','Kuwait','UAE','Iran','Iraq','Algeria','Nigeria'].includes(c.name));
+  const petroAvg = petroStates.reduce((s,c) => s + c.composite, 0) / petroStates.length;
+
+  const nordicBaltic = countries.filter(c => ['Sweden','Norway','Finland','Denmark','Iceland'].includes(c.name));
+  const nordicAvg = nordicBaltic.reduce((s,c) => s + c.composite, 0) / nordicBaltic.length;
+
+  const china = countries.find(c => c.name === 'China');
+  const us = countries.find(c => c.name === 'United States');
+
+  const el = document.getElementById('insightsSection');
+  el.innerHTML = `
+    <h3>Key Findings</h3>
+    <div class="insight-grid">
+      <div class="insight-card">
+        <h4>Nordic Dominance</h4>
+        <p>The Nordics average <strong>${nordicAvg.toFixed(1)}</strong> composite. High clean energy shares from hydro + nuclear + wind, combined with strong PPP, give them structural resilience even with modest tech production.</p>
+      </div>
+      <div class="insight-card">
+        <h4>The US-China Split</h4>
+        <p>China (${china.composite.toFixed(1)}) leads in clean tech production. The US (${us.composite.toFixed(1)}) leads in compute and PPP. Both score ~20% on clean energy. Different paths to resilience with critical blind spots.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Petrostate Exposure</h4>
+        <p>Oil-dependent economies average <strong>${petroAvg.toFixed(1)}</strong>. High PPP masks near-zero scores on energy transition and tech production. Wealth without structural resilience.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Germany's Unique Position</h4>
+        <p>The only major Western economy that's a net clean tech exporter (score: 28). Its nuclear exit dropped clean energy to 24%, creating an unusual profile: strong producer, weak consumer.</p>
+      </div>
+      <div class="insight-card">
+        <h4>The Mozambique Problem</h4>
+        <p>High renewable share from hydro doesn't equal resilience. Countries like Peru, Colombia, and Brazil have clean grids but low scores on PPP, tech production, and compute — structurally fragile despite clean energy.</p>
+      </div>
+      <div class="insight-card">
+        <h4>Taiwan's Asymmetry</h4>
+        <p>Only 8.6% clean energy, but a compute score of 40 (TSMC). Extreme semiconductor leverage doesn't protect against oil shocks — it creates a different kind of strategic exposure.</p>
+      </div>
+    </div>
+  `;
+}
+
+function updateIndex() {
+  computeScores();
+  renderTopCards();
+  renderTable();
+  renderScatter();
+  renderInsights();
+}
+
+updateIndex();
+window.addEventListener('resize', () => { renderScatter(); });
+</script>
+</body>
+</html>
