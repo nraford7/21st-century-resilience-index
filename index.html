@@ -517,48 +517,95 @@ html,body{height:100%;overflow:hidden;}
   flex-shrink: 0;
 }
 
-.findings-grid {
+.analysis-scroll {
   flex: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border-faint);
-  overflow: hidden;
-  min-height: 0;
-}
-
-.finding {
-  background: var(--surface);
-  padding: 0.6rem 0.8rem;
   overflow-y: auto;
+  min-height: 0;
+  padding: 0.8rem 1.2rem;
 }
 
-.finding-num {
-  font-family: var(--mono);
-  font-size: 0.45rem;
+.analysis-scroll h2 {
+  font-family: var(--display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  margin: 1.2rem 0 0.4rem;
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--border-faint);
+}
+
+.analysis-scroll h2:first-child { margin-top: 0; }
+
+.analysis-scroll h3 {
+  font-family: var(--sans);
+  font-size: 0.72rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
+  color: var(--text);
+  margin: 0.8rem 0 0.3rem;
+}
+
+.analysis-scroll p {
+  font-size: 0.65rem;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+  max-width: 900px;
+}
+
+.analysis-scroll strong { color: var(--text); }
+
+.analysis-scroll .archetype {
+  border-left: 2px solid var(--blue-pale);
+  padding-left: 0.7rem;
+  margin-bottom: 0.6rem;
+}
+
+.analysis-scroll .archetype-name {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--blue);
   margin-bottom: 0.15rem;
 }
 
-.finding h4 {
-  font-family: var(--sans);
-  font-size: 0.72rem;
+.analysis-scroll .weight-test {
+  background: var(--surface-2);
+  border: 1px solid var(--border-faint);
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 0.4rem;
+}
+
+.analysis-scroll .weight-test .wt-label {
+  font-family: var(--mono);
+  font-size: 0.5rem;
   font-weight: 600;
-  margin-bottom: 0.2rem;
-  color: var(--blue-dark);
-  line-height: 1.25;
-}
-
-.finding p {
-  font-size: 0.6rem;
   color: var(--text-3);
-  line-height: 1.5;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
-.finding strong { color: var(--text-2); font-weight: 600; }
+.analysis-scroll .weight-test .wt-result {
+  font-size: 0.6rem;
+  color: var(--text-2);
+  margin-top: 0.15rem;
+}
+
+.analysis-scroll .blind-spot {
+  border-left: 2px solid var(--momentum);
+  padding-left: 0.7rem;
+  margin-bottom: 0.5rem;
+}
+
+.analysis-scroll .blind-spot-label {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--momentum);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
 
 .finding-detail { display: none; }
 .finding:hover .finding-detail { display: block; }
@@ -702,7 +749,7 @@ html,body{height:100%;overflow:hidden;}
     grid-template-rows: auto 400px auto;
   }
   .viewscreen { min-height: 400px; }
-  .findings-grid { grid-template-columns: 1fr; }
+  .analysis-scroll { padding: 0.5rem 0.8rem; }
 }
 </style>
 </head>
@@ -860,9 +907,101 @@ html,body{height:100%;overflow:hidden;}
 <!-- ═══ ANALYSIS DECK ═══ -->
 <section class="analysis-deck">
   <div class="analysis-header">
-    <div class="section-label" style="margin:0">Analysis // Key Findings</div>
+    <div class="section-label" style="margin:0">Analysis // Findings</div>
   </div>
-  <div id="findings" class="findings-grid"></div>
+  <div class="analysis-scroll">
+
+    <h2>No Country Dominates All Seven Dimensions</h2>
+    <p>There is no unambiguous leader. Every country has structural blind spots. The Nordics + Switzerland come closest to balanced excellence but are weak on clean tech production and compute. China dominates clean tech (100) but sits at only 19.7% clean energy with modest PPP. The US dominates compute (100) but is a net clean tech <em>importer</em> with declining ECI. The transition won't be led by a single hegemon.</p>
+
+    <h2>Five Country Archetypes</h2>
+
+    <div class="archetype">
+      <div class="archetype-name">Balanced Leaders — Sweden, Denmark, Finland, Norway, Switzerland, Singapore</div>
+      <p>High across most dimensions. Change the weights however you want — they stay near the top. Singapore proves governance quality can partially compensate for energy deficits (0.5% clean energy, 100 WGI) if you have the manufacturing sophistication to build what you don't have.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Latent Electrostates — Japan, South Korea, Germany, Taiwan</div>
+      <p>The world's deepest manufacturing capability (top 6 ECI globally), but they haven't fully committed. Japan is #1 ECI with only 17% clean energy. This is the most strategically interesting cluster — if they commit, they could collectively challenge China's clean tech dominance within a decade. Their ECI says they can. Their momentum says they haven't yet.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Single-Dimension Powers — United States, China</div>
+      <p>Each dominates one dimension so completely it distorts the index. China at 100 on clean tech (next highest: 28). US at 100 on compute (next: 60). The ranking is almost a referendum on how much weight you give these two monopoly positions. Both are trying to shore up their weak flank — China building compute, the US trying clean tech via the IRA.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Clean but Fragile — Brazil, Peru, Colombia</div>
+      <p>High clean energy from legacy hydro (Brazil 50.6%) but low PPP, zero tech production, negligible compute, negative ECI, weak state capacity. Clean grids don't equal transition readiness. <strong>Chile is the exception</strong> — +12.7pp momentum (Atacama solar revolution), 75.5 state capacity. The only country in this group with a plausible electrostate trajectory.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Petrostates — Saudi Arabia, Qatar, Kuwait, UAE, Iran, Iraq</div>
+      <p>Near-zero on 5 of 7 dimensions. High PPP creates an illusion of capability. <strong>UAE stands apart:</strong> 81.1 state capacity (approaching Singapore-level governance), +9pp momentum, 9% clean energy from Barakah nuclear. If any petrostate makes the transition, it's the UAE. The rest are on a clock they can't buy their way off.</p>
+    </div>
+
+    <h2>What Different Weight Configurations Reveal</h2>
+
+    <div class="weight-test">
+      <div class="wt-label">Weight only Clean Energy</div>
+      <div class="wt-result">Iceland, Sweden, Norway dominate. China and the US are tied at 19.7%. Petrostates collapse. The "purist" view.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only Compute</div>
+      <div class="wt-result">US at 100, China at 60, Taiwan at 40. Five countries account for essentially all advanced compute. Everyone else is noise.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only ECI</div>
+      <div class="wt-result">Japan, Switzerland, South Korea, Germany, Singapore. The "who could build the future" view. The US drops to 14th, China to 18th.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only Momentum</div>
+      <div class="wt-result">Finland +20.6pp, Denmark +16.4pp, Netherlands +14.4pp, Chile +12.7pp. The "who's actually moving" view. Canada and Taiwan are going backwards.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only State Capacity</div>
+      <div class="wt-result">Denmark, Iceland, Norway, Finland, Switzerland, Singapore. Small, well-governed countries. China drops to 69.4 — state executes but society is strained.</div>
+    </div>
+
+    <h2>Momentum Changes Everything</h2>
+    <p><strong>Countries that look weak in snapshot but strong on trajectory:</strong> Netherlands (19.1% clean energy but +14.4pp), Chile (+12.7pp solar revolution), Turkey (+10.3pp quiet buildout), Japan (+10.4pp — the turn is happening).</p>
+    <p><strong>Countries going backwards:</strong> Canada -1.3pp (oil sands + nuclear retirements), Taiwan -1.15pp (nuclear phasedown without replacement), Philippines -2.0pp (coal outpacing renewables). The snapshot flatters them. The trajectory doesn't.</p>
+    <p><strong>UAE is the fastest-moving petrostate</strong> at +8.98pp from a base near zero. Kenya (+6.65pp) and Ethiopia (+6.58pp) are moving off tiny bases. India's +2.34pp looks modest but at 1.4 billion people, the scale effects dwarf the percentages.</p>
+
+    <h2>Five Findings That Survive Any Weighting</h2>
+    <p><strong>1. The transition is a compound problem.</strong> No single advantage is sufficient. Countries scoring high on 1-2 dimensions and zero on the rest are fragile regardless of their peak score.</p>
+    <p><strong>2. About 8-12 countries are structurally positioned to lead.</strong> Nordics, Switzerland, Singapore, South Korea, Japan, Germany, and arguably France, UK, Canada, Netherlands. Below this tier, the drop-off is steep.</p>
+    <p><strong>3. Clean tech and compute are winner-take-all.</strong> China at 100 on clean tech. US at 100 on compute. No other country exceeds 28 and 40 respectively. These dimensions don't have distributions — they have monopolists.</p>
+    <p><strong>4. State capacity is the multiplier.</strong> Countries with identical scores on other dimensions diverge dramatically based on governance quality. State capacity determines whether capability becomes deployment.</p>
+    <p><strong>5. Petrostates cluster at the bottom under every configuration except pure PPP.</strong> The most robust negative finding. The wealth cannot compensate.</p>
+
+    <h2>What the Index Cannot See</h2>
+
+    <div class="blind-spot">
+      <div class="blind-spot-label">Political Will</div>
+      <p>Japan has the highest ECI on earth but hasn't committed at the speed its capability allows. The index sees capability. It can't see the decision.</p>
+    </div>
+    <div class="blind-spot">
+      <div class="blind-spot-label">Veto Players</div>
+      <p>The US scores 77.1 on state capacity but half the political system is actively hostile to energy transition. The index can't distinguish between a state that <em>could</em> act and one that <em>will</em>.</p>
+    </div>
+    <div class="blind-spot">
+      <div class="blind-spot-label">Scale Effects</div>
+      <p>India looks bottom-quartile on current metrics but has 1.4 billion people and built the world's largest real-time payment system in 8 years. The index sees position but not the momentum of mass.</p>
+    </div>
+    <div class="blind-spot">
+      <div class="blind-spot-label">Supply Chain Dependency</div>
+      <p>Even high-scoring countries depend on Chinese clean tech and Taiwanese semiconductors. The index measures indigenous capability but not import dependency.</p>
+    </div>
+    <div class="blind-spot">
+      <div class="blind-spot-label">Climate Exposure</div>
+      <p>Countries that need transition most urgently (Bangladesh, Pakistan) score lowest. No feedback loop between vulnerability and capacity.</p>
+    </div>
+
+    <p style="margin-top:1rem;font-family:var(--mono);font-size:0.48rem;color:var(--text-4);">Data: OWID / Energy Institute 2025, World Bank 2023, IEA / BNEF / UNCTAD 2024, Harvard Growth Lab ECI 2024, Synergy / TOP500 / SIA 2024, WGI 2023, FSI 2024, SPI 2024. Custom infrastructural adaptability scores from historical evidence.</p>
+
+  </div>
 </section>
 
 <!-- ═══ INTRO MODAL ═══ -->
@@ -1144,53 +1283,10 @@ function renderScatter(){
   });
 }
 
-function renderFindings(){
-  const findings=[
-    {
-      t:"The Electrostate Leaders",
-      s:"Countries scoring high on <strong>both</strong> axes — Transition Readiness and Power to Execute. Nordic nations, Switzerland, Singapore. They have the clean energy, the manufacturing complexity, <strong>and</strong> the governance to execute.",
-      d:"These are the 21st century's structural winners. Iceland (80.5% clean energy, 90.6 state capacity), Sweden (72.2% clean, 88.2 state), Norway (71.8% clean, 90.3 state), Denmark (41.7% clean, 90.7 state), Switzerland (56.8% clean, 89.7 state), and Singapore (89.5 state, highest PPP). They don't just have one advantage — they have compounding advantages across every dimension. The common thread: small-to-medium states with high social trust and decades of institutional investment."
-    },
-    {
-      t:"China's Execution Gap",
-      s:"Highest clean tech production and strong adaptability — 48,000km HSR, 278GW solar in one year — but social stability score drags it down. The state can build anything. The question is whether the society can sustain the pace.",
-      d:"China scores 100 on clean tech (more solar, batteries, and EVs than the rest of the world combined) and 60 on compute, but only 69.4 on state capacity. The gap between what the state apparatus can construct and what the social fabric can absorb is the defining tension. If stability holds, China is the manufacturing engine of the transition. If it fractures, the world's clean tech supply chain fractures with it."
-    },
-    {
-      t:"America's Compute Gamble",
-      s:"Dominant in AI and compute but weakening on every other axis. Net clean tech importer, 20% clean energy, declining ECI ranking, middling governance stability. Betting everything on one dimension.",
-      d:"The US scores 100 on compute — unmatched AI infrastructure, hyperscaler dominance, semiconductor design leadership. But 19.7% clean energy, zero clean tech exports, and a state capacity score of 77.1 that reflects political volatility and infrastructural decay. The implicit bet: that AI and compute supremacy will compensate for energy dependence and manufacturing hollowing. History suggests single-axis dominance is fragile."
-    },
-    {
-      t:"Petrostate Trap",
-      s:"Saudi Arabia, Qatar, UAE, Kuwait: high PPP masks zero transition readiness on the X axis. UAE scores highest among them on state capacity (81.1), suggesting a genuine path out — if it executes.",
-      d:"These nations cluster in the bottom-right quadrant: rich but stuck. Qatar has the second-highest PPP in the dataset but 0.8% clean energy and negative ECI. Saudi Arabia's Vision 2030 is real but the numbers haven't moved yet. The UAE is the outlier — 81.1 state capacity, Masdar City, nuclear power plant online — it has the best shot at breaking out. Kuwait and the rest are running out of time before the commodity they sell becomes stranded."
-    },
-    {
-      t:"The Complexity Advantage",
-      s:"Japan (#1 ECI), South Korea (#3), Germany (#4): deepest manufacturing capability but haven't fully deployed it for the transition. Latent electrostates — the capacity exists, the commitment lags.",
-      d:"Japan's 2.26 ECI is the highest on Earth — the most sophisticated manufacturing economy ever built. South Korea (2.04) and Germany (1.94) aren't far behind. All three also have strong state capacity (83.8, 84.8, 82.3). But Japan is at 17% clean energy, South Korea 17.5%, Germany 24%. These countries could dominate the transition economy if they redirected their industrial depth toward it. The complexity is the asset; the deployment speed is the liability."
-    },
-    {
-      t:"State Capacity as Multiplier",
-      s:"Singapore (89.5), Denmark (90.7), Norway (90.3) show that governance quality multiplies every other dimension. Without state capacity, clean energy and complexity are theoretical. With it, they become deployable.",
-      d:"Compare two pairs: Nigeria (30.4 state) and Norway (90.3 state) — both oil producers, radically different trajectories. Bangladesh (41.2 state) and Denmark (90.7 state) — similar population scales, opposite outcomes. State capacity isn't just one dimension among six. It's the multiplier that determines whether the other five translate into real-world infrastructure, policy, and resilience. The highest-scoring countries on this index all share one trait: they can execute."
-    }
-  ];
-
-  document.getElementById('findings').innerHTML=findings.map((f,i)=>`<div class="finding">
-      <div class="finding-num">F.${String(i+1).padStart(2,'0')}</div>
-      <h4>${f.t}</h4>
-      <p class="finding-summary">${f.s}</p>
-      <p class="finding-detail">${f.d}</p>
-    </div>`).join('');
-}
-
 function updateIndex(){
   compute();
   renderTop();
   renderScatter();
-  renderFindings();
 }
 
 function dismissModal(){
