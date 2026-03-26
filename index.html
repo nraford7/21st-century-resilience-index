@@ -30,6 +30,7 @@
   --ppp: #9a6508;
   --cleantech: #4838a8;
   --compute: #146098;
+  --eci: #b45309;
   --danger: #a82028;
   --sans: 'IBM Plex Sans', -apple-system, sans-serif;
   --mono: 'JetBrains Mono', 'SF Mono', monospace;
@@ -184,6 +185,7 @@ html,body{height:100%;overflow:hidden;}
 .dim-compact.ppp { border-color: var(--ppp); }
 .dim-compact.cleantech { border-color: var(--cleantech); }
 .dim-compact.compute { border-color: var(--compute); }
+.dim-compact.eci { border-color: var(--eci); }
 
 .dim-tag {
   font-family: var(--mono);
@@ -237,6 +239,7 @@ html,body{height:100%;overflow:hidden;}
 .slider-v.ppp label { color: var(--ppp); }
 .slider-v.cleantech label { color: var(--cleantech); }
 .slider-v.compute label { color: var(--compute); }
+.slider-v.eci label { color: var(--eci); }
 
 .slider-v .wv { font-weight: 700; font-size: 0.6rem; }
 
@@ -262,6 +265,7 @@ html,body{height:100%;overflow:hidden;}
 .slider-v.ppp input::-webkit-slider-thumb { background: var(--ppp); }
 .slider-v.cleantech input::-webkit-slider-thumb { background: var(--cleantech); }
 .slider-v.compute input::-webkit-slider-thumb { background: var(--compute); }
+.slider-v.eci input::-webkit-slider-thumb { background: var(--eci); }
 
 /* System readout */
 .sys-readout {
@@ -423,6 +427,7 @@ html,body{height:100%;overflow:hidden;}
 .mini-bar.ppp { background: var(--ppp); }
 .mini-bar.cleantech { background: var(--cleantech); }
 .mini-bar.compute { background: var(--compute); }
+.mini-bar.eci { background: var(--eci); }
 
 .top-score {
   font-family: var(--mono);
@@ -568,6 +573,7 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
 .bar-fill.ppp { background: var(--ppp); }
 .bar-fill.cleantech { background: var(--cleantech); }
 .bar-fill.compute { background: var(--compute); }
+.bar-fill.eci { background: var(--eci); }
 
 .bar-val {
   font-family: var(--mono);
@@ -597,6 +603,7 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
 .tag-producer { border-color: rgba(72,56,168,0.15); color: var(--cleantech); background: rgba(72,56,168,0.03); }
 .tag-compute { border-color: rgba(20,96,152,0.15); color: var(--compute); background: rgba(20,96,152,0.03); }
 .tag-vulnerable { border-color: rgba(168,32,40,0.12); color: var(--danger); background: rgba(168,32,40,0.02); }
+.tag-complex { border-color: rgba(180,83,9,0.15); color: var(--eci); background: rgba(180,83,9,0.03); }
 
 .cell-composite { width: 110px; }
 
@@ -675,7 +682,7 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
   <div class="status-center">Strategic Assessment // Compound Index // Oil Shock Resilience + Transition Readiness</div>
   <div class="status-right">
     <span>60 NAT</span>
-    <span>4 DIM</span>
+    <span>5 DIM</span>
     <span>2024</span>
     <span class="clock" id="clock"></span>
   </div>
@@ -716,25 +723,36 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
           <span class="dim-desc">Data centers, semiconductors, AI infra</span>
         </div>
       </div>
+      <div class="dim-compact eci">
+        <span class="dim-tag">05</span>
+        <div class="dim-info">
+          <span class="dim-name">Complexity</span>
+          <span class="dim-desc">Economic Complexity Index — transition capacity</span>
+        </div>
+      </div>
     </div>
 
     <div class="lp-section">
       <div class="section-label">Weights</div>
       <div class="slider-v energy">
-        <label>Energy <span class="wv" id="w1v">25%</span></label>
-        <input type="range" id="w1" min="0" max="100" value="25" oninput="updateIndex()">
+        <label>Energy <span class="wv" id="w1v">20%</span></label>
+        <input type="range" id="w1" min="0" max="100" value="20" oninput="updateIndex()">
       </div>
       <div class="slider-v ppp">
-        <label>PPP <span class="wv" id="w2v">25%</span></label>
-        <input type="range" id="w2" min="0" max="100" value="25" oninput="updateIndex()">
+        <label>PPP <span class="wv" id="w2v">20%</span></label>
+        <input type="range" id="w2" min="0" max="100" value="20" oninput="updateIndex()">
       </div>
       <div class="slider-v cleantech">
-        <label>Clean Tech <span class="wv" id="w3v">25%</span></label>
-        <input type="range" id="w3" min="0" max="100" value="25" oninput="updateIndex()">
+        <label>Clean Tech <span class="wv" id="w3v">20%</span></label>
+        <input type="range" id="w3" min="0" max="100" value="20" oninput="updateIndex()">
       </div>
       <div class="slider-v compute">
-        <label>Compute <span class="wv" id="w4v">25%</span></label>
-        <input type="range" id="w4" min="0" max="100" value="25" oninput="updateIndex()">
+        <label>Compute <span class="wv" id="w4v">20%</span></label>
+        <input type="range" id="w4" min="0" max="100" value="20" oninput="updateIndex()">
+      </div>
+      <div class="slider-v eci">
+        <label>Complexity <span class="wv" id="w5v">20%</span></label>
+        <input type="range" id="w5" min="0" max="100" value="20" oninput="updateIndex()">
       </div>
     </div>
 
@@ -742,7 +760,7 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
       <div class="section-label">System</div>
       <div class="sys-readout">
         Nations: <span class="val">60</span><br>
-        Model: <span class="val">21CRI v3.0</span><br>
+        Model: <span class="val">21CRI v4.0</span><br>
         Normalization: <span class="val">0–100</span><br>
         PPP Transform: <span class="val">Log</span><br>
         CleanTech Floor: <span class="val">0 (clamped)</span><br>
@@ -757,7 +775,7 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
     <div class="corner tr"></div>
     <div class="corner bl"></div>
     <div class="corner br"></div>
-    <div class="vs-label">Energy Sovereignty vs Economic Power</div>
+    <div class="vs-label">Transition Capacity vs Economic Power</div>
     <svg id="scatterChart"></svg>
     <div class="tooltip" id="tooltip"></div>
   </div>
@@ -792,76 +810,77 @@ td { padding: 0.3rem 0.7rem; vertical-align: middle; }
 
 <!-- ═══ BOTTOM STATUS BAR ═══ -->
 <footer class="status-bar bottom-bar">
-  <span>SRC: OWID / Energy Institute 2025 · World Bank 2023 · IEA / BNEF / UNCTAD 2024 · Synergy / TOP500 / SIA 2024</span>
-  <span>SYS.21CRI v3.0 // COMPOSITE 0–100 // ALL WEIGHTS ADJUSTABLE</span>
+  <span>SRC: OWID / Energy Institute 2025 · World Bank 2023 · IEA / BNEF / UNCTAD 2024 · Synergy / TOP500 / SIA 2024 · Harvard Growth Lab ECI 2024</span>
+  <span>SYS.21CRI v4.0 // 5 DIMENSIONS // COMPOSITE 0–100 // ECI VIA HARVARD GROWTH LAB</span>
 </footer>
 
 </div>
 
 <script>
 const LN_MIN=Math.log(1150),LN_MAX=Math.log(150508),LN_R=LN_MAX-LN_MIN;
+const ECI_MIN=-2.44,ECI_MAX=2.26,ECI_R=ECI_MAX-ECI_MIN;
 
 const raw=[
-  {n:"Iceland",ce:80.5,ppp:81608,ct:0,co:1},
-  {n:"Sweden",ce:72.2,ppp:69226,ct:3,co:8.5},
-  {n:"Norway",ce:71.8,ppp:103638,ct:0,co:5},
-  {n:"Finland",ce:63.2,ppp:63415,ct:0,co:9.5},
-  {n:"Switzerland",ce:56.8,ppp:95142,ct:0,co:7.5},
-  {n:"France",ce:53.9,ppp:60839,ct:2,co:14},
-  {n:"Brazil",ce:50.6,ppp:21176,ct:0,co:6.5},
-  {n:"Austria",ce:43.3,ppp:73545,ct:0,co:2},
-  {n:"New Zealand",ce:42.6,ppp:54697,ct:0,co:2},
-  {n:"Denmark",ce:41.7,ppp:77892,ct:10,co:3},
-  {n:"Portugal",ce:39.7,ppp:49353,ct:2,co:2},
-  {n:"Slovakia",ce:36.1,ppp:39840,ct:2,co:1},
-  {n:"Spain",ce:34.2,ppp:55682,ct:5,co:7.5},
-  {n:"Canada",ce:32.6,ppp:64219,ct:3,co:12},
-  {n:"Chile",ce:32.3,ppp:33145,ct:0,co:1},
-  {n:"Czech Republic",ce:28.3,ppp:55761,ct:2,co:2},
-  {n:"Hungary",ce:27.8,ppp:46592,ct:4,co:2},
-  {n:"Romania",ce:26.7,ppp:45982,ct:0,co:1},
-  {n:"Peru",ce:26.7,ppp:17011,ct:0,co:0.5},
-  {n:"United Kingdom",ce:26.5,ppp:59911,ct:0,co:18},
-  {n:"Colombia",ce:26.1,ppp:21246,ct:0,co:0.5},
-  {n:"Germany",ce:24,ppp:71684,ct:28,co:20},
-  {n:"Belgium",ce:23.4,ppp:71946,ct:5,co:3},
-  {n:"Ireland",ce:22.2,ppp:129683,ct:0,co:16},
-  {n:"Vietnam",ce:21.5,ppp:15034,ct:9,co:3},
-  {n:"Italy",ce:20.9,ppp:60030,ct:2,co:8.5},
-  {n:"Turkey",ce:19.8,ppp:42786,ct:2,co:2},
-  {n:"China",ce:19.7,ppp:25179,ct:100,co:60},
-  {n:"United States",ce:19.7,ppp:82305,ct:0,co:100},
-  {n:"Netherlands",ce:19.1,ppp:81729,ct:2,co:16},
-  {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:0.5},
-  {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:27.5},
-  {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:1},
-  {n:"Japan",ce:17,ppp:50662,ct:14,co:25},
-  {n:"Australia",ce:14.7,ppp:72273,ct:0,co:10},
-  {n:"Poland",ce:13,ppp:48473,ct:4,co:5},
-  {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:0.5},
-  {n:"Russia",ce:11.8,ppp:44269,ct:0,co:4},
-  {n:"Indonesia",ce:11,ppp:15416,ct:3,co:4},
-  {n:"India",ce:10.3,ppp:10323,ct:8,co:11},
-  {n:"Israel",ce:9.8,ppp:55171,ct:0,co:8.5},
-  {n:"Mexico",ce:9.6,ppp:25243,ct:5,co:4},
-  {n:"UAE",ce:9,ppp:77955,ct:0,co:6},
-  {n:"Morocco",ce:8.7,ppp:9895,ct:0,co:0.5},
-  {n:"Taiwan",ce:8.6,ppp:73344,ct:3,co:40},
-  {n:"Malaysia",ce:8.3,ppp:36467,ct:6,co:7.5},
-  {n:"Thailand",ce:7.4,ppp:23519,ct:7,co:2.5},
-  {n:"Egypt",ce:5.8,ppp:18525,ct:0,co:1},
-  {n:"South Africa",ce:5,ppp:15200,ct:0,co:3},
-  {n:"Singapore",ce:0.5,ppp:143786,ct:4,co:13},
-  {n:"Saudi Arabia",ce:0.7,ppp:71565,ct:0,co:6.5},
-  {n:"Iran",ce:1.9,ppp:18917,ct:0,co:0.5},
-  {n:"Bangladesh",ce:1.1,ppp:9148,ct:0,co:0.5},
-  {n:"Qatar",ce:0.8,ppp:129368,ct:0,co:0.5},
-  {n:"Kuwait",ce:0.1,ppp:52000,ct:0,co:0.5},
-  {n:"Algeria",ce:0.2,ppp:16824,ct:0,co:0.5},
-  {n:"Iraq",ce:0.6,ppp:14653,ct:0,co:0.5},
-  {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:0.5},
-  {n:"Kenya",ce:4,ppp:6317,ct:0,co:0.5},
-  {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:0.5},
+  {n:"Iceland",ce:80.5,ppp:81608,ct:0,co:1,eci:0.10},
+  {n:"Sweden",ce:72.2,ppp:69226,ct:3,co:8.5,eci:1.54},
+  {n:"Norway",ce:71.8,ppp:103638,ct:0,co:5,eci:0.39},
+  {n:"Finland",ce:63.2,ppp:63415,ct:0,co:9.5,eci:1.36},
+  {n:"Switzerland",ce:56.8,ppp:95142,ct:0,co:7.5,eci:2.14},
+  {n:"France",ce:53.9,ppp:60839,ct:2,co:14,eci:1.34},
+  {n:"Brazil",ce:50.6,ppp:21176,ct:0,co:6.5,eci:-0.16},
+  {n:"Austria",ce:43.3,ppp:73545,ct:0,co:2,eci:1.68},
+  {n:"New Zealand",ce:42.6,ppp:54697,ct:0,co:2,eci:0.20},
+  {n:"Denmark",ce:41.7,ppp:77892,ct:10,co:3,eci:1.06},
+  {n:"Portugal",ce:39.7,ppp:49353,ct:2,co:2,eci:0.74},
+  {n:"Slovakia",ce:36.1,ppp:39840,ct:2,co:1,eci:1.46},
+  {n:"Spain",ce:34.2,ppp:55682,ct:5,co:7.5,eci:0.76},
+  {n:"Canada",ce:32.6,ppp:64219,ct:3,co:12,eci:0.58},
+  {n:"Chile",ce:32.3,ppp:33145,ct:0,co:1,eci:-0.30},
+  {n:"Czech Republic",ce:28.3,ppp:55761,ct:2,co:2,eci:1.75},
+  {n:"Hungary",ce:27.8,ppp:46592,ct:4,co:2,eci:1.52},
+  {n:"Romania",ce:26.7,ppp:45982,ct:0,co:1,eci:1.23},
+  {n:"Peru",ce:26.7,ppp:17011,ct:0,co:0.5,eci:-0.86},
+  {n:"United Kingdom",ce:26.5,ppp:59911,ct:0,co:18,eci:1.61},
+  {n:"Colombia",ce:26.1,ppp:21246,ct:0,co:0.5,eci:-0.13},
+  {n:"Germany",ce:24,ppp:71684,ct:28,co:20,eci:1.94},
+  {n:"Belgium",ce:23.4,ppp:71946,ct:5,co:3,eci:1.18},
+  {n:"Ireland",ce:22.2,ppp:129683,ct:0,co:16,eci:1.44},
+  {n:"Vietnam",ce:21.5,ppp:15034,ct:9,co:3,eci:0.04},
+  {n:"Italy",ce:20.9,ppp:60030,ct:2,co:8.5,eci:1.35},
+  {n:"Turkey",ce:19.8,ppp:42786,ct:2,co:2,eci:0.61},
+  {n:"China",ce:19.7,ppp:25179,ct:100,co:60,eci:1.33},
+  {n:"United States",ce:19.7,ppp:82305,ct:0,co:100,eci:1.40},
+  {n:"Netherlands",ce:19.1,ppp:81729,ct:2,co:16,eci:0.99},
+  {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:0.5,eci:-0.57},
+  {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:27.5,eci:2.04},
+  {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:1,eci:-0.20},
+  {n:"Japan",ce:17,ppp:50662,ct:14,co:25,eci:2.26},
+  {n:"Australia",ce:14.7,ppp:72273,ct:0,co:10,eci:-0.55},
+  {n:"Poland",ce:13,ppp:48473,ct:4,co:5,eci:1.02},
+  {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:0.5,eci:0.76},
+  {n:"Russia",ce:11.8,ppp:44269,ct:0,co:4,eci:0.19},
+  {n:"Indonesia",ce:11,ppp:15416,ct:3,co:4,eci:-0.09},
+  {n:"India",ce:10.3,ppp:10323,ct:8,co:11,eci:0.48},
+  {n:"Israel",ce:9.8,ppp:55171,ct:0,co:8.5,eci:1.17},
+  {n:"Mexico",ce:9.6,ppp:25243,ct:5,co:4,eci:1.14},
+  {n:"UAE",ce:9,ppp:77955,ct:0,co:6,eci:0.12},
+  {n:"Morocco",ce:8.7,ppp:9895,ct:0,co:0.5,eci:-0.35},
+  {n:"Taiwan",ce:8.6,ppp:73344,ct:3,co:40,eci:1.80},
+  {n:"Malaysia",ce:8.3,ppp:36467,ct:6,co:7.5,eci:0.95},
+  {n:"Thailand",ce:7.4,ppp:23519,ct:7,co:2.5,eci:1.12},
+  {n:"Egypt",ce:5.8,ppp:18525,ct:0,co:1,eci:-0.13},
+  {n:"South Africa",ce:5,ppp:15200,ct:0,co:3,eci:-0.15},
+  {n:"Singapore",ce:0.5,ppp:143786,ct:4,co:13,eci:1.83},
+  {n:"Saudi Arabia",ce:0.7,ppp:71565,ct:0,co:6.5,eci:0.62},
+  {n:"Iran",ce:1.9,ppp:18917,ct:0,co:0.5,eci:-0.19},
+  {n:"Bangladesh",ce:1.1,ppp:9148,ct:0,co:0.5,eci:-0.76},
+  {n:"Qatar",ce:0.8,ppp:129368,ct:0,co:0.5,eci:-0.38},
+  {n:"Kuwait",ce:0.1,ppp:52000,ct:0,co:0.5,eci:0.13},
+  {n:"Algeria",ce:0.2,ppp:16824,ct:0,co:0.5,eci:-0.63},
+  {n:"Iraq",ce:0.6,ppp:14653,ct:0,co:0.5,eci:-0.80},
+  {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:0.5,eci:-1.62},
+  {n:"Kenya",ce:4,ppp:6317,ct:0,co:0.5,eci:-0.35},
+  {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:0.5,eci:-0.88},
 ];
 
 const annotations=[
@@ -880,17 +899,19 @@ const annotations=[
 let data=[],sortCol='composite',sortDir=-1;
 
 function nPPP(v){return Math.max(0,Math.min(1,(Math.log(v)-LN_MIN)/LN_R));}
+function nECI(v){return Math.max(0,Math.min(1,(v-ECI_MIN)/ECI_R));}
 
 function prof(d){
-  const s=[{k:'energy',v:d.ceN},{k:'ppp',v:d.ppN},{k:'cleantech',v:d.ctN},{k:'compute',v:d.coN}].sort((a,b)=>b.v-a.v);
-  const avg=(d.ceN+d.ppN+d.ctN+d.coN)/4;
-  const spread=Math.max(d.ceN,d.ppN,d.ctN,d.coN)-Math.min(d.ceN,d.ppN,d.ctN,d.coN);
+  const s=[{k:'energy',v:d.ceN},{k:'ppp',v:d.ppN},{k:'cleantech',v:d.ctN},{k:'compute',v:d.coN},{k:'eci',v:d.ecN}].sort((a,b)=>b.v-a.v);
+  const avg=(d.ceN+d.ppN+d.ctN+d.coN+d.ecN)/5;
+  const spread=Math.max(d.ceN,d.ppN,d.ctN,d.coN,d.ecN)-Math.min(d.ceN,d.ppN,d.ctN,d.coN,d.ecN);
   if(avg<0.12)return{l:'Vulnerable',c:'vulnerable'};
   if(spread<0.25&&avg>0.2)return{l:'Balanced',c:'balanced'};
   if(s[0].k==='energy')return{l:'Energy Led',c:'energy'};
   if(s[0].k==='ppp')return{l:'Economic',c:'economic'};
   if(s[0].k==='cleantech')return{l:'Producer',c:'producer'};
   if(s[0].k==='compute')return{l:'Compute',c:'compute'};
+  if(s[0].k==='eci')return{l:'Complex',c:'complex'};
   return{l:'Mixed',c:'balanced'};
 }
 
@@ -899,16 +920,18 @@ function compute(){
   const w2=+document.getElementById('w2').value;
   const w3=+document.getElementById('w3').value;
   const w4=+document.getElementById('w4').value;
-  const wT=w1+w2+w3+w4||1;
+  const w5=+document.getElementById('w5').value;
+  const wT=w1+w2+w3+w4+w5||1;
   document.getElementById('w1v').textContent=Math.round(w1/wT*100)+'%';
   document.getElementById('w2v').textContent=Math.round(w2/wT*100)+'%';
   document.getElementById('w3v').textContent=Math.round(w3/wT*100)+'%';
   document.getElementById('w4v').textContent=Math.round(w4/wT*100)+'%';
+  document.getElementById('w5v').textContent=Math.round(w5/wT*100)+'%';
   data=raw.map(r=>{
-    const ceN=r.ce/100,ppN=nPPP(r.ppp),ctN=Math.max(0,r.ct)/100,coN=r.co/100;
-    const comp=((w1*ceN+w2*ppN+w3*ctN+w4*coN)/wT)*100;
-    const eW=w1+w3||1,pW=w2+w4||1;
-    return{...r,ceN,ppN,ctN,coN,ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,composite:comp,eSov:(w1*ceN+w3*ctN)/eW*100,ePow:(w2*ppN+w4*coN)/pW*100,pf:prof({ceN,ppN,ctN,coN})};
+    const ceN=r.ce/100,ppN=nPPP(r.ppp),ctN=Math.max(0,r.ct)/100,coN=r.co/100,ecN=nECI(r.eci);
+    const comp=((w1*ceN+w2*ppN+w3*ctN+w4*coN+w5*ecN)/wT)*100;
+    const eW=w1+w3+w5||1,pW=w2+w4||1;
+    return{...r,ceN,ppN,ctN,coN,ecN,ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,ecS:ecN*100,composite:comp,eSov:(w1*ceN+w3*ctN+w5*ecN)/eW*100,ePow:(w2*ppN+w4*coN)/pW*100,pf:prof({ceN,ppN,ctN,coN,ecN})};
   });
   data.sort((a,b)=>{
     const va=a[sortCol],vb=b[sortCol];
@@ -929,6 +952,7 @@ function renderTop(){
         <span class="mini-bar ppp" style="height:${Math.max(1,c.ppS/100*16)}px"></span>
         <span class="mini-bar cleantech" style="height:${Math.max(1,c.ctS/100*16)}px"></span>
         <span class="mini-bar compute" style="height:${Math.max(1,c.coS/100*16)}px"></span>
+        <span class="mini-bar eci" style="height:${Math.max(1,c.ecS/100*16)}px"></span>
       </span>
       <span class="top-score">${c.composite.toFixed(1)}</span>
     </div>`;
@@ -938,7 +962,7 @@ function renderTop(){
 function renderTable(){
   const cols=[
     {k:'rank',l:'#'},{k:'n',l:'Country'},{k:'ceS',l:'Energy'},{k:'ppS',l:'PPP'},
-    {k:'ctS',l:'Tech'},{k:'coS',l:'Compute'},{k:'pf',l:'Type'},{k:'composite',l:'Score'}
+    {k:'ctS',l:'Tech'},{k:'coS',l:'Compute'},{k:'ecS',l:'ECI'},{k:'pf',l:'Type'},{k:'composite',l:'Score'}
   ];
   const th=document.getElementById('tHead');
   th.innerHTML='<tr>'+cols.map(c=>{
@@ -963,6 +987,7 @@ function renderTable(){
     <td class="cell-score"><div class="bar-row"><div class="bar-track"><div class="bar-fill ppp" style="width:${c.ppS}%"></div></div><span class="bar-val">${c.ppS.toFixed(0)}</span></div></td>
     <td class="cell-score"><div class="bar-row"><div class="bar-track"><div class="bar-fill cleantech" style="width:${c.ctS}%"></div></div><span class="bar-val">${c.ctS.toFixed(0)}</span></div></td>
     <td class="cell-score"><div class="bar-row"><div class="bar-track"><div class="bar-fill compute" style="width:${c.coS}%"></div></div><span class="bar-val">${c.coS.toFixed(0)}</span></div></td>
+    <td class="cell-score"><div class="bar-row"><div class="bar-track"><div class="bar-fill eci" style="width:${c.ecS}%"></div></div><span class="bar-val">${c.ecS.toFixed(0)}</span></div></td>
     <td class="cell-profile"><span class="profile-tag tag-${c.pf.c}">${c.pf.l}</span></td>
     <td class="cell-composite"><div class="composite-row"><span class="composite-val">${c.composite.toFixed(1)}</span><div class="composite-track"><div class="composite-fill" style="width:${c.composite}%"></div></div></div></td>
   </tr>`).join('');
@@ -995,17 +1020,17 @@ function renderScatter(){
   s+=`<line class="crosshair" x1="${p.l}" y1="${scy}" x2="${w-p.r}" y2="${scy}"/>`;
   s+=`<line class="crosshair" x1="${scx}" y1="${p.t}" x2="${scx}" y2="${h-p.b}"/>`;
 
-  s+=`<text class="quadrant-label" x="${p.l+8}" y="${p.t+14}" fill="#0a7058" fill-opacity="0.22">Clean but Fragile</text>`;
-  s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${p.t+14}" text-anchor="end" fill="#165a96" fill-opacity="0.28">Resilient Powers</text>`;
+  s+=`<text class="quadrant-label" x="${p.l+8}" y="${p.t+14}" fill="#0a7058" fill-opacity="0.22">Transition Ready, Low Power</text>`;
+  s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${p.t+14}" text-anchor="end" fill="#165a96" fill-opacity="0.28">Electrostates</text>`;
   s+=`<text class="quadrant-label" x="${p.l+8}" y="${h-p.b-6}" fill="#a82028" fill-opacity="0.18">Exposed</text>`;
-  s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${h-p.b-6}" text-anchor="end" fill="#9a6508" fill-opacity="0.22">Vulnerable Wealth</text>`;
+  s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${h-p.b-6}" text-anchor="end" fill="#9a6508" fill-opacity="0.22">Petrostates</text>`;
 
   s+=`<text class="hud-coord" x="${p.l}" y="${p.t+7}">X:00 Y:100</text>`;
   s+=`<text class="hud-coord" x="${w-p.r}" y="${p.t+7}" text-anchor="end">X:100 Y:100</text>`;
   s+=`<text class="hud-coord" x="${p.l}" y="${h-p.b-3}">X:00 Y:00</text>`;
   s+=`<text class="hud-coord" x="${w-p.r}" y="${h-p.b-3}" text-anchor="end">X:100 Y:00</text>`;
 
-  s+=`<text class="axis-label" x="${p.l+pw/2}" y="${h-3}" text-anchor="middle" fill="#6e7c90">Energy Sovereignty</text>`;
+  s+=`<text class="axis-label" x="${p.l+pw/2}" y="${h-3}" text-anchor="middle" fill="#6e7c90">Transition Capacity (Energy + Tech + Complexity)</text>`;
   s+=`<text class="axis-label" x="10" y="${p.t+ph/2}" text-anchor="middle" fill="#6e7c90" transform="rotate(-90,10,${p.t+ph/2})">Economic Power</text>`;
 
   const sorted=[...data].sort((a,b)=>a.composite-b.composite);
@@ -1018,7 +1043,7 @@ function renderScatter(){
       fill="rgba(22,90,150,${alpha})"
       stroke="#165a96" stroke-width="0.7" stroke-opacity="${0.25+c.composite/100*0.4}"
       data-n="${c.n}" data-ce="${c.ceS.toFixed(0)}" data-pp="${c.ppS.toFixed(0)}"
-      data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
+      data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
   });
 
   annotations.forEach(a=>{
@@ -1047,6 +1072,7 @@ function renderScatter(){
         <div class="tt-row"><span class="tt-label" style="color:var(--ppp)">PPP</span><span class="tt-val">${d.pp}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Tech</span><span class="tt-val">${d.ct}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute</span><span class="tt-val">${d.co}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--eci)">Complexity</span><span class="tt-val">${d.ec}</span></div>
         <div class="tt-divider"></div>
         <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${d.comp}</span></div>`;
       tt.classList.add('visible');
