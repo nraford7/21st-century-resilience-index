@@ -2314,6 +2314,12 @@ setInterval(updateClock,1000);
 updateClock();
 
 updateIndex();
+
+// Default to 3D on desktop, 2D on mobile
+if(window.innerWidth > 900 && !('ontouchstart' in window)){
+  toggle3D();
+}
+
 window.addEventListener('resize',function(){
   if(view3D){ resize3D(); } else { renderScatter(); }
 });
