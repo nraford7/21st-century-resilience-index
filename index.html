@@ -943,7 +943,18 @@ html,body{height:100%;overflow:hidden;}
   }
   .viewscreen { min-height: 400px; }
   .analysis-scroll { padding: 0.5rem 0.8rem; }
-  .country-detail { width: 100%; }
+  .country-detail {
+    position: fixed;
+    top: 0; right: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 200;
+  }
+  .detail-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 195;
+  }
 }
 </style>
 </head>
@@ -959,7 +970,7 @@ html,body{height:100%;overflow:hidden;}
   </div>
   <div class="status-center">Strategic Assessment // Compound Index // Oil Shock Resilience + Transition Readiness</div>
   <div class="status-right">
-    <span>60 NAT</span>
+    <span>70 NAT</span>
     <span>7 DIM</span>
     <span>2024</span>
     <span class="clock" id="clock"></span>
@@ -1066,7 +1077,7 @@ html,body{height:100%;overflow:hidden;}
     <div class="lp-section">
       <div class="section-label">System</div>
       <div class="sys-readout">
-        Nations: <span class="val">60</span><br>
+        Nations: <span class="val">70</span><br>
         Model: <span class="val">21CRI v6.0</span><br>
         Dimensions: <span class="val">7</span><br>
         Normalization: <span class="val">0–100</span><br>
@@ -1221,7 +1232,7 @@ html,body{height:100%;overflow:hidden;}
     <h2>21st Century Resilience Index</h2>
     <p>Which countries will lead the 21st century? This index measures a nation's capacity to transition from petrostate to electrostate — deriving power from manufacturing clean energy technology rather than extracting fossil fuels.</p>
     <p>The winners will survive energy price shocks, navigate the climate crisis, harness the AI and compute revolution, and translate industrial complexity into smart manufacturing. The losers will be customers of the winners.</p>
-    <p>60 nations scored across six dimensions:</p>
+    <p>70 nations scored across six dimensions:</p>
     <div class="dim-list">
       <span class="dim-pill energy">Clean Energy</span>
       <span class="dim-pill ppp">Purchasing Power</span>
@@ -1311,6 +1322,16 @@ const raw=[
   {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:0.5,eci:-1.62,sc:30.4,mo:1.93,desc:"0.5% clean energy, lowest infrastructure score globally, lowest state capacity in the dataset alongside Iraq (30.4). Negative ECI (-1.62). Oil dependency with unreliable power grid. Population growth outpaces everything. Some tech sector growth in Lagos but it\u2019s a thin layer on a crumbling foundation."},
   {n:"Kenya",ce:4,ppp:6317,ct:0,co:0.5,eci:-0.35,sc:43.1,mo:6.65,desc:"4% clean energy, negative ECI (-0.35), low PPP ($6k), weak state capacity (43.1). But M-Pesa mobile money revolution shows digital adoption capacity. Standard Gauge Railway and geothermal expansion. East Africa\u2019s economic hub. Momentum (+6.7pp) from a low base but moving."},
   {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:0.5,eci:-0.88,sc:33.4,mo:6.58,desc:"3% clean energy, lowest SPI in the dataset (43.3), weak state capacity (33.4). But the Grand Renaissance Dam (5.15 GW, Africa\u2019s largest hydroelectric) and Addis Ababa Light Rail show ambition. Civil war (2020-22) devastated progress. Momentum (+6.6pp) if stability holds."},
+  {n:"Greece",ce:21.1,ppp:42711,ct:0,co:1,eci:0.25,sc:62.5,mo:5.8,desc:"21% clean energy with growing solar and wind. Moderate PPP ($43k) but low ECI (0.25) \u2014 tourism and shipping economy, not manufacturing. State capacity (62.5) recovering from the 2010s debt crisis that gutted institutional credibility. New cloud region from Google. Momentum (+5.8pp) is real but the industrial base to build transition technology doesn\u2019t exist."},
+  {n:"Slovenia",ce:43,ppp:53000,ct:1,co:0.5,eci:1.59,sc:72.0,mo:4.5,desc:"43% clean energy (nuclear + hydro), very high ECI (1.59 \u2014 9th globally). Small but sophisticated manufacturing economy. Renault EV assembly gives it a clean tech toehold. State capacity (72.0) is solid. A micro-Austria: quietly strong across most dimensions, invisible on the world stage."},
+  {n:"Croatia",ce:27.8,ppp:40000,ct:0,co:0.5,eci:0.77,sc:63.0,mo:4.2,desc:"28% clean energy from hydro, moderate ECI (0.77), EU membership driving institutional improvement. State capacity (63.0) still developing. Tourism-heavy economy limits manufacturing depth. The Adriatic hydro base gives it a cleaner starting position than most of Central Europe."},
+  {n:"Bulgaria",ce:36.7,ppp:32000,ct:0,co:0.5,eci:0.62,sc:55.0,mo:3.8,desc:"37% clean energy \u2014 nuclear (20%) plus hydro and growing renewables. Moderate ECI (0.62). But low PPP ($32k), weak state capacity (55.0), and EU\u2019s lowest SPI scores. The nuclear baseload is a structural advantage most neighbors lack; the governance to leverage it is the gap."},
+  {n:"Latvia",ce:29.7,ppp:38000,ct:0,co:0.5,eci:0.73,sc:64.0,mo:3.5,desc:"30% clean energy from hydro and biomass. Moderate ECI (0.73), decent state capacity (64.0). Small Baltic economy \u2014 well-governed relative to size but lacks the industrial depth for clean tech production. EU integration and Nordic proximity provide institutional uplift."},
+  {n:"Lithuania",ce:23.4,ppp:46000,ct:0,co:0.5,eci:0.89,sc:66.0,mo:4.0,desc:"23% clean energy, rising ECI (0.89), solid PPP ($46k). Closed its Soviet-era nuclear plant (Ignalina) without replacement \u2014 a self-inflicted energy vulnerability. Growing as a fintech and logistics hub. State capacity (66.0) improving with EU membership. The Baltic Tiger with more ambition than energy security."},
+  {n:"Estonia",ce:17.9,ppp:45000,ct:0,co:0.5,eci:0.99,sc:70.0,mo:5.0,desc:"18% clean energy, strong ECI (0.99), remarkable digital governance (e-Residency, e-government pioneer). State capacity (70.0) punches above its weight. But oil shale legacy and small economy limit transition scale. The world\u2019s most digitally governed country, transitioning from its dirtiest energy source."},
+  {n:"Sri Lanka",ce:23.2,ppp:14456,ct:0,co:0.5,eci:-0.24,sc:45.0,mo:2.5,desc:"23% clean energy from hydro, but 2022 economic collapse devastated institutional capacity. Negative ECI (-0.24), very low PPP ($14k), weak state capacity (45.0). A country that was making progress until sovereign debt crisis erased a decade of gains. Recovery trajectory uncertain."},
+  {n:"Ecuador",ce:25.4,ppp:15919,ct:0,co:0.5,eci:-1.07,sc:45.0,mo:2.0,desc:"25% clean energy from hydro, but deeply negative ECI (-1.07), low PPP ($16k), weak state capacity (45.0). Oil-dependent economy with no manufacturing complexity. Like Peru and Colombia \u2014 clean from legacy hydro, structurally unable to build the next phase."},
+  {n:"Venezuela",ce:25.8,ppp:8000,ct:0,co:0.5,eci:-1.28,sc:28.0,mo:0.5,desc:"26% clean energy from hydro (Guri Dam), but institutional collapse has destroyed all other capacity. ECI of -1.28, estimated PPP under $8k, state capacity ~28. Once Latin America\u2019s richest country; now a case study in how political dysfunction can reverse decades of development. The anti-transition."},
 ];
 
 const annotations=[
