@@ -32,6 +32,7 @@
   --compute: #146098;
   --eci: #b45309;
   --state: #7c3aed;
+  --momentum: #dc2626;
   --danger: #a82028;
   --sans: 'IBM Plex Sans', -apple-system, sans-serif;
   --mono: 'JetBrains Mono', 'SF Mono', monospace;
@@ -188,6 +189,7 @@ html,body{height:100%;overflow:hidden;}
 .dim-compact.cleantech { border-color: var(--cleantech); }
 .dim-compact.compute { border-color: var(--compute); }
 .dim-compact.eci { border-color: var(--eci); }
+.dim-compact.momentum { border-color: var(--momentum); }
 .dim-compact.state { border-color: var(--state); }
 
 .dim-tag {
@@ -262,6 +264,7 @@ html,body{height:100%;overflow:hidden;}
 .slider-v.cleantech label { color: var(--cleantech); }
 .slider-v.compute label { color: var(--compute); }
 .slider-v.eci label { color: var(--eci); }
+.slider-v.momentum label { color: var(--momentum); }
 .slider-v.state label { color: var(--state); }
 
 .slider-v .wv { font-weight: 700; font-size: 0.6rem; }
@@ -289,6 +292,7 @@ html,body{height:100%;overflow:hidden;}
 .slider-v.cleantech input::-webkit-slider-thumb { background: var(--cleantech); }
 .slider-v.compute input::-webkit-slider-thumb { background: var(--compute); }
 .slider-v.eci input::-webkit-slider-thumb { background: var(--eci); }
+.slider-v.momentum input::-webkit-slider-thumb { background: var(--momentum); }
 .slider-v.state input::-webkit-slider-thumb { background: var(--state); }
 
 /* System readout */
@@ -450,6 +454,7 @@ html,body{height:100%;overflow:hidden;}
 .mini-bar.cleantech { background: var(--cleantech); }
 .mini-bar.compute { background: var(--compute); }
 .mini-bar.eci { background: var(--eci); }
+.mini-bar.momentum { background: var(--momentum); }
 .mini-bar.state { background: var(--state); }
 
 .top-score {
@@ -564,6 +569,11 @@ html,body{height:100%;overflow:hidden;}
   color: var(--state);
   border: 1px solid rgba(124,58,237,0.2);
 }
+.tag-momentum {
+  background: rgba(220,38,38,0.06);
+  color: var(--momentum);
+  border: 1px solid rgba(220,38,38,0.15);
+}
 
 /* ═══ MODAL ═══ */
 .modal-overlay {
@@ -635,6 +645,7 @@ html,body{height:100%;overflow:hidden;}
 .modal .dim-pill.cleantech { border-color: var(--cleantech); color: var(--cleantech); }
 .modal .dim-pill.compute { border-color: var(--compute); color: var(--compute); }
 .modal .dim-pill.eci { border-color: var(--eci); color: var(--eci); }
+.modal .dim-pill.momentum { border-color: var(--momentum); color: var(--momentum); }
 .modal .dim-pill.state { border-color: var(--state); color: var(--state); }
 
 .modal-btn {
@@ -708,7 +719,7 @@ html,body{height:100%;overflow:hidden;}
   <div class="status-center">Strategic Assessment // Compound Index // Oil Shock Resilience + Transition Readiness</div>
   <div class="status-right">
     <span>60 NAT</span>
-    <span>6 DIM</span>
+    <span>7 DIM</span>
     <span>2024</span>
     <span class="clock" id="clock"></span>
   </div>
@@ -769,33 +780,45 @@ html,body{height:100%;overflow:hidden;}
         </div>
         <span class="dim-tip">Composite of governance effectiveness (World Bank WGI), social stability (Fragile States Index), quality of life (Social Progress Index), and demonstrated infrastructural adaptability (historical transition speed). Measures power to execute systemic change.</span>
       </div>
+      <div class="dim-compact momentum">
+        <span class="dim-tag">07</span>
+        <div class="dim-info">
+          <span class="dim-name">Momentum</span>
+          <span class="dim-desc">10-year clean energy trajectory (2014–2024)</span>
+        </div>
+        <span class="dim-tip">Change in clean energy share of primary energy over the last decade (percentage points). Captures direction of travel — whether a country is actively transitioning or stalled. Negative values mean regression. Source: Our World in Data / Energy Institute 2025.</span>
+      </div>
     </div>
 
     <div class="lp-section">
       <div class="section-label">Weights</div>
       <div class="slider-v energy">
         <label>Energy <span class="wv" id="w1v">17%</span></label>
-        <input type="range" id="w1" min="0" max="100" value="17" oninput="updateIndex()">
+        <input type="range" id="w1" min="0" max="100" value="14" oninput="updateIndex()">
       </div>
       <div class="slider-v ppp">
         <label>PPP <span class="wv" id="w2v">17%</span></label>
-        <input type="range" id="w2" min="0" max="100" value="17" oninput="updateIndex()">
+        <input type="range" id="w2" min="0" max="100" value="14" oninput="updateIndex()">
       </div>
       <div class="slider-v cleantech">
         <label>Clean Tech <span class="wv" id="w3v">17%</span></label>
-        <input type="range" id="w3" min="0" max="100" value="17" oninput="updateIndex()">
+        <input type="range" id="w3" min="0" max="100" value="14" oninput="updateIndex()">
       </div>
       <div class="slider-v compute">
         <label>Compute <span class="wv" id="w4v">17%</span></label>
-        <input type="range" id="w4" min="0" max="100" value="17" oninput="updateIndex()">
+        <input type="range" id="w4" min="0" max="100" value="14" oninput="updateIndex()">
       </div>
       <div class="slider-v eci">
         <label>Complexity <span class="wv" id="w5v">17%</span></label>
-        <input type="range" id="w5" min="0" max="100" value="17" oninput="updateIndex()">
+        <input type="range" id="w5" min="0" max="100" value="14" oninput="updateIndex()">
       </div>
       <div class="slider-v state">
-        <label>State Cap. <span class="wv" id="w6v">17%</span></label>
-        <input type="range" id="w6" min="0" max="100" value="17" oninput="updateIndex()">
+        <label>State Cap. <span class="wv" id="w6v">14%</span></label>
+        <input type="range" id="w6" min="0" max="100" value="14" oninput="updateIndex()">
+      </div>
+      <div class="slider-v momentum">
+        <label>Momentum <span class="wv" id="w7v">14%</span></label>
+        <input type="range" id="w7" min="0" max="100" value="14" oninput="updateIndex()">
       </div>
     </div>
 
@@ -803,8 +826,8 @@ html,body{height:100%;overflow:hidden;}
       <div class="section-label">System</div>
       <div class="sys-readout">
         Nations: <span class="val">60</span><br>
-        Model: <span class="val">21CRI v5.0</span><br>
-        Dimensions: <span class="val">6</span><br>
+        Model: <span class="val">21CRI v6.0</span><br>
+        Dimensions: <span class="val">7</span><br>
         Normalization: <span class="val">0–100</span><br>
         PPP Transform: <span class="val">Log</span><br>
         CleanTech Floor: <span class="val">0 (clamped)</span><br>
@@ -856,6 +879,7 @@ html,body{height:100%;overflow:hidden;}
       <span class="dim-pill compute">Compute &amp; AI</span>
       <span class="dim-pill eci">Economic Complexity</span>
       <span class="dim-pill state">State Capacity</span>
+      <span class="dim-pill momentum">Momentum</span>
     </div>
     <p>The scatter plot maps Transition Readiness (do you have the technology?) against Power to Execute (do you have the money and governance to deploy it?). Adjust the weight sliders to test your own hypotheses.</p>
     <button class="modal-btn" onclick="dismissModal()">Enter</button>
@@ -865,8 +889,8 @@ html,body{height:100%;overflow:hidden;}
 
 <!-- ═══ BOTTOM STATUS BAR ═══ -->
 <footer class="status-bar bottom-bar">
-  <span>SRC: OWID / Energy Institute 2025 · World Bank 2023 · IEA / BNEF / UNCTAD 2024 · Synergy / TOP500 / SIA 2024 · Harvard Growth Lab ECI 2024 · WGI / FSI / SPI (governance)</span>
-  <span>SYS.21CRI v5.0 // 6 DIMENSIONS // COMPOSITE 0–100 // ECI VIA HARVARD GROWTH LAB</span>
+  <span>SRC: OWID / Energy Institute 2025 (energy + trajectory) · World Bank 2023 · IEA / BNEF / UNCTAD 2024 · Synergy / TOP500 / SIA 2024 · Harvard Growth Lab ECI 2024 · WGI / FSI / SPI (governance)</span>
+  <span>SYS.21CRI v6.0 // 7 DIMENSIONS // COMPOSITE 0–100 // ECI VIA HARVARD GROWTH LAB</span>
 </footer>
 
 </div>
@@ -874,68 +898,69 @@ html,body{height:100%;overflow:hidden;}
 <script>
 const LN_MIN=Math.log(1150),LN_MAX=Math.log(150508),LN_R=LN_MAX-LN_MIN;
 const ECI_MIN=-2.44,ECI_MAX=2.26,ECI_R=ECI_MAX-ECI_MIN;
+const MO_MIN=-2.51,MO_MAX=20.59,MO_R=MO_MAX-MO_MIN;
 
 const raw=[
-  {n:"Iceland",ce:80.5,ppp:81608,ct:0,co:1,eci:0.10,sc:90.6},
-  {n:"Sweden",ce:72.2,ppp:69226,ct:3,co:8.5,eci:1.54,sc:88.2},
-  {n:"Norway",ce:71.8,ppp:103638,ct:0,co:5,eci:0.39,sc:90.3},
-  {n:"Finland",ce:63.2,ppp:63415,ct:0,co:9.5,eci:1.36,sc:90.1},
-  {n:"Switzerland",ce:56.8,ppp:95142,ct:0,co:7.5,eci:2.14,sc:89.7},
-  {n:"France",ce:53.9,ppp:60839,ct:2,co:14,eci:1.34,sc:80.8},
-  {n:"Brazil",ce:50.6,ppp:21176,ct:0,co:6.5,eci:-0.16,sc:52.6},
-  {n:"Austria",ce:43.3,ppp:73545,ct:0,co:2,eci:1.68,sc:84.0},
-  {n:"New Zealand",ce:42.6,ppp:54697,ct:0,co:2,eci:0.20,sc:86.3},
-  {n:"Denmark",ce:41.7,ppp:77892,ct:10,co:3,eci:1.06,sc:90.7},
-  {n:"Portugal",ce:39.7,ppp:49353,ct:2,co:2,eci:0.74,sc:80.2},
-  {n:"Slovakia",ce:36.1,ppp:39840,ct:2,co:1,eci:1.46,sc:66.8},
-  {n:"Spain",ce:34.2,ppp:55682,ct:5,co:7.5,eci:0.76,sc:75.0},
-  {n:"Canada",ce:32.6,ppp:64219,ct:3,co:12,eci:0.58,sc:84.6},
-  {n:"Chile",ce:32.3,ppp:33145,ct:0,co:1,eci:-0.30,sc:75.5},
-  {n:"Czech Republic",ce:28.3,ppp:55761,ct:2,co:2,eci:1.75,sc:74.5},
-  {n:"Hungary",ce:27.8,ppp:46592,ct:4,co:2,eci:1.52,sc:64.2},
-  {n:"Romania",ce:26.7,ppp:45982,ct:0,co:1,eci:1.23,sc:59.9},
-  {n:"Peru",ce:26.7,ppp:17011,ct:0,co:0.5,eci:-0.86,sc:48.2},
-  {n:"United Kingdom",ce:26.5,ppp:59911,ct:0,co:18,eci:1.61,sc:77.5},
-  {n:"Colombia",ce:26.1,ppp:21246,ct:0,co:0.5,eci:-0.13,sc:52.8},
-  {n:"Germany",ce:24,ppp:71684,ct:28,co:20,eci:1.94,sc:82.3},
-  {n:"Belgium",ce:23.4,ppp:71946,ct:5,co:3,eci:1.18,sc:78.4},
-  {n:"Ireland",ce:22.2,ppp:129683,ct:0,co:16,eci:1.44,sc:85.6},
-  {n:"Vietnam",ce:21.5,ppp:15034,ct:9,co:3,eci:0.04,sc:63.1},
-  {n:"Italy",ce:20.9,ppp:60030,ct:2,co:8.5,eci:1.35,sc:71.2},
-  {n:"Turkey",ce:19.8,ppp:42786,ct:2,co:2,eci:0.61,sc:51.4},
-  {n:"China",ce:19.7,ppp:25179,ct:100,co:60,eci:1.33,sc:69.4},
-  {n:"United States",ce:19.7,ppp:82305,ct:0,co:100,eci:1.40,sc:77.1},
-  {n:"Netherlands",ce:19.1,ppp:81729,ct:2,co:16,eci:0.99,sc:87.6},
-  {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:0.5,eci:-0.57,sc:35.8},
-  {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:27.5,eci:2.04,sc:84.8},
-  {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:1,eci:-0.20,sc:56.7},
-  {n:"Japan",ce:17,ppp:50662,ct:14,co:25,eci:2.26,sc:83.8},
-  {n:"Australia",ce:14.7,ppp:72273,ct:0,co:10,eci:-0.55,sc:86.1},
-  {n:"Poland",ce:13,ppp:48473,ct:4,co:5,eci:1.02,sc:71.6},
-  {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:0.5,eci:0.76,sc:52.9},
-  {n:"Russia",ce:11.8,ppp:44269,ct:0,co:4,eci:0.19,sc:44.5},
-  {n:"Indonesia",ce:11,ppp:15416,ct:3,co:4,eci:-0.09,sc:61.5},
-  {n:"India",ce:10.3,ppp:10323,ct:8,co:11,eci:0.48,sc:58.9},
-  {n:"Israel",ce:9.8,ppp:55171,ct:0,co:8.5,eci:1.17,sc:75.6},
-  {n:"Mexico",ce:9.6,ppp:25243,ct:5,co:4,eci:1.14,sc:52.3},
-  {n:"UAE",ce:9,ppp:77955,ct:0,co:6,eci:0.12,sc:81.1},
-  {n:"Morocco",ce:8.7,ppp:9895,ct:0,co:0.5,eci:-0.35,sc:56.1},
-  {n:"Taiwan",ce:8.6,ppp:73344,ct:3,co:40,eci:1.80,sc:84.8},
-  {n:"Malaysia",ce:8.3,ppp:36467,ct:6,co:7.5,eci:0.95,sc:69.8},
-  {n:"Thailand",ce:7.4,ppp:23519,ct:7,co:2.5,eci:1.12,sc:59.0},
-  {n:"Egypt",ce:5.8,ppp:18525,ct:0,co:1,eci:-0.13,sc:46.7},
-  {n:"South Africa",ce:5,ppp:15200,ct:0,co:3,eci:-0.15,sc:49.3},
-  {n:"Singapore",ce:0.5,ppp:143786,ct:4,co:13,eci:1.83,sc:89.5},
-  {n:"Saudi Arabia",ce:0.7,ppp:71565,ct:0,co:6.5,eci:0.62,sc:66.4},
-  {n:"Iran",ce:1.9,ppp:18917,ct:0,co:0.5,eci:-0.19,sc:36.8},
-  {n:"Bangladesh",ce:1.1,ppp:9148,ct:0,co:0.5,eci:-0.76,sc:41.2},
-  {n:"Qatar",ce:0.8,ppp:129368,ct:0,co:0.5,eci:-0.38,sc:74.5},
-  {n:"Kuwait",ce:0.1,ppp:52000,ct:0,co:0.5,eci:0.13,sc:58.4},
-  {n:"Algeria",ce:0.2,ppp:16824,ct:0,co:0.5,eci:-0.63,sc:44.1},
-  {n:"Iraq",ce:0.6,ppp:14653,ct:0,co:0.5,eci:-0.80,sc:31.1},
-  {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:0.5,eci:-1.62,sc:30.4},
-  {n:"Kenya",ce:4,ppp:6317,ct:0,co:0.5,eci:-0.35,sc:43.1},
-  {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:0.5,eci:-0.88,sc:33.4},
+  {n:"Iceland",ce:80.5,ppp:81608,ct:0,co:1,eci:0.10,sc:90.6,mo:-2.51},
+  {n:"Sweden",ce:72.2,ppp:69226,ct:3,co:8.5,eci:1.54,sc:88.2,mo:4.25},
+  {n:"Norway",ce:71.8,ppp:103638,ct:0,co:5,eci:0.39,sc:90.3,mo:3.90},
+  {n:"Finland",ce:63.2,ppp:63415,ct:0,co:9.5,eci:1.36,sc:90.1,mo:20.59},
+  {n:"Switzerland",ce:56.8,ppp:95142,ct:0,co:7.5,eci:2.14,sc:89.7,mo:4.72},
+  {n:"France",ce:53.9,ppp:60839,ct:2,co:14,eci:1.34,sc:80.8,mo:3.72},
+  {n:"Brazil",ce:50.6,ppp:21176,ct:0,co:6.5,eci:-0.16,sc:52.6,mo:11.94},
+  {n:"Austria",ce:43.3,ppp:73545,ct:0,co:2,eci:1.68,sc:84.0,mo:8.33},
+  {n:"New Zealand",ce:42.6,ppp:54697,ct:0,co:2,eci:0.20,sc:86.3,mo:5.10},
+  {n:"Denmark",ce:41.7,ppp:77892,ct:10,co:3,eci:1.06,sc:90.7,mo:16.42},
+  {n:"Portugal",ce:39.7,ppp:49353,ct:2,co:2,eci:0.74,sc:80.2,mo:9.98},
+  {n:"Slovakia",ce:36.1,ppp:39840,ct:2,co:1,eci:1.46,sc:66.8,mo:3.96},
+  {n:"Spain",ce:34.2,ppp:55682,ct:5,co:7.5,eci:0.76,sc:75.0,mo:5.24},
+  {n:"Canada",ce:32.6,ppp:64219,ct:3,co:12,eci:0.58,sc:84.6,mo:-1.30},
+  {n:"Chile",ce:32.3,ppp:33145,ct:0,co:1,eci:-0.30,sc:75.5,mo:12.73},
+  {n:"Czech Republic",ce:28.3,ppp:55761,ct:2,co:2,eci:1.75,sc:74.5,mo:5.91},
+  {n:"Hungary",ce:27.8,ppp:46592,ct:4,co:2,eci:1.52,sc:64.2,mo:6.20},
+  {n:"Romania",ce:26.7,ppp:45982,ct:0,co:1,eci:1.23,sc:59.9,mo:1.24},
+  {n:"Peru",ce:26.7,ppp:17011,ct:0,co:0.5,eci:-0.86,sc:48.2,mo:1.88},
+  {n:"United Kingdom",ce:26.5,ppp:59911,ct:0,co:18,eci:1.61,sc:77.5,mo:10.72},
+  {n:"Colombia",ce:26.1,ppp:21246,ct:0,co:0.5,eci:-0.13,sc:52.8,mo:0.79},
+  {n:"Germany",ce:24,ppp:71684,ct:28,co:20,eci:1.94,sc:82.3,mo:4.42},
+  {n:"Belgium",ce:23.4,ppp:71946,ct:5,co:3,eci:1.18,sc:78.4,mo:4.18},
+  {n:"Ireland",ce:22.2,ppp:129683,ct:0,co:16,eci:1.44,sc:85.6,mo:11.24},
+  {n:"Vietnam",ce:21.5,ppp:15034,ct:9,co:3,eci:0.04,sc:63.1,mo:-0.69},
+  {n:"Italy",ce:20.9,ppp:60030,ct:2,co:8.5,eci:1.35,sc:71.2,mo:2.41},
+  {n:"Turkey",ce:19.8,ppp:42786,ct:2,co:2,eci:0.61,sc:51.4,mo:10.29},
+  {n:"China",ce:19.7,ppp:25179,ct:100,co:60,eci:1.33,sc:69.4,mo:9.07},
+  {n:"United States",ce:19.7,ppp:82305,ct:0,co:100,eci:1.40,sc:77.1,mo:4.40},
+  {n:"Netherlands",ce:19.1,ppp:81729,ct:2,co:16,eci:0.99,sc:87.6,mo:14.39},
+  {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:0.5,eci:-0.57,sc:35.8,mo:6.56},
+  {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:27.5,eci:2.04,sc:84.8,mo:4.06},
+  {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:1,eci:-0.20,sc:56.7,mo:5.60},
+  {n:"Japan",ce:17,ppp:50662,ct:14,co:25,eci:2.26,sc:83.8,mo:10.44},
+  {n:"Australia",ce:14.7,ppp:72273,ct:0,co:10,eci:-0.55,sc:86.1,mo:9.07},
+  {n:"Poland",ce:13,ppp:48473,ct:4,co:5,eci:1.02,sc:71.6,mo:7.12},
+  {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:0.5,eci:0.76,sc:52.9,mo:-1.99},
+  {n:"Russia",ce:11.8,ppp:44269,ct:0,co:4,eci:0.19,sc:44.5,mo:0.57},
+  {n:"Indonesia",ce:11,ppp:15416,ct:3,co:4,eci:-0.09,sc:61.5,mo:6.25},
+  {n:"India",ce:10.3,ppp:10323,ct:8,co:11,eci:0.48,sc:58.9,mo:2.34},
+  {n:"Israel",ce:9.8,ppp:55171,ct:0,co:8.5,eci:1.17,sc:75.6,mo:8.81},
+  {n:"Mexico",ce:9.6,ppp:25243,ct:5,co:4,eci:1.14,sc:52.3,mo:2.02},
+  {n:"UAE",ce:9,ppp:77955,ct:0,co:6,eci:0.12,sc:81.1,mo:8.98},
+  {n:"Morocco",ce:8.7,ppp:9895,ct:0,co:0.5,eci:-0.35,sc:56.1,mo:4.49},
+  {n:"Taiwan",ce:8.6,ppp:73344,ct:3,co:40,eci:1.80,sc:84.8,mo:-1.15},
+  {n:"Malaysia",ce:8.3,ppp:36467,ct:6,co:7.5,eci:0.95,sc:69.8,mo:4.60},
+  {n:"Thailand",ce:7.4,ppp:23519,ct:7,co:2.5,eci:1.12,sc:59.0,mo:3.16},
+  {n:"Egypt",ce:5.8,ppp:18525,ct:0,co:1,eci:-0.13,sc:46.7,mo:1.86},
+  {n:"South Africa",ce:5,ppp:15200,ct:0,co:3,eci:-0.15,sc:49.3,mo:1.72},
+  {n:"Singapore",ce:0.5,ppp:143786,ct:4,co:13,eci:1.83,sc:89.5,mo:0.27},
+  {n:"Saudi Arabia",ce:0.7,ppp:71565,ct:0,co:6.5,eci:0.62,sc:66.4,mo:0.72},
+  {n:"Iran",ce:1.9,ppp:18917,ct:0,co:0.5,eci:-0.19,sc:36.8,mo:0.21},
+  {n:"Bangladesh",ce:1.1,ppp:9148,ct:0,co:0.5,eci:-0.76,sc:41.2,mo:0.41},
+  {n:"Qatar",ce:0.8,ppp:129368,ct:0,co:0.5,eci:-0.38,sc:74.5,mo:0.75},
+  {n:"Kuwait",ce:0.1,ppp:52000,ct:0,co:0.5,eci:0.13,sc:58.4,mo:0.07},
+  {n:"Algeria",ce:0.2,ppp:16824,ct:0,co:0.5,eci:-0.63,sc:44.1,mo:0.13},
+  {n:"Iraq",ce:0.6,ppp:14653,ct:0,co:0.5,eci:-0.80,sc:31.1,mo:-0.96},
+  {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:0.5,eci:-1.62,sc:30.4,mo:1.93},
+  {n:"Kenya",ce:4,ppp:6317,ct:0,co:0.5,eci:-0.35,sc:43.1,mo:6.65},
+  {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:0.5,eci:-0.88,sc:33.4,mo:6.58},
 ];
 
 const annotations=[
@@ -955,11 +980,12 @@ let data=[],sortCol='composite',sortDir=-1;
 
 function nPPP(v){return Math.max(0,Math.min(1,(Math.log(v)-LN_MIN)/LN_R));}
 function nECI(v){return Math.max(0,Math.min(1,(v-ECI_MIN)/ECI_R));}
+function nMO(v){return Math.max(0,Math.min(1,(v-MO_MIN)/MO_R));}
 
 function prof(d){
-  const s=[{k:'energy',v:d.ceN},{k:'ppp',v:d.ppN},{k:'cleantech',v:d.ctN},{k:'compute',v:d.coN},{k:'eci',v:d.ecN},{k:'state',v:d.scN}].sort((a,b)=>b.v-a.v);
-  const avg=(d.ceN+d.ppN+d.ctN+d.coN+d.ecN+d.scN)/6;
-  const spread=Math.max(d.ceN,d.ppN,d.ctN,d.coN,d.ecN,d.scN)-Math.min(d.ceN,d.ppN,d.ctN,d.coN,d.ecN,d.scN);
+  const s=[{k:'energy',v:d.ceN},{k:'ppp',v:d.ppN},{k:'cleantech',v:d.ctN},{k:'compute',v:d.coN},{k:'eci',v:d.ecN},{k:'state',v:d.scN},{k:'momentum',v:d.moN}].sort((a,b)=>b.v-a.v);
+  const avg=(d.ceN+d.ppN+d.ctN+d.coN+d.ecN+d.scN+d.moN)/7;
+  const spread=Math.max(d.ceN,d.ppN,d.ctN,d.coN,d.ecN,d.scN,d.moN)-Math.min(d.ceN,d.ppN,d.ctN,d.coN,d.ecN,d.scN,d.moN);
   if(avg<0.12)return{l:'Vulnerable',c:'vulnerable'};
   if(spread<0.25&&avg>0.2)return{l:'Balanced',c:'balanced'};
   if(s[0].k==='energy')return{l:'Energy Led',c:'energy'};
@@ -968,6 +994,7 @@ function prof(d){
   if(s[0].k==='compute')return{l:'Compute',c:'compute'};
   if(s[0].k==='eci')return{l:'Complex',c:'complex'};
   if(s[0].k==='state')return{l:'Capable',c:'capable'};
+  if(s[0].k==='momentum')return{l:'Accelerating',c:'momentum'};
   return{l:'Mixed',c:'balanced'};
 }
 
@@ -978,19 +1005,21 @@ function compute(){
   const w4=+document.getElementById('w4').value;
   const w5=+document.getElementById('w5').value;
   const w6=+document.getElementById('w6').value;
-  const wT=w1+w2+w3+w4+w5+w6||1;
+  const w7=+document.getElementById('w7').value;
+  const wT=w1+w2+w3+w4+w5+w6+w7||1;
   document.getElementById('w1v').textContent=Math.round(w1/wT*100)+'%';
   document.getElementById('w2v').textContent=Math.round(w2/wT*100)+'%';
   document.getElementById('w3v').textContent=Math.round(w3/wT*100)+'%';
   document.getElementById('w4v').textContent=Math.round(w4/wT*100)+'%';
   document.getElementById('w5v').textContent=Math.round(w5/wT*100)+'%';
   document.getElementById('w6v').textContent=Math.round(w6/wT*100)+'%';
+  document.getElementById('w7v').textContent=Math.round(w7/wT*100)+'%';
   data=raw.map(r=>{
-    const ceN=r.ce/100,ppN=nPPP(r.ppp),ctN=Math.max(0,r.ct)/100,coN=r.co/100,ecN=nECI(r.eci),scN=r.sc/100;
-    const comp=((w1*ceN+w2*ppN+w3*ctN+w4*coN+w5*ecN+w6*scN)/wT)*100;
-    const xW=w1+w3+w4+w5||1;
+    const ceN=r.ce/100,ppN=nPPP(r.ppp),ctN=Math.max(0,r.ct)/100,coN=r.co/100,ecN=nECI(r.eci),scN=r.sc/100,moN=nMO(r.mo);
+    const comp=((w1*ceN+w2*ppN+w3*ctN+w4*coN+w5*ecN+w6*scN+w7*moN)/wT)*100;
+    const xW=w1+w3+w4+w5+w7||1;
     const yW=w2+w6||1;
-    return{...r,ceN,ppN,ctN,coN,ecN,scN,ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,ecS:ecN*100,scS:scN*100,composite:comp,eSov:(w1*ceN+w3*ctN+w4*coN+w5*ecN)/xW*100,ePow:(w2*ppN+w6*scN)/yW*100,pf:prof({ceN,ppN,ctN,coN,ecN,scN})};
+    return{...r,ceN,ppN,ctN,coN,ecN,scN,moN,ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,ecS:ecN*100,scS:scN*100,moS:moN*100,composite:comp,eSov:(w1*ceN+w3*ctN+w4*coN+w5*ecN+w7*moN)/xW*100,ePow:(w2*ppN+w6*scN)/yW*100,pf:prof({ceN,ppN,ctN,coN,ecN,scN,moN})};
   });
   data.sort((a,b)=>{
     const va=a[sortCol],vb=b[sortCol];
@@ -1013,6 +1042,7 @@ function renderTop(){
         <span class="mini-bar compute" style="height:${Math.max(1,c.coS/100*16)}px"></span>
         <span class="mini-bar eci" style="height:${Math.max(1,c.ecS/100*16)}px"></span>
         <span class="mini-bar state" style="height:${Math.max(1,c.scS/100*16)}px"></span>
+        <span class="mini-bar momentum" style="height:${Math.max(1,c.moS/100*16)}px"></span>
       </span>
       <span class="top-score">${c.composite.toFixed(1)}</span>
     </div>`;
@@ -1056,7 +1086,7 @@ function renderScatter(){
   s+=`<text class="hud-coord" x="${p.l}" y="${h-p.b-3}">X:00 Y:00</text>`;
   s+=`<text class="hud-coord" x="${w-p.r}" y="${h-p.b-3}" text-anchor="end">X:100 Y:00</text>`;
 
-  s+=`<text class="axis-label" x="${p.l+pw/2}" y="${h-3}" text-anchor="middle" fill="#6e7c90">Transition Readiness (Energy + Tech + Compute + Complexity)</text>`;
+  s+=`<text class="axis-label" x="${p.l+pw/2}" y="${h-3}" text-anchor="middle" fill="#6e7c90">Transition Readiness (Energy + Tech + Compute + Complexity + Momentum)</text>`;
   s+=`<text class="axis-label" x="10" y="${p.t+ph/2}" text-anchor="middle" fill="#6e7c90" transform="rotate(-90,10,${p.t+ph/2})">Power to Execute (PPP + State Capacity)</text>`;
 
   const sorted=[...data].sort((a,b)=>a.composite-b.composite);
@@ -1069,7 +1099,7 @@ function renderScatter(){
       fill="rgba(22,90,150,${alpha})"
       stroke="#165a96" stroke-width="0.7" stroke-opacity="${0.25+c.composite/100*0.4}"
       data-n="${c.n}" data-ce="${c.ceS.toFixed(0)}" data-pp="${c.ppS.toFixed(0)}"
-      data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-sc="${c.scS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
+      data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-sc="${c.scS.toFixed(0)}" data-mo="${c.moS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
   });
 
   annotations.forEach(a=>{
@@ -1100,6 +1130,7 @@ function renderScatter(){
         <div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute</span><span class="tt-val">${d.co}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--eci)">Complexity</span><span class="tt-val">${d.ec}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--state)">State Cap.</span><span class="tt-val">${d.sc}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--momentum)">Momentum</span><span class="tt-val">${d.mo}</span></div>
         <div class="tt-divider"></div>
         <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${d.comp}</span></div>`;
       tt.classList.add('visible');
