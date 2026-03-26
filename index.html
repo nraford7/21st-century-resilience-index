@@ -1755,13 +1755,13 @@ function makeTextSprite(text,opts){
 function makeCountryLabel(text,color){
   const canvas=document.createElement('canvas');
   const ctx=canvas.getContext('2d');
-  const fontSize=36;
+  const fontSize=56;
   ctx.font='600 '+fontSize+'px IBM Plex Sans, sans-serif';
   const tw=ctx.measureText(text).width;
   canvas.width=tw+24;
   canvas.height=fontSize+16;
   ctx.font='600 '+fontSize+'px IBM Plex Sans, sans-serif';
-  ctx.fillStyle='rgba(12,37,64,0.65)';
+  ctx.fillStyle='rgba(12,37,64,0.75)';
   const r=6;
   ctx.beginPath();
   ctx.moveTo(r,0);ctx.lineTo(canvas.width-r,0);
@@ -1780,7 +1780,7 @@ function makeCountryLabel(text,color){
   tex.minFilter=THREE.LinearFilter;
   const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
   const sprite=new THREE.Sprite(mat);
-  sprite.scale.set(canvas.width/canvas.height*0.5,0.5,1);
+  sprite.scale.set(canvas.width/canvas.height*0.9,0.9,1);
   return sprite;
 }
 
@@ -1872,13 +1872,13 @@ function build3DAxes(){
   axisGroup3D.add(new THREE.Line(zGeo,new THREE.LineBasicMaterial({color:0x4060c0,linewidth:2})));
 
   // Axis labels
-  const xLabel=makeTextSprite('Transition Readiness \u2192',{textColor:'rgba(192,64,64,0.85)',fontSize:40,scale:0.18});
+  const xLabel=makeTextSprite('Transition Readiness \u2192',{textColor:'rgba(192,64,64,0.85)',fontSize:64,scale:0.35});
   xLabel.position.set(55,-6,0);
   axisGroup3D.add(xLabel);
-  const yLabel=makeTextSprite('\u2191 Power to Execute',{textColor:'rgba(64,160,64,0.85)',fontSize:40,scale:0.18});
+  const yLabel=makeTextSprite('\u2191 Power to Execute',{textColor:'rgba(64,160,64,0.85)',fontSize:64,scale:0.35});
   yLabel.position.set(-6,55,0);
   axisGroup3D.add(yLabel);
-  const zLabel=makeTextSprite('Climate 2050 \u2192',{textColor:'rgba(64,96,192,0.85)',fontSize:40,scale:0.18});
+  const zLabel=makeTextSprite('Climate 2050 \u2192',{textColor:'rgba(64,96,192,0.85)',fontSize:64,scale:0.35});
   zLabel.position.set(0,-6,55);
   axisGroup3D.add(zLabel);
 
@@ -1887,15 +1887,15 @@ function build3DAxes(){
   const tickMat=new THREE.LineBasicMaterial({color:0x9aa8b8,transparent:true,opacity:0.5});
   tickVals.forEach(v=>{
     // X ticks
-    const xTick=makeTextSprite(String(v),{textColor:'rgba(154,168,184,0.8)',fontSize:32,scale:0.1});
+    const xTick=makeTextSprite(String(v),{textColor:'rgba(110,124,144,0.9)',fontSize:48,scale:0.2});
     xTick.position.set(v,-3,0);
     axisGroup3D.add(xTick);
     // Y ticks
-    const yTick=makeTextSprite(String(v),{textColor:'rgba(154,168,184,0.8)',fontSize:32,scale:0.1});
+    const yTick=makeTextSprite(String(v),{textColor:'rgba(110,124,144,0.9)',fontSize:48,scale:0.2});
     yTick.position.set(-3,v,0);
     axisGroup3D.add(yTick);
     // Z ticks
-    const zTick=makeTextSprite(String(v),{textColor:'rgba(154,168,184,0.8)',fontSize:32,scale:0.1});
+    const zTick=makeTextSprite(String(v),{textColor:'rgba(110,124,144,0.9)',fontSize:48,scale:0.2});
     zTick.position.set(0,-3,v);
     axisGroup3D.add(zTick);
   });
@@ -1925,6 +1925,28 @@ function build3DAxes(){
   }
 
   scene3D.add(axisGroup3D);
+
+  // 3D Legend (fixed in bottom-left of scene)
+  const legendItems=[
+    {label:'Balanced Leaders',color:'#0a7058'},
+    {label:'Latent Electrostates',color:'#b45309'},
+    {label:'Single-Dim Powers',color:'#165a96'},
+    {label:'Petrostates',color:'#a82028'},
+    {label:'Crisis States',color:'#991b1b'},
+    {label:'Clean but Fragile',color:'#7c3aed'},
+    {label:'Other',color:'#6b7094'}
+  ];
+  legendItems.forEach((item,i)=>{
+    const dot=new THREE.Mesh(
+      new THREE.SphereGeometry(0.8,8,6),
+      new THREE.MeshPhongMaterial({color:item.color})
+    );
+    dot.position.set(-8, 95 - i*5, 0);
+    axisGroup3D.add(dot);
+    const lbl=makeTextSprite(item.label,{textColor:item.color,fontSize:44,scale:0.22});
+    lbl.position.set(-2, 95 - i*5, 0);
+    axisGroup3D.add(lbl);
+  });
 }
 
 function update3DScene(){
