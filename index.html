@@ -7,6 +7,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 <style>
 :root {
   --bg: #e8edf4;
@@ -426,6 +428,19 @@ html,body{height:100%;overflow:hidden;}
 #scatterChart {
   width: 100%;
   height: 100%;
+  display: block;
+}
+
+#scatter3D {
+  width: 100%;
+  height: 100%;
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+#scatter3D.active {
   display: block;
 }
 
@@ -1208,6 +1223,7 @@ html,body{height:100%;overflow:hidden;}
       <button class="toggle-3d" id="toggle3d" onclick="toggle3D()">3D</button>
     </div>
     <svg id="scatterChart"></svg>
+    <canvas id="scatter3D"></canvas>
     <div class="tooltip" id="tooltip"></div>
   </div>
 
@@ -1660,10 +1676,384 @@ document.getElementById('countrySearch').addEventListener('input',function(e){
 });
 
 /* ═══ 3D TOGGLE ═══ */
+let scene3D=null, camera3D=null, renderer3D=null, controls3D=null;
+let spheres3D=[], labelSprites3D=[], raycaster3D=null, mouse3D=null;
+let needsRender3D=false;
+let axisGroup3D=null;
+
 function toggle3D(){
   view3D=!view3D;
   document.getElementById('toggle3d').classList.toggle('active',view3D);
-  renderScatter();
+  const svg=document.getElementById('scatterChart');
+  const canvas=document.getElementById('scatter3D');
+  if(view3D){
+    svg.style.display='none';
+    canvas.classList.add('active');
+    if(!scene3D) init3DScene();
+    else update3DScene();
+    requestRender3D();
+  } else {
+    canvas.classList.remove('active');
+    svg.style.display='block';
+    if(renderer3D){
+      renderer3D.dispose();
+      renderer3D=null;
+      scene3D=null;
+      camera3D=null;
+      controls3D=null;
+      spheres3D=[];
+      labelSprites3D=[];
+      axisGroup3D=null;
+    }
+    renderScatter();
+  }
+}
+
+function requestRender3D(){
+  if(!needsRender3D){
+    needsRender3D=true;
+    requestAnimationFrame(render3DFrame);
+  }
+}
+
+function render3DFrame(){
+  needsRender3D=false;
+  if(renderer3D&&scene3D&&camera3D){
+    renderer3D.render(scene3D,camera3D);
+  }
+}
+
+function makeTextSprite(text,opts){
+  opts=opts||{};
+  const fontSize=opts.fontSize||48;
+  const fontFace=opts.fontFace||'IBM Plex Sans, sans-serif';
+  const textColor=opts.textColor||'rgba(110,124,144,0.9)';
+  const bgColor=opts.bgColor||'transparent';
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  ctx.font=fontSize+'px '+fontFace;
+  const metrics=ctx.measureText(text);
+  const tw=metrics.width;
+  canvas.width=tw+20;
+  canvas.height=fontSize+20;
+  ctx.font=fontSize+'px '+fontFace;
+  if(bgColor!=='transparent'){
+    ctx.fillStyle=bgColor;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+  }
+  ctx.fillStyle=textColor;
+  ctx.fillText(text,10,fontSize+2);
+  const tex=new THREE.CanvasTexture(canvas);
+  tex.minFilter=THREE.LinearFilter;
+  const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
+  const sprite=new THREE.Sprite(mat);
+  const sc=opts.scale||0.15;
+  sprite.scale.set(canvas.width/canvas.height*sc*4,sc*4,1);
+  return sprite;
+}
+
+function makeCountryLabel(text,color){
+  const canvas=document.createElement('canvas');
+  const ctx=canvas.getContext('2d');
+  const fontSize=36;
+  ctx.font='600 '+fontSize+'px IBM Plex Sans, sans-serif';
+  const tw=ctx.measureText(text).width;
+  canvas.width=tw+24;
+  canvas.height=fontSize+16;
+  ctx.font='600 '+fontSize+'px IBM Plex Sans, sans-serif';
+  ctx.fillStyle='rgba(12,37,64,0.65)';
+  const r=6;
+  ctx.beginPath();
+  ctx.moveTo(r,0);ctx.lineTo(canvas.width-r,0);
+  ctx.quadraticCurveTo(canvas.width,0,canvas.width,r);
+  ctx.lineTo(canvas.width,canvas.height-r);
+  ctx.quadraticCurveTo(canvas.width,canvas.height,canvas.width-r,canvas.height);
+  ctx.lineTo(r,canvas.height);
+  ctx.quadraticCurveTo(0,canvas.height,0,canvas.height-r);
+  ctx.lineTo(0,r);
+  ctx.quadraticCurveTo(0,0,r,0);
+  ctx.closePath();
+  ctx.fill();
+  ctx.fillStyle='#ffffff';
+  ctx.fillText(text,12,fontSize+2);
+  const tex=new THREE.CanvasTexture(canvas);
+  tex.minFilter=THREE.LinearFilter;
+  const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
+  const sprite=new THREE.Sprite(mat);
+  sprite.scale.set(canvas.width/canvas.height*0.5,0.5,1);
+  return sprite;
+}
+
+function init3DScene(){
+  const container=document.querySelector('.viewscreen');
+  const rect=container.getBoundingClientRect();
+  const w=rect.width,h=rect.height;
+
+  scene3D=new THREE.Scene();
+  scene3D.background=new THREE.Color('#ffffff');
+
+  camera3D=new THREE.PerspectiveCamera(45,w/h,0.1,1000);
+  camera3D.position.set(70,60,70);
+  camera3D.lookAt(50,50,50);
+
+  const canvasEl=document.getElementById('scatter3D');
+  renderer3D=new THREE.WebGLRenderer({canvas:canvasEl,antialias:true});
+  renderer3D.setSize(w,h);
+  renderer3D.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+  controls3D=new THREE.OrbitControls(camera3D,canvasEl);
+  controls3D.target.set(50,50,50);
+  controls3D.enableDamping=true;
+  controls3D.dampingFactor=0.08;
+  controls3D.minDistance=20;
+  controls3D.maxDistance=250;
+  controls3D.addEventListener('change',requestRender3D);
+
+  // Lights
+  const ambient=new THREE.AmbientLight(0xffffff,0.55);
+  scene3D.add(ambient);
+  const dir=new THREE.DirectionalLight(0xffffff,0.65);
+  dir.position.set(80,120,60);
+  scene3D.add(dir);
+  const dir2=new THREE.DirectionalLight(0xffffff,0.25);
+  dir2.position.set(-40,80,-30);
+  scene3D.add(dir2);
+
+  // Build axes, grids, and data
+  build3DAxes();
+  update3DScene();
+
+  // Raycaster for hover
+  raycaster3D=new THREE.Raycaster();
+  mouse3D=new THREE.Vector2();
+  raycaster3D.params.Sphere={threshold:0};
+
+  canvasEl.addEventListener('mousemove',on3DMouseMove);
+  canvasEl.addEventListener('click',on3DClick);
+  canvasEl.addEventListener('mouseleave',()=>{
+    document.getElementById('tooltip').classList.remove('visible');
+    requestRender3D();
+  });
+
+  // Damping animation loop (lightweight, only when controls are active)
+  function dampLoop(){
+    if(!controls3D)return;
+    if(controls3D.enableDamping){
+      controls3D.update();
+      requestRender3D();
+    }
+    requestAnimationFrame(dampLoop);
+  }
+  dampLoop();
+}
+
+function build3DAxes(){
+  if(axisGroup3D){scene3D.remove(axisGroup3D);}
+  axisGroup3D=new THREE.Group();
+
+  // Wireframe box (data bounds 0-100 on each axis)
+  const boxGeo=new THREE.BoxGeometry(100,100,100);
+  const boxEdges=new THREE.EdgesGeometry(boxGeo);
+  const boxMat=new THREE.LineBasicMaterial({color:0xbcc6d4,transparent:true,opacity:0.3});
+  const boxLine=new THREE.LineSegments(boxEdges,boxMat);
+  boxLine.position.set(50,50,50);
+  axisGroup3D.add(boxLine);
+
+  // Axis lines
+  const axisLen=105;
+  // X axis - red
+  const xGeo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(axisLen,0,0)]);
+  axisGroup3D.add(new THREE.Line(xGeo,new THREE.LineBasicMaterial({color:0xc04040,linewidth:2})));
+  // Y axis - green
+  const yGeo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,axisLen,0)]);
+  axisGroup3D.add(new THREE.Line(yGeo,new THREE.LineBasicMaterial({color:0x40a040,linewidth:2})));
+  // Z axis - blue
+  const zGeo=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),new THREE.Vector3(0,0,axisLen)]);
+  axisGroup3D.add(new THREE.Line(zGeo,new THREE.LineBasicMaterial({color:0x4060c0,linewidth:2})));
+
+  // Axis labels
+  const xLabel=makeTextSprite('Transition Readiness \u2192',{textColor:'rgba(192,64,64,0.85)',fontSize:40,scale:0.18});
+  xLabel.position.set(55,-6,0);
+  axisGroup3D.add(xLabel);
+  const yLabel=makeTextSprite('\u2191 Power to Execute',{textColor:'rgba(64,160,64,0.85)',fontSize:40,scale:0.18});
+  yLabel.position.set(-6,55,0);
+  axisGroup3D.add(yLabel);
+  const zLabel=makeTextSprite('Climate 2050 \u2192',{textColor:'rgba(64,96,192,0.85)',fontSize:40,scale:0.18});
+  zLabel.position.set(0,-6,55);
+  axisGroup3D.add(zLabel);
+
+  // Tick marks and labels at 25, 50, 75
+  const tickVals=[25,50,75];
+  const tickMat=new THREE.LineBasicMaterial({color:0x9aa8b8,transparent:true,opacity:0.5});
+  tickVals.forEach(v=>{
+    // X ticks
+    const xTick=makeTextSprite(String(v),{textColor:'rgba(154,168,184,0.8)',fontSize:32,scale:0.1});
+    xTick.position.set(v,-3,0);
+    axisGroup3D.add(xTick);
+    // Y ticks
+    const yTick=makeTextSprite(String(v),{textColor:'rgba(154,168,184,0.8)',fontSize:32,scale:0.1});
+    yTick.position.set(-3,v,0);
+    axisGroup3D.add(yTick);
+    // Z ticks
+    const zTick=makeTextSprite(String(v),{textColor:'rgba(154,168,184,0.8)',fontSize:32,scale:0.1});
+    zTick.position.set(0,-3,v);
+    axisGroup3D.add(zTick);
+  });
+
+  // Floor grid (XZ plane, at Y=0)
+  const gridMat=new THREE.LineBasicMaterial({color:0xd4dce8,transparent:true,opacity:0.25});
+  for(let i=0;i<=4;i++){
+    const v=i*25;
+    // Lines along X at Z=v
+    const gx=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,v),new THREE.Vector3(100,0,v)]);
+    axisGroup3D.add(new THREE.Line(gx,gridMat));
+    // Lines along Z at X=v
+    const gz=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(v,0,0),new THREE.Vector3(v,0,100)]);
+    axisGroup3D.add(new THREE.Line(gz,gridMat));
+  }
+
+  // Back wall grid (XY plane, at Z=0)
+  const wallMat=new THREE.LineBasicMaterial({color:0xd4dce8,transparent:true,opacity:0.15});
+  for(let i=0;i<=4;i++){
+    const v=i*25;
+    // Horizontal lines on back wall
+    const wh=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,v,0),new THREE.Vector3(100,v,0)]);
+    axisGroup3D.add(new THREE.Line(wh,wallMat));
+    // Vertical lines on back wall
+    const wv=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(v,0,0),new THREE.Vector3(v,100,0)]);
+    axisGroup3D.add(new THREE.Line(wv,wallMat));
+  }
+
+  scene3D.add(axisGroup3D);
+}
+
+function update3DScene(){
+  if(!scene3D)return;
+
+  // Remove old spheres and labels
+  spheres3D.forEach(s=>{
+    scene3D.remove(s);
+    if(s.geometry)s.geometry.dispose();
+    if(s.material)s.material.dispose();
+  });
+  labelSprites3D.forEach(s=>{
+    scene3D.remove(s);
+    if(s.material&&s.material.map)s.material.map.dispose();
+    if(s.material)s.material.dispose();
+  });
+  spheres3D=[];
+  labelSprites3D=[];
+
+  const sphereGeo=new THREE.SphereGeometry(1,12,8);
+
+  // Sort to find top 10 for labels
+  const sorted=[...data].sort((a,b)=>b.composite-a.composite);
+  const top10=new Set(sorted.slice(0,10).map(c=>c.n));
+
+  data.forEach(c=>{
+    const cc=clusterColors[c.cluster]||clusterColors['default'];
+    const hex=cc.replace('#','');
+    const r3=parseInt(hex.substring(0,2),16)/255;
+    const g3=parseInt(hex.substring(2,4),16)/255;
+    const b3=parseInt(hex.substring(4,6),16)/255;
+    const col=new THREE.Color(r3,g3,b3);
+
+    const radius=0.6+(c.composite/100)*2.2;
+    const mat=new THREE.MeshPhongMaterial({
+      color:col,
+      transparent:true,
+      opacity:0.35+c.composite/100*0.5,
+      shininess:60,
+      emissive:col,
+      emissiveIntensity:0.1
+    });
+    const mesh=new THREE.Mesh(sphereGeo,mat);
+    mesh.scale.set(radius,radius,radius);
+
+    // X = eSov (Transition Readiness), Y = ePow (Power to Execute), Z = cxN inverted (less exposed = further forward)
+    const px=c.eSov;
+    const py=c.ePow;
+    const pz=(1-c.cxN)*100; // invert so less exposed = higher Z
+    mesh.position.set(px,py,pz);
+    mesh.userData={country:c};
+    scene3D.add(mesh);
+    spheres3D.push(mesh);
+
+    // Top 10 labels
+    if(top10.has(c.n)){
+      const label=makeCountryLabel(c.n,cc);
+      label.position.set(px,py+radius+1.2,pz);
+      scene3D.add(label);
+      labelSprites3D.push(label);
+    }
+  });
+
+  requestRender3D();
+}
+
+function on3DMouseMove(e){
+  if(!renderer3D||!camera3D)return;
+  const canvasEl=document.getElementById('scatter3D');
+  const rect=canvasEl.getBoundingClientRect();
+  mouse3D.x=((e.clientX-rect.left)/rect.width)*2-1;
+  mouse3D.y=-((e.clientY-rect.top)/rect.height)*2+1;
+
+  raycaster3D.setFromCamera(mouse3D,camera3D);
+  const intersects=raycaster3D.intersectObjects(spheres3D);
+  const tt=document.getElementById('tooltip');
+
+  if(intersects.length>0){
+    const obj=intersects[0].object;
+    const c=obj.userData.country;
+    if(c){
+      const pr=canvasEl.closest('.viewscreen').getBoundingClientRect();
+      tt.innerHTML=`
+        <div class="tt-name">${c.n}</div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--energy)">Energy</span><span class="tt-val">${c.ceS.toFixed(0)}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--ppp)">PPP</span><span class="tt-val">${c.ppS.toFixed(0)}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Tech</span><span class="tt-val">${c.ctS.toFixed(0)}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute</span><span class="tt-val">${c.coS.toFixed(0)}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--eci)">Complexity</span><span class="tt-val">${c.ecS.toFixed(0)}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--state)">State Cap.</span><span class="tt-val">${c.scS.toFixed(0)}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--momentum)">Momentum</span><span class="tt-val">${c.moS.toFixed(0)}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--resource)">Resource Sec.</span><span class="tt-val">${c.rsS.toFixed(0)}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--climate)">Climate Exp.</span><span class="tt-val">${c.cxS.toFixed(0)}</span></div>
+        <div class="tt-divider"></div>
+        <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${c.composite.toFixed(1)}</span></div>`;
+      tt.style.left=(e.clientX-pr.left+12)+'px';
+      tt.style.top=(e.clientY-pr.top-8)+'px';
+      tt.classList.add('visible');
+      canvasEl.style.cursor='pointer';
+    }
+  } else {
+    tt.classList.remove('visible');
+    canvasEl.style.cursor='grab';
+  }
+}
+
+function on3DClick(e){
+  if(!renderer3D||!camera3D)return;
+  const canvasEl=document.getElementById('scatter3D');
+  const rect=canvasEl.getBoundingClientRect();
+  const mx=((e.clientX-rect.left)/rect.width)*2-1;
+  const my=-((e.clientY-rect.top)/rect.height)*2+1;
+  const rc=new THREE.Raycaster();
+  rc.setFromCamera(new THREE.Vector2(mx,my),camera3D);
+  const intersects=rc.intersectObjects(spheres3D);
+  if(intersects.length>0){
+    const c=intersects[0].object.userData.country;
+    if(c) openDetail(c.n);
+  }
+}
+
+function resize3D(){
+  if(!renderer3D||!camera3D)return;
+  const container=document.querySelector('.viewscreen');
+  const rect=container.getBoundingClientRect();
+  camera3D.aspect=rect.width/rect.height;
+  camera3D.updateProjectionMatrix();
+  renderer3D.setSize(rect.width,rect.height);
+  requestRender3D();
 }
 
 function renderScatter(){
@@ -1875,7 +2265,11 @@ function renderScatter(){
 function updateIndex(){
   compute();
   renderTop();
-  renderScatter();
+  if(view3D){
+    update3DScene();
+  } else {
+    renderScatter();
+  }
 }
 
 function dismissModal(){
@@ -1898,7 +2292,9 @@ setInterval(updateClock,1000);
 updateClock();
 
 updateIndex();
-window.addEventListener('resize',renderScatter);
+window.addEventListener('resize',function(){
+  if(view3D){ resize3D(); } else { renderScatter(); }
+});
 </script>
 </body>
 </html>
