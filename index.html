@@ -31,6 +31,7 @@
   --cleantech: #4838a8;
   --compute: #146098;
   --eci: #b45309;
+  --state: #7c3aed;
   --danger: #a82028;
   --sans: 'IBM Plex Sans', -apple-system, sans-serif;
   --mono: 'JetBrains Mono', 'SF Mono', monospace;
@@ -179,6 +180,7 @@ html,body{height:100%;overflow:hidden;}
   border-left: 2px solid transparent;
   padding-left: 0.5rem;
   margin-bottom: 0.15rem;
+  position: relative;
 }
 
 .dim-compact.energy { border-color: var(--energy); }
@@ -186,6 +188,7 @@ html,body{height:100%;overflow:hidden;}
 .dim-compact.cleantech { border-color: var(--cleantech); }
 .dim-compact.compute { border-color: var(--compute); }
 .dim-compact.eci { border-color: var(--eci); }
+.dim-compact.state { border-color: var(--state); }
 
 .dim-tag {
   font-family: var(--mono);
@@ -217,6 +220,25 @@ html,body{height:100%;overflow:hidden;}
   line-height: 1.35;
 }
 
+/* Dimension hover tooltips */
+.dim-tip {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: 220px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  padding: 0.5rem;
+  font-size: 0.55rem;
+  color: var(--text-2);
+  line-height: 1.5;
+  z-index: 20;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.dim-compact:hover .dim-tip { display: block; }
+
 /* Sliders vertical */
 .slider-v {
   margin-bottom: 0.6rem;
@@ -240,6 +262,7 @@ html,body{height:100%;overflow:hidden;}
 .slider-v.cleantech label { color: var(--cleantech); }
 .slider-v.compute label { color: var(--compute); }
 .slider-v.eci label { color: var(--eci); }
+.slider-v.state label { color: var(--state); }
 
 .slider-v .wv { font-weight: 700; font-size: 0.6rem; }
 
@@ -266,6 +289,7 @@ html,body{height:100%;overflow:hidden;}
 .slider-v.cleantech input::-webkit-slider-thumb { background: var(--cleantech); }
 .slider-v.compute input::-webkit-slider-thumb { background: var(--compute); }
 .slider-v.eci input::-webkit-slider-thumb { background: var(--eci); }
+.slider-v.state input::-webkit-slider-thumb { background: var(--state); }
 
 /* System readout */
 .sys-readout {
@@ -426,6 +450,7 @@ html,body{height:100%;overflow:hidden;}
 .mini-bar.cleantech { background: var(--cleantech); }
 .mini-bar.compute { background: var(--compute); }
 .mini-bar.eci { background: var(--eci); }
+.mini-bar.state { background: var(--state); }
 
 .top-score {
   font-family: var(--mono);
@@ -530,6 +555,16 @@ html,body{height:100%;overflow:hidden;}
 
 .finding strong { color: var(--text-2); font-weight: 600; }
 
+.finding-detail { display: none; }
+.finding:hover .finding-detail { display: block; }
+
+/* Profile tags */
+.tag-capable {
+  background: rgba(124,58,237,0.08);
+  color: var(--state);
+  border: 1px solid rgba(124,58,237,0.2);
+}
+
 /* ═══ MODAL ═══ */
 .modal-overlay {
   position: fixed;
@@ -600,6 +635,7 @@ html,body{height:100%;overflow:hidden;}
 .modal .dim-pill.cleantech { border-color: var(--cleantech); color: var(--cleantech); }
 .modal .dim-pill.compute { border-color: var(--compute); color: var(--compute); }
 .modal .dim-pill.eci { border-color: var(--eci); color: var(--eci); }
+.modal .dim-pill.state { border-color: var(--state); color: var(--state); }
 
 .modal-btn {
   font-family: var(--mono);
@@ -672,7 +708,7 @@ html,body{height:100%;overflow:hidden;}
   <div class="status-center">Strategic Assessment // Compound Index // Oil Shock Resilience + Transition Readiness</div>
   <div class="status-right">
     <span>60 NAT</span>
-    <span>5 DIM</span>
+    <span>6 DIM</span>
     <span>2024</span>
     <span class="clock" id="clock"></span>
   </div>
@@ -691,6 +727,7 @@ html,body{height:100%;overflow:hidden;}
           <span class="dim-name">Clean Energy</span>
           <span class="dim-desc">% primary energy from renewables + nuclear</span>
         </div>
+        <span class="dim-tip">Percentage of total primary energy from renewables (hydro, solar, wind, geothermal, biomass) and nuclear. Measures structural insulation from fossil fuel price shocks. Source: Our World in Data / Energy Institute 2025.</span>
       </div>
       <div class="dim-compact ppp">
         <span class="dim-tag">02</span>
@@ -698,6 +735,7 @@ html,body{height:100%;overflow:hidden;}
           <span class="dim-name">Purchasing Power</span>
           <span class="dim-desc">GDP/capita PPP, log-normalized</span>
         </div>
+        <span class="dim-tip">GDP per capita at Purchasing Power Parity, log-normalized. Measures economic capacity to absorb shocks and fund the transition. Source: World Bank 2023.</span>
       </div>
       <div class="dim-compact cleantech">
         <span class="dim-tag">03</span>
@@ -705,6 +743,7 @@ html,body{height:100%;overflow:hidden;}
           <span class="dim-name">Clean Tech</span>
           <span class="dim-desc">Net export of solar, batteries, EVs, wind</span>
         </div>
+        <span class="dim-tip">Net production and export of solar panels, batteries, EVs, wind turbines. Scores current industrial position in the transition economy. China normalized to 100. Source: IEA / BloombergNEF / UNCTAD 2024.</span>
       </div>
       <div class="dim-compact compute">
         <span class="dim-tag">04</span>
@@ -712,6 +751,7 @@ html,body{height:100%;overflow:hidden;}
           <span class="dim-name">Compute</span>
           <span class="dim-desc">Data centers, semiconductors, AI infra</span>
         </div>
+        <span class="dim-tip">Data center capacity, semiconductor manufacturing, supercomputing, AI training infrastructure. Measures position in the automation economy. Source: Synergy Research / TOP500 / SIA 2024.</span>
       </div>
       <div class="dim-compact eci">
         <span class="dim-tag">05</span>
@@ -719,30 +759,43 @@ html,body{height:100%;overflow:hidden;}
           <span class="dim-name">Complexity</span>
           <span class="dim-desc">Economic Complexity Index — transition capacity</span>
         </div>
+        <span class="dim-tip">Harvard Economic Complexity Index — productive knowledge embedded in the economy, inferred from export sophistication. Predicts ability to develop new industries. Source: Harvard Growth Lab 2024.</span>
+      </div>
+      <div class="dim-compact state">
+        <span class="dim-tag">06</span>
+        <div class="dim-info">
+          <span class="dim-name">State Capacity</span>
+          <span class="dim-desc">Governance, stability, quality of life, adaptability</span>
+        </div>
+        <span class="dim-tip">Composite of governance effectiveness (World Bank WGI), social stability (Fragile States Index), quality of life (Social Progress Index), and demonstrated infrastructural adaptability (historical transition speed). Measures power to execute systemic change.</span>
       </div>
     </div>
 
     <div class="lp-section">
       <div class="section-label">Weights</div>
       <div class="slider-v energy">
-        <label>Energy <span class="wv" id="w1v">20%</span></label>
-        <input type="range" id="w1" min="0" max="100" value="20" oninput="updateIndex()">
+        <label>Energy <span class="wv" id="w1v">17%</span></label>
+        <input type="range" id="w1" min="0" max="100" value="17" oninput="updateIndex()">
       </div>
       <div class="slider-v ppp">
-        <label>PPP <span class="wv" id="w2v">20%</span></label>
-        <input type="range" id="w2" min="0" max="100" value="20" oninput="updateIndex()">
+        <label>PPP <span class="wv" id="w2v">17%</span></label>
+        <input type="range" id="w2" min="0" max="100" value="17" oninput="updateIndex()">
       </div>
       <div class="slider-v cleantech">
-        <label>Clean Tech <span class="wv" id="w3v">20%</span></label>
-        <input type="range" id="w3" min="0" max="100" value="20" oninput="updateIndex()">
+        <label>Clean Tech <span class="wv" id="w3v">17%</span></label>
+        <input type="range" id="w3" min="0" max="100" value="17" oninput="updateIndex()">
       </div>
       <div class="slider-v compute">
-        <label>Compute <span class="wv" id="w4v">20%</span></label>
-        <input type="range" id="w4" min="0" max="100" value="20" oninput="updateIndex()">
+        <label>Compute <span class="wv" id="w4v">17%</span></label>
+        <input type="range" id="w4" min="0" max="100" value="17" oninput="updateIndex()">
       </div>
       <div class="slider-v eci">
-        <label>Complexity <span class="wv" id="w5v">20%</span></label>
-        <input type="range" id="w5" min="0" max="100" value="20" oninput="updateIndex()">
+        <label>Complexity <span class="wv" id="w5v">17%</span></label>
+        <input type="range" id="w5" min="0" max="100" value="17" oninput="updateIndex()">
+      </div>
+      <div class="slider-v state">
+        <label>State Cap. <span class="wv" id="w6v">17%</span></label>
+        <input type="range" id="w6" min="0" max="100" value="17" oninput="updateIndex()">
       </div>
     </div>
 
@@ -750,7 +803,8 @@ html,body{height:100%;overflow:hidden;}
       <div class="section-label">System</div>
       <div class="sys-readout">
         Nations: <span class="val">60</span><br>
-        Model: <span class="val">21CRI v4.0</span><br>
+        Model: <span class="val">21CRI v5.0</span><br>
+        Dimensions: <span class="val">6</span><br>
         Normalization: <span class="val">0–100</span><br>
         PPP Transform: <span class="val">Log</span><br>
         CleanTech Floor: <span class="val">0 (clamped)</span><br>
@@ -765,7 +819,7 @@ html,body{height:100%;overflow:hidden;}
     <div class="corner tr"></div>
     <div class="corner bl"></div>
     <div class="corner br"></div>
-    <div class="vs-label">Transition Capacity vs Economic Power</div>
+    <div class="vs-label">Transition Readiness vs Power to Execute</div>
     <svg id="scatterChart"></svg>
     <div class="tooltip" id="tooltip"></div>
   </div>
@@ -792,25 +846,27 @@ html,body{height:100%;overflow:hidden;}
 <div class="modal-overlay" id="introModal">
   <div class="modal">
     <h2>21st Century Resilience Index</h2>
-    <p>Which countries will thrive in the 21st century? This index measures <strong>transition capacity</strong> — a nation's ability to navigate energy shocks, the climate crisis, and the AI revolution, and emerge as an <strong>electrostate</strong>: a country whose power comes from manufacturing clean energy technology, not extracting fossil fuels.</p>
-    <p>60 nations scored across five dimensions:</p>
+    <p>Which countries will lead the 21st century? This index measures a nation's capacity to transition from petrostate to electrostate — deriving power from manufacturing clean energy technology rather than extracting fossil fuels.</p>
+    <p>The winners will survive energy price shocks, navigate the climate crisis, harness the AI and compute revolution, and translate industrial complexity into smart manufacturing. The losers will be customers of the winners.</p>
+    <p>60 nations scored across six dimensions:</p>
     <div class="dim-list">
       <span class="dim-pill energy">Clean Energy</span>
       <span class="dim-pill ppp">Purchasing Power</span>
       <span class="dim-pill cleantech">Clean Tech Exports</span>
       <span class="dim-pill compute">Compute &amp; AI</span>
       <span class="dim-pill eci">Economic Complexity</span>
+      <span class="dim-pill state">State Capacity</span>
     </div>
-    <p>Adjust the weight sliders on the left to test different hypotheses about what matters most. The scatter plot and rankings update in real time.</p>
+    <p>The scatter plot maps Transition Readiness (do you have the technology?) against Power to Execute (do you have the money and governance to deploy it?). Adjust the weight sliders to test your own hypotheses.</p>
     <button class="modal-btn" onclick="dismissModal()">Enter</button>
-    <div class="src">Data: OWID, World Bank, IEA, Harvard Growth Lab, TOP500</div>
+    <div class="src">Data: OWID, World Bank, IEA, Harvard Growth Lab, TOP500, WGI / FSI / SPI</div>
   </div>
 </div>
 
 <!-- ═══ BOTTOM STATUS BAR ═══ -->
 <footer class="status-bar bottom-bar">
-  <span>SRC: OWID / Energy Institute 2025 · World Bank 2023 · IEA / BNEF / UNCTAD 2024 · Synergy / TOP500 / SIA 2024 · Harvard Growth Lab ECI 2024</span>
-  <span>SYS.21CRI v4.0 // 5 DIMENSIONS // COMPOSITE 0–100 // ECI VIA HARVARD GROWTH LAB</span>
+  <span>SRC: OWID / Energy Institute 2025 · World Bank 2023 · IEA / BNEF / UNCTAD 2024 · Synergy / TOP500 / SIA 2024 · Harvard Growth Lab ECI 2024 · WGI / FSI / SPI (governance)</span>
+  <span>SYS.21CRI v5.0 // 6 DIMENSIONS // COMPOSITE 0–100 // ECI VIA HARVARD GROWTH LAB</span>
 </footer>
 
 </div>
@@ -820,66 +876,66 @@ const LN_MIN=Math.log(1150),LN_MAX=Math.log(150508),LN_R=LN_MAX-LN_MIN;
 const ECI_MIN=-2.44,ECI_MAX=2.26,ECI_R=ECI_MAX-ECI_MIN;
 
 const raw=[
-  {n:"Iceland",ce:80.5,ppp:81608,ct:0,co:1,eci:0.10},
-  {n:"Sweden",ce:72.2,ppp:69226,ct:3,co:8.5,eci:1.54},
-  {n:"Norway",ce:71.8,ppp:103638,ct:0,co:5,eci:0.39},
-  {n:"Finland",ce:63.2,ppp:63415,ct:0,co:9.5,eci:1.36},
-  {n:"Switzerland",ce:56.8,ppp:95142,ct:0,co:7.5,eci:2.14},
-  {n:"France",ce:53.9,ppp:60839,ct:2,co:14,eci:1.34},
-  {n:"Brazil",ce:50.6,ppp:21176,ct:0,co:6.5,eci:-0.16},
-  {n:"Austria",ce:43.3,ppp:73545,ct:0,co:2,eci:1.68},
-  {n:"New Zealand",ce:42.6,ppp:54697,ct:0,co:2,eci:0.20},
-  {n:"Denmark",ce:41.7,ppp:77892,ct:10,co:3,eci:1.06},
-  {n:"Portugal",ce:39.7,ppp:49353,ct:2,co:2,eci:0.74},
-  {n:"Slovakia",ce:36.1,ppp:39840,ct:2,co:1,eci:1.46},
-  {n:"Spain",ce:34.2,ppp:55682,ct:5,co:7.5,eci:0.76},
-  {n:"Canada",ce:32.6,ppp:64219,ct:3,co:12,eci:0.58},
-  {n:"Chile",ce:32.3,ppp:33145,ct:0,co:1,eci:-0.30},
-  {n:"Czech Republic",ce:28.3,ppp:55761,ct:2,co:2,eci:1.75},
-  {n:"Hungary",ce:27.8,ppp:46592,ct:4,co:2,eci:1.52},
-  {n:"Romania",ce:26.7,ppp:45982,ct:0,co:1,eci:1.23},
-  {n:"Peru",ce:26.7,ppp:17011,ct:0,co:0.5,eci:-0.86},
-  {n:"United Kingdom",ce:26.5,ppp:59911,ct:0,co:18,eci:1.61},
-  {n:"Colombia",ce:26.1,ppp:21246,ct:0,co:0.5,eci:-0.13},
-  {n:"Germany",ce:24,ppp:71684,ct:28,co:20,eci:1.94},
-  {n:"Belgium",ce:23.4,ppp:71946,ct:5,co:3,eci:1.18},
-  {n:"Ireland",ce:22.2,ppp:129683,ct:0,co:16,eci:1.44},
-  {n:"Vietnam",ce:21.5,ppp:15034,ct:9,co:3,eci:0.04},
-  {n:"Italy",ce:20.9,ppp:60030,ct:2,co:8.5,eci:1.35},
-  {n:"Turkey",ce:19.8,ppp:42786,ct:2,co:2,eci:0.61},
-  {n:"China",ce:19.7,ppp:25179,ct:100,co:60,eci:1.33},
-  {n:"United States",ce:19.7,ppp:82305,ct:0,co:100,eci:1.40},
-  {n:"Netherlands",ce:19.1,ppp:81729,ct:2,co:16,eci:0.99},
-  {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:0.5,eci:-0.57},
-  {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:27.5,eci:2.04},
-  {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:1,eci:-0.20},
-  {n:"Japan",ce:17,ppp:50662,ct:14,co:25,eci:2.26},
-  {n:"Australia",ce:14.7,ppp:72273,ct:0,co:10,eci:-0.55},
-  {n:"Poland",ce:13,ppp:48473,ct:4,co:5,eci:1.02},
-  {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:0.5,eci:0.76},
-  {n:"Russia",ce:11.8,ppp:44269,ct:0,co:4,eci:0.19},
-  {n:"Indonesia",ce:11,ppp:15416,ct:3,co:4,eci:-0.09},
-  {n:"India",ce:10.3,ppp:10323,ct:8,co:11,eci:0.48},
-  {n:"Israel",ce:9.8,ppp:55171,ct:0,co:8.5,eci:1.17},
-  {n:"Mexico",ce:9.6,ppp:25243,ct:5,co:4,eci:1.14},
-  {n:"UAE",ce:9,ppp:77955,ct:0,co:6,eci:0.12},
-  {n:"Morocco",ce:8.7,ppp:9895,ct:0,co:0.5,eci:-0.35},
-  {n:"Taiwan",ce:8.6,ppp:73344,ct:3,co:40,eci:1.80},
-  {n:"Malaysia",ce:8.3,ppp:36467,ct:6,co:7.5,eci:0.95},
-  {n:"Thailand",ce:7.4,ppp:23519,ct:7,co:2.5,eci:1.12},
-  {n:"Egypt",ce:5.8,ppp:18525,ct:0,co:1,eci:-0.13},
-  {n:"South Africa",ce:5,ppp:15200,ct:0,co:3,eci:-0.15},
-  {n:"Singapore",ce:0.5,ppp:143786,ct:4,co:13,eci:1.83},
-  {n:"Saudi Arabia",ce:0.7,ppp:71565,ct:0,co:6.5,eci:0.62},
-  {n:"Iran",ce:1.9,ppp:18917,ct:0,co:0.5,eci:-0.19},
-  {n:"Bangladesh",ce:1.1,ppp:9148,ct:0,co:0.5,eci:-0.76},
-  {n:"Qatar",ce:0.8,ppp:129368,ct:0,co:0.5,eci:-0.38},
-  {n:"Kuwait",ce:0.1,ppp:52000,ct:0,co:0.5,eci:0.13},
-  {n:"Algeria",ce:0.2,ppp:16824,ct:0,co:0.5,eci:-0.63},
-  {n:"Iraq",ce:0.6,ppp:14653,ct:0,co:0.5,eci:-0.80},
-  {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:0.5,eci:-1.62},
-  {n:"Kenya",ce:4,ppp:6317,ct:0,co:0.5,eci:-0.35},
-  {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:0.5,eci:-0.88},
+  {n:"Iceland",ce:80.5,ppp:81608,ct:0,co:1,eci:0.10,sc:90.6},
+  {n:"Sweden",ce:72.2,ppp:69226,ct:3,co:8.5,eci:1.54,sc:88.2},
+  {n:"Norway",ce:71.8,ppp:103638,ct:0,co:5,eci:0.39,sc:90.3},
+  {n:"Finland",ce:63.2,ppp:63415,ct:0,co:9.5,eci:1.36,sc:90.1},
+  {n:"Switzerland",ce:56.8,ppp:95142,ct:0,co:7.5,eci:2.14,sc:89.7},
+  {n:"France",ce:53.9,ppp:60839,ct:2,co:14,eci:1.34,sc:80.8},
+  {n:"Brazil",ce:50.6,ppp:21176,ct:0,co:6.5,eci:-0.16,sc:52.6},
+  {n:"Austria",ce:43.3,ppp:73545,ct:0,co:2,eci:1.68,sc:84.0},
+  {n:"New Zealand",ce:42.6,ppp:54697,ct:0,co:2,eci:0.20,sc:86.3},
+  {n:"Denmark",ce:41.7,ppp:77892,ct:10,co:3,eci:1.06,sc:90.7},
+  {n:"Portugal",ce:39.7,ppp:49353,ct:2,co:2,eci:0.74,sc:80.2},
+  {n:"Slovakia",ce:36.1,ppp:39840,ct:2,co:1,eci:1.46,sc:66.8},
+  {n:"Spain",ce:34.2,ppp:55682,ct:5,co:7.5,eci:0.76,sc:75.0},
+  {n:"Canada",ce:32.6,ppp:64219,ct:3,co:12,eci:0.58,sc:84.6},
+  {n:"Chile",ce:32.3,ppp:33145,ct:0,co:1,eci:-0.30,sc:75.5},
+  {n:"Czech Republic",ce:28.3,ppp:55761,ct:2,co:2,eci:1.75,sc:74.5},
+  {n:"Hungary",ce:27.8,ppp:46592,ct:4,co:2,eci:1.52,sc:64.2},
+  {n:"Romania",ce:26.7,ppp:45982,ct:0,co:1,eci:1.23,sc:59.9},
+  {n:"Peru",ce:26.7,ppp:17011,ct:0,co:0.5,eci:-0.86,sc:48.2},
+  {n:"United Kingdom",ce:26.5,ppp:59911,ct:0,co:18,eci:1.61,sc:77.5},
+  {n:"Colombia",ce:26.1,ppp:21246,ct:0,co:0.5,eci:-0.13,sc:52.8},
+  {n:"Germany",ce:24,ppp:71684,ct:28,co:20,eci:1.94,sc:82.3},
+  {n:"Belgium",ce:23.4,ppp:71946,ct:5,co:3,eci:1.18,sc:78.4},
+  {n:"Ireland",ce:22.2,ppp:129683,ct:0,co:16,eci:1.44,sc:85.6},
+  {n:"Vietnam",ce:21.5,ppp:15034,ct:9,co:3,eci:0.04,sc:63.1},
+  {n:"Italy",ce:20.9,ppp:60030,ct:2,co:8.5,eci:1.35,sc:71.2},
+  {n:"Turkey",ce:19.8,ppp:42786,ct:2,co:2,eci:0.61,sc:51.4},
+  {n:"China",ce:19.7,ppp:25179,ct:100,co:60,eci:1.33,sc:69.4},
+  {n:"United States",ce:19.7,ppp:82305,ct:0,co:100,eci:1.40,sc:77.1},
+  {n:"Netherlands",ce:19.1,ppp:81729,ct:2,co:16,eci:0.99,sc:87.6},
+  {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:0.5,eci:-0.57,sc:35.8},
+  {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:27.5,eci:2.04,sc:84.8},
+  {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:1,eci:-0.20,sc:56.7},
+  {n:"Japan",ce:17,ppp:50662,ct:14,co:25,eci:2.26,sc:83.8},
+  {n:"Australia",ce:14.7,ppp:72273,ct:0,co:10,eci:-0.55,sc:86.1},
+  {n:"Poland",ce:13,ppp:48473,ct:4,co:5,eci:1.02,sc:71.6},
+  {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:0.5,eci:0.76,sc:52.9},
+  {n:"Russia",ce:11.8,ppp:44269,ct:0,co:4,eci:0.19,sc:44.5},
+  {n:"Indonesia",ce:11,ppp:15416,ct:3,co:4,eci:-0.09,sc:61.5},
+  {n:"India",ce:10.3,ppp:10323,ct:8,co:11,eci:0.48,sc:58.9},
+  {n:"Israel",ce:9.8,ppp:55171,ct:0,co:8.5,eci:1.17,sc:75.6},
+  {n:"Mexico",ce:9.6,ppp:25243,ct:5,co:4,eci:1.14,sc:52.3},
+  {n:"UAE",ce:9,ppp:77955,ct:0,co:6,eci:0.12,sc:81.1},
+  {n:"Morocco",ce:8.7,ppp:9895,ct:0,co:0.5,eci:-0.35,sc:56.1},
+  {n:"Taiwan",ce:8.6,ppp:73344,ct:3,co:40,eci:1.80,sc:84.8},
+  {n:"Malaysia",ce:8.3,ppp:36467,ct:6,co:7.5,eci:0.95,sc:69.8},
+  {n:"Thailand",ce:7.4,ppp:23519,ct:7,co:2.5,eci:1.12,sc:59.0},
+  {n:"Egypt",ce:5.8,ppp:18525,ct:0,co:1,eci:-0.13,sc:46.7},
+  {n:"South Africa",ce:5,ppp:15200,ct:0,co:3,eci:-0.15,sc:49.3},
+  {n:"Singapore",ce:0.5,ppp:143786,ct:4,co:13,eci:1.83,sc:89.5},
+  {n:"Saudi Arabia",ce:0.7,ppp:71565,ct:0,co:6.5,eci:0.62,sc:66.4},
+  {n:"Iran",ce:1.9,ppp:18917,ct:0,co:0.5,eci:-0.19,sc:36.8},
+  {n:"Bangladesh",ce:1.1,ppp:9148,ct:0,co:0.5,eci:-0.76,sc:41.2},
+  {n:"Qatar",ce:0.8,ppp:129368,ct:0,co:0.5,eci:-0.38,sc:74.5},
+  {n:"Kuwait",ce:0.1,ppp:52000,ct:0,co:0.5,eci:0.13,sc:58.4},
+  {n:"Algeria",ce:0.2,ppp:16824,ct:0,co:0.5,eci:-0.63,sc:44.1},
+  {n:"Iraq",ce:0.6,ppp:14653,ct:0,co:0.5,eci:-0.80,sc:31.1},
+  {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:0.5,eci:-1.62,sc:30.4},
+  {n:"Kenya",ce:4,ppp:6317,ct:0,co:0.5,eci:-0.35,sc:43.1},
+  {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:0.5,eci:-0.88,sc:33.4},
 ];
 
 const annotations=[
@@ -901,9 +957,9 @@ function nPPP(v){return Math.max(0,Math.min(1,(Math.log(v)-LN_MIN)/LN_R));}
 function nECI(v){return Math.max(0,Math.min(1,(v-ECI_MIN)/ECI_R));}
 
 function prof(d){
-  const s=[{k:'energy',v:d.ceN},{k:'ppp',v:d.ppN},{k:'cleantech',v:d.ctN},{k:'compute',v:d.coN},{k:'eci',v:d.ecN}].sort((a,b)=>b.v-a.v);
-  const avg=(d.ceN+d.ppN+d.ctN+d.coN+d.ecN)/5;
-  const spread=Math.max(d.ceN,d.ppN,d.ctN,d.coN,d.ecN)-Math.min(d.ceN,d.ppN,d.ctN,d.coN,d.ecN);
+  const s=[{k:'energy',v:d.ceN},{k:'ppp',v:d.ppN},{k:'cleantech',v:d.ctN},{k:'compute',v:d.coN},{k:'eci',v:d.ecN},{k:'state',v:d.scN}].sort((a,b)=>b.v-a.v);
+  const avg=(d.ceN+d.ppN+d.ctN+d.coN+d.ecN+d.scN)/6;
+  const spread=Math.max(d.ceN,d.ppN,d.ctN,d.coN,d.ecN,d.scN)-Math.min(d.ceN,d.ppN,d.ctN,d.coN,d.ecN,d.scN);
   if(avg<0.12)return{l:'Vulnerable',c:'vulnerable'};
   if(spread<0.25&&avg>0.2)return{l:'Balanced',c:'balanced'};
   if(s[0].k==='energy')return{l:'Energy Led',c:'energy'};
@@ -911,6 +967,7 @@ function prof(d){
   if(s[0].k==='cleantech')return{l:'Producer',c:'producer'};
   if(s[0].k==='compute')return{l:'Compute',c:'compute'};
   if(s[0].k==='eci')return{l:'Complex',c:'complex'};
+  if(s[0].k==='state')return{l:'Capable',c:'capable'};
   return{l:'Mixed',c:'balanced'};
 }
 
@@ -920,17 +977,20 @@ function compute(){
   const w3=+document.getElementById('w3').value;
   const w4=+document.getElementById('w4').value;
   const w5=+document.getElementById('w5').value;
-  const wT=w1+w2+w3+w4+w5||1;
+  const w6=+document.getElementById('w6').value;
+  const wT=w1+w2+w3+w4+w5+w6||1;
   document.getElementById('w1v').textContent=Math.round(w1/wT*100)+'%';
   document.getElementById('w2v').textContent=Math.round(w2/wT*100)+'%';
   document.getElementById('w3v').textContent=Math.round(w3/wT*100)+'%';
   document.getElementById('w4v').textContent=Math.round(w4/wT*100)+'%';
   document.getElementById('w5v').textContent=Math.round(w5/wT*100)+'%';
+  document.getElementById('w6v').textContent=Math.round(w6/wT*100)+'%';
   data=raw.map(r=>{
-    const ceN=r.ce/100,ppN=nPPP(r.ppp),ctN=Math.max(0,r.ct)/100,coN=r.co/100,ecN=nECI(r.eci);
-    const comp=((w1*ceN+w2*ppN+w3*ctN+w4*coN+w5*ecN)/wT)*100;
-    const eW=w1+w3+w5||1,pW=w2+w4||1;
-    return{...r,ceN,ppN,ctN,coN,ecN,ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,ecS:ecN*100,composite:comp,eSov:(w1*ceN+w3*ctN+w5*ecN)/eW*100,ePow:(w2*ppN+w4*coN)/pW*100,pf:prof({ceN,ppN,ctN,coN,ecN})};
+    const ceN=r.ce/100,ppN=nPPP(r.ppp),ctN=Math.max(0,r.ct)/100,coN=r.co/100,ecN=nECI(r.eci),scN=r.sc/100;
+    const comp=((w1*ceN+w2*ppN+w3*ctN+w4*coN+w5*ecN+w6*scN)/wT)*100;
+    const xW=w1+w3+w4+w5||1;
+    const yW=w2+w6||1;
+    return{...r,ceN,ppN,ctN,coN,ecN,scN,ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,ecS:ecN*100,scS:scN*100,composite:comp,eSov:(w1*ceN+w3*ctN+w4*coN+w5*ecN)/xW*100,ePow:(w2*ppN+w6*scN)/yW*100,pf:prof({ceN,ppN,ctN,coN,ecN,scN})};
   });
   data.sort((a,b)=>{
     const va=a[sortCol],vb=b[sortCol];
@@ -952,6 +1012,7 @@ function renderTop(){
         <span class="mini-bar cleantech" style="height:${Math.max(1,c.ctS/100*16)}px"></span>
         <span class="mini-bar compute" style="height:${Math.max(1,c.coS/100*16)}px"></span>
         <span class="mini-bar eci" style="height:${Math.max(1,c.ecS/100*16)}px"></span>
+        <span class="mini-bar state" style="height:${Math.max(1,c.scS/100*16)}px"></span>
       </span>
       <span class="top-score">${c.composite.toFixed(1)}</span>
     </div>`;
@@ -985,18 +1046,18 @@ function renderScatter(){
   s+=`<line class="crosshair" x1="${p.l}" y1="${scy}" x2="${w-p.r}" y2="${scy}"/>`;
   s+=`<line class="crosshair" x1="${scx}" y1="${p.t}" x2="${scx}" y2="${h-p.b}"/>`;
 
-  s+=`<text class="quadrant-label" x="${p.l+8}" y="${p.t+14}" fill="#0a7058" fill-opacity="0.22">Transition Ready, Low Power</text>`;
+  s+=`<text class="quadrant-label" x="${p.l+8}" y="${p.t+14}" fill="#0a7058" fill-opacity="0.22">Ready but Weak</text>`;
   s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${p.t+14}" text-anchor="end" fill="#165a96" fill-opacity="0.28">Electrostates</text>`;
   s+=`<text class="quadrant-label" x="${p.l+8}" y="${h-p.b-6}" fill="#a82028" fill-opacity="0.18">Exposed</text>`;
-  s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${h-p.b-6}" text-anchor="end" fill="#9a6508" fill-opacity="0.22">Petrostates</text>`;
+  s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${h-p.b-6}" text-anchor="end" fill="#9a6508" fill-opacity="0.22">Rich but Stuck</text>`;
 
   s+=`<text class="hud-coord" x="${p.l}" y="${p.t+7}">X:00 Y:100</text>`;
   s+=`<text class="hud-coord" x="${w-p.r}" y="${p.t+7}" text-anchor="end">X:100 Y:100</text>`;
   s+=`<text class="hud-coord" x="${p.l}" y="${h-p.b-3}">X:00 Y:00</text>`;
   s+=`<text class="hud-coord" x="${w-p.r}" y="${h-p.b-3}" text-anchor="end">X:100 Y:00</text>`;
 
-  s+=`<text class="axis-label" x="${p.l+pw/2}" y="${h-3}" text-anchor="middle" fill="#6e7c90">Transition Capacity (Energy + Tech + Complexity)</text>`;
-  s+=`<text class="axis-label" x="10" y="${p.t+ph/2}" text-anchor="middle" fill="#6e7c90" transform="rotate(-90,10,${p.t+ph/2})">Economic Power</text>`;
+  s+=`<text class="axis-label" x="${p.l+pw/2}" y="${h-3}" text-anchor="middle" fill="#6e7c90">Transition Readiness (Energy + Tech + Compute + Complexity)</text>`;
+  s+=`<text class="axis-label" x="10" y="${p.t+ph/2}" text-anchor="middle" fill="#6e7c90" transform="rotate(-90,10,${p.t+ph/2})">Power to Execute (PPP + State Capacity)</text>`;
 
   const sorted=[...data].sort((a,b)=>a.composite-b.composite);
   sorted.forEach(c=>{
@@ -1008,7 +1069,7 @@ function renderScatter(){
       fill="rgba(22,90,150,${alpha})"
       stroke="#165a96" stroke-width="0.7" stroke-opacity="${0.25+c.composite/100*0.4}"
       data-n="${c.n}" data-ce="${c.ceS.toFixed(0)}" data-pp="${c.ppS.toFixed(0)}"
-      data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
+      data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-sc="${c.scS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
   });
 
   annotations.forEach(a=>{
@@ -1038,6 +1099,7 @@ function renderScatter(){
         <div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Tech</span><span class="tt-val">${d.ct}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute</span><span class="tt-val">${d.co}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--eci)">Complexity</span><span class="tt-val">${d.ec}</span></div>
+        <div class="tt-row"><span class="tt-label" style="color:var(--state)">State Cap.</span><span class="tt-val">${d.sc}</span></div>
         <div class="tt-divider"></div>
         <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${d.comp}</span></div>`;
       tt.classList.add('visible');
@@ -1052,25 +1114,44 @@ function renderScatter(){
 }
 
 function renderFindings(){
-  const petroStates=data.filter(c=>['Saudi Arabia','Qatar','Kuwait','UAE','Iran','Iraq','Algeria','Nigeria'].includes(c.n));
-  const petroAvg=petroStates.reduce((s,c)=>s+c.composite,0)/petroStates.length;
-  const nordics=data.filter(c=>['Sweden','Norway','Finland','Denmark','Iceland'].includes(c.n));
-  const nAvg=nordics.reduce((s,c)=>s+c.composite,0)/nordics.length;
-  const cn=data.find(c=>c.n==='China'),us=data.find(c=>c.n==='United States');
-
   const findings=[
-    {t:"Nordic Advantage",b:`Avg <strong>${nAvg.toFixed(1)}</strong> composite. Hydro + nuclear + high PPP = structural resilience.`},
-    {t:"US\u2013China Split",b:`China (${cn.composite.toFixed(1)}) dominates production. US (${us.composite.toFixed(1)}) dominates compute. Both ~20% clean energy.`},
-    {t:"Petrostate Exposure",b:`Oil economies avg <strong>${petroAvg.toFixed(1)}</strong>. High PPP masks zero transition scores.`},
-    {t:"Germany Exception",b:`Only major Western net clean tech exporter. Nuclear exit dropped clean energy to 24%.`},
-    {t:"Mozambique Problem",b:`High hydro \u2260 resilience. Brazil 50.6% clean energy but mid-table composite.`},
-    {t:"Taiwan Asymmetry",b:`8.6% clean energy, compute score 40. TSMC leverage \u2260 structural resilience.`}
+    {
+      t:"The Electrostate Leaders",
+      s:"Countries scoring high on <strong>both</strong> axes — Transition Readiness and Power to Execute. Nordic nations, Switzerland, Singapore. They have the clean energy, the manufacturing complexity, <strong>and</strong> the governance to execute.",
+      d:"These are the 21st century's structural winners. Iceland (80.5% clean energy, 90.6 state capacity), Sweden (72.2% clean, 88.2 state), Norway (71.8% clean, 90.3 state), Denmark (41.7% clean, 90.7 state), Switzerland (56.8% clean, 89.7 state), and Singapore (89.5 state, highest PPP). They don't just have one advantage — they have compounding advantages across every dimension. The common thread: small-to-medium states with high social trust and decades of institutional investment."
+    },
+    {
+      t:"China's Execution Gap",
+      s:"Highest clean tech production and strong adaptability — 48,000km HSR, 278GW solar in one year — but social stability score drags it down. The state can build anything. The question is whether the society can sustain the pace.",
+      d:"China scores 100 on clean tech (more solar, batteries, and EVs than the rest of the world combined) and 60 on compute, but only 69.4 on state capacity. The gap between what the state apparatus can construct and what the social fabric can absorb is the defining tension. If stability holds, China is the manufacturing engine of the transition. If it fractures, the world's clean tech supply chain fractures with it."
+    },
+    {
+      t:"America's Compute Gamble",
+      s:"Dominant in AI and compute but weakening on every other axis. Net clean tech importer, 20% clean energy, declining ECI ranking, middling governance stability. Betting everything on one dimension.",
+      d:"The US scores 100 on compute — unmatched AI infrastructure, hyperscaler dominance, semiconductor design leadership. But 19.7% clean energy, zero clean tech exports, and a state capacity score of 77.1 that reflects political volatility and infrastructural decay. The implicit bet: that AI and compute supremacy will compensate for energy dependence and manufacturing hollowing. History suggests single-axis dominance is fragile."
+    },
+    {
+      t:"Petrostate Trap",
+      s:"Saudi Arabia, Qatar, UAE, Kuwait: high PPP masks zero transition readiness on the X axis. UAE scores highest among them on state capacity (81.1), suggesting a genuine path out — if it executes.",
+      d:"These nations cluster in the bottom-right quadrant: rich but stuck. Qatar has the second-highest PPP in the dataset but 0.8% clean energy and negative ECI. Saudi Arabia's Vision 2030 is real but the numbers haven't moved yet. The UAE is the outlier — 81.1 state capacity, Masdar City, nuclear power plant online — it has the best shot at breaking out. Kuwait and the rest are running out of time before the commodity they sell becomes stranded."
+    },
+    {
+      t:"The Complexity Advantage",
+      s:"Japan (#1 ECI), South Korea (#3), Germany (#4): deepest manufacturing capability but haven't fully deployed it for the transition. Latent electrostates — the capacity exists, the commitment lags.",
+      d:"Japan's 2.26 ECI is the highest on Earth — the most sophisticated manufacturing economy ever built. South Korea (2.04) and Germany (1.94) aren't far behind. All three also have strong state capacity (83.8, 84.8, 82.3). But Japan is at 17% clean energy, South Korea 17.5%, Germany 24%. These countries could dominate the transition economy if they redirected their industrial depth toward it. The complexity is the asset; the deployment speed is the liability."
+    },
+    {
+      t:"State Capacity as Multiplier",
+      s:"Singapore (89.5), Denmark (90.7), Norway (90.3) show that governance quality multiplies every other dimension. Without state capacity, clean energy and complexity are theoretical. With it, they become deployable.",
+      d:"Compare two pairs: Nigeria (30.4 state) and Norway (90.3 state) — both oil producers, radically different trajectories. Bangladesh (41.2 state) and Denmark (90.7 state) — similar population scales, opposite outcomes. State capacity isn't just one dimension among six. It's the multiplier that determines whether the other five translate into real-world infrastructure, policy, and resilience. The highest-scoring countries on this index all share one trait: they can execute."
+    }
   ];
 
   document.getElementById('findings').innerHTML=findings.map((f,i)=>`<div class="finding">
       <div class="finding-num">F.${String(i+1).padStart(2,'0')}</div>
       <h4>${f.t}</h4>
-      <p>${f.b}</p>
+      <p class="finding-summary">${f.s}</p>
+      <p class="finding-detail">${f.d}</p>
     </div>`).join('');
 }
 
