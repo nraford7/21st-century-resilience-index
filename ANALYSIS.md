@@ -1,20 +1,20 @@
 # 21st Century Resilience Index: Analytical Findings
 
-**60 nations. 7 dimensions. What the data reveals about who will lead the electrostate transition — and who won't.**
+**85 nations. 9 dimensions. What the data reveals about who will lead the electrostate transition — and who won't.**
 
 ---
 
-## 1. No Country Dominates All Seven Dimensions
+## 1. No Country Dominates All Nine Dimensions
 
 This is the headline finding. There is no unambiguous leader. Every country has structural blind spots.
 
 The Nordics + Switzerland come closest to "balanced excellence" — high clean energy, high PPP, high state capacity, strong momentum. But they're weak on clean tech production (none are net exporters) and compute (no hyperscale presence). They're *resilient* but they're not *producing* the transition tools.
 
-China is the only country in the top tier on clean tech (100) and scores well on compute (60), ECI (1.33), and momentum (+9.07pp). But its clean energy share is only 19.7%, its PPP is modest ($25k), and its state capacity (69.4) is held back by social stability concerns. It's a production powerhouse, not a balanced electrostate.
+China is the only country in the top tier on clean tech (100) and scores well on compute (71), ECI (1.33), and momentum (+9.07pp). But its clean energy share is only 19.7%, its PPP is modest ($25k), and its state capacity (69.4) is held back by social stability concerns. It's a production powerhouse, not a balanced electrostate.
 
-The US dominates compute (100) and has high PPP ($82k), but is a net clean tech *importer*, sits at only 19.7% clean energy, and its momentum (+4.4pp) is modest. Its ECI ranking has been declining (13th → 20th over a decade). It's betting on one dimension.
+The US dominates compute (95) and has high PPP ($82k), but is a net clean tech *importer*, sits at only 19.7% clean energy, and its momentum (+4.4pp) is modest. Its ECI ranking has been declining (13th → 20th over a decade). It's betting on one dimension.
 
-**Implication:** The transition won't be led by a single hegemon. It will be led by a small club of countries whose strengths compensate for each other's gaps — or by whoever figures out how to score well across all seven dimensions first.
+**Implication:** The transition won't be led by a single hegemon. It will be led by a small club of countries whose strengths compensate for each other's gaps — or by whoever figures out how to score well across all nine dimensions first.
 
 ---
 
@@ -45,7 +45,7 @@ Each dominates one dimension so completely that it distorts the entire index.
 
 **China:** 100 on clean tech. No other country exceeds 28. Eighty percent of global solar manufacturing, 83% of batteries, 70% of EVs. The index is almost a referendum on how much weight you give clean tech production — weight it heavily and China leads the world; zero it out and China drops to mid-table.
 
-**United States:** 100 on compute. The next highest is China at 60. Half of global hyperscale data center capacity. The same logic applies: weight compute heavily and the US leads; zero it and it drops.
+**United States:** 95 on compute. The next highest is China at 71. Half of global hyperscale data center capacity. The same logic applies: weight compute heavily and the US leads; zero it and it drops.
 
 The critical question for both: is single-dimension dominance durable? China is trying to build compute capacity. The US is trying to build clean tech (IRA). Both are trying to shore up their weak flank. The index snapshot can't tell you who will succeed — but it can tell you where the gap is.
 
@@ -79,7 +79,7 @@ The interactive weights are the most analytically powerful feature. Here's what 
 This is the "purist" view — who has actually decarbonized their energy? The Nordic countries + hydro nations dominate. China and the US are tied at 19.7% — identical despite radically different strategies. The petrostates collapse to the bottom.
 
 ### Weight only Compute (w4=100)
-**Top 5:** US (100), China (60), Taiwan (40), South Korea (27.5), Japan (25)
+**Top 5:** US (95), China (71), Taiwan (64), South Korea (61), Japan (58)
 
 The most concentrated dimension. Five countries account for essentially all advanced compute. This is where the leverage analysis from "Indispensable Fragility" becomes visible — Taiwan's TSMC, South Korea's HBM, the Netherlands' ASML (16). Remove any one of these nodes and the global compute supply chain fragments.
 
@@ -101,7 +101,7 @@ The governance premium. Small, well-run countries cluster at the top. Singapore 
 ### Equal weight on Transition Readiness only (w1,w3,w4,w5,w7 = 20 each, w2,w6 = 0)
 **This isolates the X-axis:** Who has the technology?
 
-China dominates on the strength of clean tech production (100) and growing compute (60). The Nordics score well from clean energy and momentum. Japan and South Korea score well from ECI and compute. The US drops significantly — high compute can't compensate for being a net clean tech importer with modest energy share and declining complexity.
+China dominates on the strength of clean tech production (100) and growing compute (71). The Nordics score well from clean energy and momentum. Japan and South Korea score well from ECI and compute. The US drops significantly — high compute can't compensate for being a net clean tech importer with modest energy share and declining complexity.
 
 ### Equal weight on Power to Execute only (w2,w6 = 50 each, rest = 0)
 **This isolates the Y-axis:** Can you afford it and govern it?
@@ -140,11 +140,11 @@ Regardless of how you set the weights, these patterns persist:
 
 **1. The transition is a compound problem.** No single advantage is sufficient. You need some combination of energy, technology, money, governance, manufacturing sophistication, and momentum. Countries that score high on 1-2 dimensions and zero on the rest are fragile no matter how impressive their peak score.
 
-**2. About 8-12 countries are structurally positioned to lead.** The Nordics, Switzerland, Singapore, South Korea, Japan, Germany, and arguably France, UK, Canada, and the Netherlands. They have some combination of all seven ingredients. Below this top tier, the drop-off is steep.
+**2. About 8-12 countries are structurally positioned to lead.** The Nordics, Switzerland, Singapore, South Korea, Japan, Germany, and arguably France, UK, Canada, and the Netherlands. They have some combination of all nine ingredients. Below this top tier, the drop-off is steep.
 
-**3. Clean tech production and compute are winner-take-all dimensions.** China at 100 on clean tech, the US at 100 on compute. No other country exceeds 28 and 40 respectively. These dimensions don't have a distribution — they have a monopolist and everyone else. The index is highly sensitive to how much weight you give monopoly positions.
+**3. Clean tech production and compute are winner-take-all dimensions.** China at 100 on clean tech, the US at 95 on compute. No other country exceeds 28 and 71 respectively. These dimensions don't have a distribution — they have a monopolist and everyone else. The index is highly sensitive to how much weight you give monopoly positions.
 
-**4. State capacity is the multiplier.** Countries with identical scores on the other six dimensions diverge dramatically based on governance quality. Singapore and Hong Kong have similar PPP and compute profiles, but Singapore's governance score (100 vs ~70) puts it in a different tier entirely. State capacity determines whether capability becomes deployment.
+**4. State capacity is the multiplier.** Countries with identical scores on the other eight dimensions diverge dramatically based on governance quality. Singapore and Hong Kong have similar PPP and compute profiles, but Singapore's governance score (100 vs ~70) puts it in a different tier entirely. State capacity determines whether capability becomes deployment.
 
 **5. Petrostates cluster at the bottom under every configuration except pure PPP.** This is the most robust negative finding. Weight any dimension other than purchasing power and the petrostates — Saudi Arabia, Qatar, Kuwait — collapse to the bottom quartile. The wealth cannot compensate. UAE is the sole partial exception.
 
