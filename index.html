@@ -1899,13 +1899,21 @@ function prof(d){
   return{l:'Mixed',c:'balanced'};
 }
 
+// Cluster assignment: checked in order, first match wins.
+// leader:  High governance + deployed clean energy + resource security
+// power:   Extreme compute or clean tech dominance (US, China only)
+// latent:  High manufacturing complexity + governance, but low clean energy deployment
+// petro:   Near-zero clean energy + high wealth (Gulf states)
+// fragile: Some clean energy but weak state + low complexity (hydro-dependent developing)
+// crisis:  High climate exposure + weak state capacity
+// default: Everything else (mixed profiles, boundary cases like Chile)
 function cluster(c) {
-  if (c.scN > 0.80 && (c.ceN > 0.35 || c.ecN > 0.8) && c.rsN > 0.45) return 'leader';
+  if (c.scN > 0.80 && c.ceN > 0.35 && c.rsN >= 0.50) return 'leader';
+  if (c.coN > 0.85 || c.ctN > 0.5) return 'power';
   if (c.ecN > 0.75 && c.scN > 0.65 && c.ceN < 0.35) return 'latent';
-  if (c.coN > 0.5 || c.ctN > 0.5) return 'power';
   if (c.ceN < 0.05 && c.ppN > 0.6) return 'petro';
-  if (c.cxN > 0.5 && c.scN < 0.55) return 'crisis';
-  if (c.ceN > 0.25 && c.ecN < 0.45 && c.scN < 0.6) return 'fragile';
+  if (c.ceN > 0.20 && c.scN < 0.60 && c.ecN < 0.50) return 'fragile';
+  if (c.cxN > 0.5 && c.scN < 0.60) return 'crisis';
   return 'default';
 }
 
