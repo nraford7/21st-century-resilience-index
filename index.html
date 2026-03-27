@@ -509,27 +509,17 @@ html,body{height:100%;overflow:hidden;}
 
 .story-popup .story-close:hover { color: var(--text); }
 
-#scatterChart {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
 #scatter3D {
   width: 100%;
   height: 100%;
-  display: none;
+  display: block;
   position: absolute;
   top: 0;
   left: 0;
 }
 
-#scatter3D.active {
-  display: block;
-}
-
 .legend-3d {
-  display: none;
+  display: block;
   position: absolute;
   bottom: 36px;
   left: 10px;
@@ -541,7 +531,6 @@ html,body{height:100%;overflow:hidden;}
   pointer-events: none;
 }
 
-.legend-3d.active { display: block; }
 
 .legend-3d-item {
   display: flex;
@@ -1483,8 +1472,6 @@ html,body{height:100%;overflow:hidden;}
     <div class="corner br"></div>
     <div class="vs-header">
       <span class="vs-label">Transition Readiness vs Power to Execute</span>
-      <button class="toggle-3d" id="toggle3d" onclick="toggle3D()">3D</button>
-      <button class="toggle-3d active" id="toggleLabels" onclick="toggleAnnotations()" style="margin-left:4px;">Labels</button>
     </div>
     <div class="story-bar">
       <button class="story-btn" onclick="playStory('reset')">Reset</button>
@@ -1494,7 +1481,6 @@ html,body{height:100%;overflow:hidden;}
       <button class="story-btn" onclick="playStory('breadth')">Breadth Wins</button>
       <button class="story-btn" onclick="playStory('crisis')">Crisis States</button>
     </div>
-    <svg id="scatterChart"></svg>
     <canvas id="scatter3D"></canvas>
     <div class="legend-3d" id="legend3d">
       <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#0a7058"></span><span class="legend-3d-label">Balanced Leaders</span></div>
@@ -1721,91 +1707,91 @@ const ECI_MIN=-2.44,ECI_MAX=2.26,ECI_R=ECI_MAX-ECI_MIN;
 const MO_MIN=23.5,MO_MAX=77.6,MO_R=MO_MAX-MO_MIN;
 
 const raw=[
-  {n:"Iceland",ce:80.5,ppp:81608,ct:0,co:42,eci:0.10,sc:90.6,mo:37.6,rs:50,cx:17.5,desc:"Highest clean energy share on Earth (80.5%) from geothermal and hydro. Strong PPP and state capacity, but near-zero on clean tech, compute, and ECI. Energy sovereign but not an electrostate \u2014 it consumes clean power without producing the technology."},
-  {n:"Sweden",ce:72.2,ppp:69226,ct:3,co:54,eci:1.54,sc:88.2,mo:34.0,rs:71,cx:21.5,desc:"Top-tier across all dimensions. 72% clean energy, high ECI (1.54), strong state capacity (88.2), solid momentum (+4.3pp). The closest thing to a complete electrostate profile in the dataset. Weak only on clean tech exports and compute."},
-  {n:"Norway",ce:71.8,ppp:103638,ct:0,co:50,eci:0.39,sc:90.3,mo:31.7,rs:59,cx:19.0,desc:"71.8% clean energy from hydro, highest PPP among Nordics ($104k), exceptional state capacity (90.3). But ECI is only 0.39 \u2014 oil wealth didn\u2019t build manufacturing complexity. A sovereign wealth fund is not an industrial base."},
-  {n:"Finland",ce:63.2,ppp:63415,ct:0,co:54,eci:1.36,sc:90.1,mo:41.0,rs:73,cx:18.5,desc:"Fastest momentum on Earth (+20.6pp in a decade). Strong state capacity (90.1), solid ECI (1.36). Jumped from 42% to 63% clean energy through nuclear and wind buildout. The model for rapid, governed transition."},
-  {n:"Switzerland",ce:56.8,ppp:95142,ct:0,co:52,eci:2.14,sc:89.7,mo:39.5,rs:58,cx:16.5,desc:"Second-highest ECI globally (2.14), near-perfect governance (99.5 WGI), 57% clean energy from hydro and nuclear. Infrastructure score #1 worldwide. Lacks only clean tech production scale and compute presence."},
-  {n:"France",ce:53.9,ppp:60839,ct:2,co:56,eci:1.34,sc:80.8,mo:42.5,rs:84,cx:31.0,desc:"Nuclear advantage: 37% of primary energy from nuclear gives it 54% clean energy total. Strong ECI (1.34), decent compute (14), solid state capacity (80.8). The nuclear baseload makes it structurally resilient, but clean tech exports are minimal."},
-  {n:"Brazil",ce:50.6,ppp:21176,ct:0,co:41,eci:-0.16,sc:52.6,mo:43.4,rs:92,cx:54.5,desc:"50.6% clean energy from legacy hydro \u2014 third highest in dataset. But negative ECI (-0.16), weak state capacity (52.6), zero clean tech production. Strong momentum (+11.9pp) from wind and solar additions. Clean but structurally fragile. Can\u2019t build the transition, only buy it."},
-  {n:"Austria",ce:43.3,ppp:73545,ct:0,co:47,eci:1.68,sc:84.0,mo:44.5,rs:64,cx:24.5,desc:"43% clean energy, strong ECI (1.68), high PPP ($74k), good state capacity (84.0). A quiet overachiever \u2014 strong on most dimensions without dominating any. Alpine hydro and high industrial sophistication create a solid foundation."},
-  {n:"New Zealand",ce:42.6,ppp:54697,ct:0,co:47,eci:0.20,sc:86.3,mo:37.3,rs:81,cx:32.0,desc:"42.6% clean energy from hydro and geothermal, excellent state capacity (86.3), best COVID response globally. But low ECI (0.20), zero compute, zero clean tech. Geographically isolated, residentially clean, industrially dependent."},
-  {n:"Denmark",ce:41.7,ppp:77892,ct:10,co:51,eci:1.06,sc:90.7,mo:45.0,rs:72,cx:22.0,desc:"Highest state capacity in the dataset (90.7). Second-fastest momentum (+16.4pp). Wind power pioneer \u2014 Vestas controls ~20% of global turbine market. One of the few countries that both deploys AND produces transition technology at scale."},
-  {n:"Portugal",ce:39.7,ppp:49353,ct:2,co:43,eci:0.74,sc:80.2,mo:52.8,rs:56,cx:37.5,desc:"39.7% clean energy with strong momentum (+10pp). Decent state capacity (80.2). But modest ECI (0.74), low compute, minimal clean tech exports. A transition success story on the consumption side; still a customer on the production side."},
-  {n:"Slovakia",ce:36.1,ppp:39840,ct:2,co:39,eci:1.46,sc:66.8,mo:44.9,rs:61,cx:26.0,desc:"36% clean energy (nuclear + hydro), surprisingly high ECI (1.46) for its size. Growing battery manufacturing hub from Asian FDI. Low compute and modest state capacity (66.8). A small country punching above its weight on manufacturing complexity."},
-  {n:"Spain",ce:34.2,ppp:55682,ct:5,co:48,eci:0.76,sc:75.0,mo:45.8,rs:57,cx:38.5,desc:"34% clean energy, moderate ECI (0.76), decent compute (7.5). 3,600km of HSR (#2 globally). But state capacity (75.0) held back by 2008 crisis hangover and institutional fragility. Strong infrastructure buildout capacity, weaker on manufacturing sophistication."},
-  {n:"Canada",ce:32.6,ppp:64219,ct:3,co:57,eci:0.58,sc:84.6,mo:32.4,rs:88,cx:37.0,desc:"32.6% clean energy but going backwards (-1.3pp momentum). High PPP ($64k), good state capacity (84.6), strong infrastructure (#5 globally). But ECI only 0.58 and zero clean tech production. Oil sands growth is actively undermining the transition. The anti-momentum case study."},
-  {n:"Chile",ce:32.3,ppp:33145,ct:0,co:40,eci:-0.30,sc:75.5,mo:51.3,rs:60,cx:31.5,desc:"32% clean energy with explosive momentum (+12.7pp) \u2014 one of the fastest solar buildouts on earth driven by the Atacama Desert. Good state capacity (75.5). But negative ECI (-0.30) and zero compute mean it\u2019s deploying imported technology, not building its own."},
-  {n:"Czech Republic",ce:28.3,ppp:55761,ct:2,co:44,eci:1.75,sc:74.5,mo:49.0,rs:64,cx:24.0,desc:"28% clean energy, high ECI (1.75 \u2014 6th globally). Growing as a European manufacturing hub. Moderate state capacity (74.5). Nuclear expansion planned. Strong industrial base that could pivot to clean tech production if directed."},
-  {n:"Hungary",ce:27.8,ppp:46592,ct:4,co:42,eci:1.52,sc:64.2,mo:54.9,rs:76,cx:30.5,desc:"28% clean energy (nuclear + renewables), high ECI (1.52), growing battery manufacturing from CATL and Samsung FDI. But declining institutional quality (64.2 state capacity) and EU conflicts threaten the trajectory. Industrial capacity without governance stability."},
-  {n:"Romania",ce:26.7,ppp:45982,ct:0,co:39,eci:1.23,sc:59.9,mo:70.6,rs:77,cx:33.5,desc:"27% clean energy, decent ECI (1.23), EU funds driving modernization. But low state capacity (59.9) and minimal momentum (+1.2pp). Has the latent potential but not the institutional machinery to deploy it quickly."},
-  {n:"Peru",ce:26.7,ppp:17011,ct:0,co:31,eci:-0.86,sc:48.2,mo:45.5,rs:62,cx:56.0,desc:"27% clean energy from hydro, but negative ECI (-0.86), low PPP ($17k), weak state capacity (48.2), minimal momentum (+1.9pp). Six presidents in five years. Clean energy from legacy infrastructure, zero capacity to build the next phase."},
-  {n:"United Kingdom",ce:26.5,ppp:59911,ct:0,co:61,eci:1.61,sc:77.5,mo:41.6,rs:45,cx:27.0,desc:"26.5% clean energy with strong momentum (+10.7pp). High ECI (1.61), significant compute (18), decent state capacity (77.5). Arm Holdings gives it outsized semiconductor leverage. Offshore wind leadership. But aging infrastructure and post-Brexit institutional strain limit execution speed."},
-  {n:"Colombia",ce:26.1,ppp:21246,ct:0,co:35,eci:-0.13,sc:52.8,mo:45.0,rs:68,cx:63.5,desc:"26% clean energy from hydro, but negative ECI (-0.13), low PPP ($21k), weak state capacity (52.8), near-zero momentum (+0.8pp). Diversifying from oil but lacks the industrial complexity to build transition technology domestically."},
-  {n:"Germany",ce:24,ppp:71684,ct:28,co:59,eci:1.94,sc:82.3,mo:38.4,rs:63,cx:26.5,desc:"Only major Western net clean tech exporter (score: 28). Fourth-highest ECI globally (1.94). Strong compute (20), high state capacity (82.3). But nuclear exit dropped clean energy to 24%. Builds the transition tools without having fully deployed them at home. The producer-consumer paradox."},
-  {n:"Belgium",ce:23.4,ppp:71946,ct:5,co:48,eci:1.18,sc:78.4,mo:40.2,rs:47,cx:28.5,desc:"23% clean energy, good ECI (1.18), high PPP ($72k). EU institutional hub. Major EV re-export port (Antwerp/Zeebrugge). But modest state capacity (78.4) and low momentum (+4.2pp). A logistics node, not a production powerhouse."},
-  {n:"Ireland",ce:22.2,ppp:129683,ct:0,co:54,eci:1.44,sc:85.6,mo:56.0,rs:58,cx:23.5,desc:"22% clean energy with strong momentum (+11.2pp). Highest PPP in Europe ($130k, partially tax-driven). Major cloud computing hub (AWS, Azure, Google European HQs). High state capacity (85.6). But zero clean tech production and modest ECI (1.44)."},
-  {n:"Vietnam",ce:21.5,ppp:15034,ct:9,co:35,eci:0.04,sc:63.1,mo:68.3,rs:63,cx:77.0,desc:"21.5% clean energy but going backwards (-0.7pp \u2014 coal growth outpacing renewables). Scores 9 on clean tech but it\u2019s Chinese FDI re-export, not indigenous capability. Near-zero ECI (0.04). A manufacturing platform, not a manufacturing power. The momentum direction is the warning signal."},
-  {n:"Italy",ce:20.9,ppp:60030,ct:2,co:47,eci:1.35,sc:71.2,mo:46.1,rs:48,cx:41.5,desc:"21% clean energy, strong ECI (1.35), decent compute (8.5). STMicroelectronics gives it some semiconductor presence. But low momentum (+2.4pp) and declining state capacity (71.2). Industrial sophistication without the institutional drive to deploy it for the transition."},
-  {n:"Turkey",ce:19.8,ppp:42786,ct:2,co:39,eci:0.61,sc:51.4,mo:60.5,rs:55,cx:46.0,desc:"20% clean energy with surprisingly strong momentum (+10.3pp). Moderate ECI (0.61). But weak state capacity (51.4) and institutional quality declining. Building renewable capacity fast but governance instability could stall the trajectory at any point."},
-  {n:"China",ce:19.7,ppp:25179,ct:100,co:71,eci:1.33,sc:69.4,mo:77.6,rs:54,cx:66.0,desc:"Dominates clean tech production (100 \u2014 80% of solar, 83% of batteries, 70% of EVs). Strong compute (60), good ECI (1.33), high momentum (+9.1pp). But only 19.7% clean energy and state capacity (69.4) constrained by social stability concerns. The manufacturing engine of the global transition \u2014 the question is whether the society can sustain the pace."},
-  {n:"United States",ce:19.7,ppp:82305,ct:0,co:95,eci:1.40,sc:77.1,mo:37.3,rs:89,cx:46.5,desc:"Dominates compute & AI (97 \u2014 half of global hyperscale plus world-leading AI readiness). High PPP ($82k), decent state capacity (77.1). But net clean tech importer, only 19.7% clean energy, declining ECI ranking (13th to 20th), and modest momentum (+4.4pp). Betting everything on AI and compute while the energy transition happens elsewhere."},
-  {n:"Netherlands",ce:19.1,ppp:81729,ct:2,co:57,eci:0.99,sc:87.6,mo:42.0,rs:45,cx:44.0,desc:"19% clean energy but third-fastest momentum (+14.4pp). High PPP ($82k), strong state capacity (87.6). ASML \u2014 sole manufacturer of EUV lithography \u2014 gives it irreplaceable semiconductor leverage. A small country with outsized chokepoint power and accelerating energy transition."},
-  {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:27,eci:-0.57,sc:35.8,mo:35.3,rs:50,cx:84.0,desc:"19% clean energy (hydro + nuclear) but negative ECI (-0.57), $6k PPP, extremely weak state capacity (35.8). Some momentum (+6.6pp). Massive population (230M) with minimal industrial capacity for the transition. Vulnerable to energy and climate shocks simultaneously."},
-  {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:61,eci:2.04,sc:84.8,mo:38.1,rs:47,cx:39.0,desc:"Third-highest ECI globally (2.04). Strong compute (27.5), significant clean tech production (16), high state capacity (84.8). But only 17.5% clean energy and modest momentum (+4.1pp). The industrial capability exists for rapid transition \u2014 the commitment hasn\u2019t matched it."},
-  {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:36,eci:-0.20,sc:56.7,mo:42.5,rs:87,cx:43.0,desc:"17% clean energy, negative ECI (-0.20), moderate PPP ($30k), weak state capacity (56.7). Recurring economic crises prevent sustained transformation. Strong human capital and renewable potential (Patagonian wind) but institutional instability is the binding constraint."},
-  {n:"Japan",ce:17,ppp:50662,ct:14,co:58,eci:2.26,sc:83.8,mo:32.0,rs:42,cx:39.5,desc:"Highest ECI on Earth (2.26) \u2014 the most sophisticated manufacturing economy ever built. Strong compute (25), good clean tech production (14), high state capacity (83.8), solid momentum (+10.4pp). But only 17% clean energy. The latent electrostate: every capability exists, the deployment lags."},
-  {n:"Australia",ce:14.7,ppp:72273,ct:0,co:53,eci:-0.55,sc:86.1,mo:34.2,rs:85,cx:48.0,desc:"High PPP ($72k), strong state capacity (86.1), good momentum (+9.1pp). But negative ECI (-0.55) \u2014 manufacturing base hollowed out. Zero clean tech production. World\u2019s largest lithium exporter but imports all finished clean technology. Rich and well-governed but can\u2019t build the transition, only buy it."},
-  {n:"Poland",ce:13,ppp:48473,ct:4,co:45,eci:1.02,sc:71.6,mo:54.8,rs:75,cx:29.5,desc:"13% clean energy, decent ECI (1.02), moderate state capacity (71.6), solid momentum (+7.1pp). Growing battery manufacturing hub from EU-directed FDI. The only EU country to avoid the 2008 recession. Transitioning from coal, slowly. Intel fab planned for Wroclaw."},
-  {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:32,eci:0.76,sc:52.9,mo:56.6,rs:52,cx:88.0,desc:"12.8% clean energy and going backwards (-2.0pp). Low PPP ($11k), weak state capacity (52.9). Coal growth is outpacing renewable additions. One of the few countries actively regressing on energy transition. Extreme climate exposure (89.2) compounds the vulnerability."},
-  {n:"Russia",ce:11.8,ppp:44269,ct:0,co:35,eci:0.19,sc:44.5,mo:50.7,rs:74,cx:48.5,desc:"11.8% clean energy, near-zero momentum (+0.6pp). Negative ECI trend, declining state capacity (44.5). Nuclear technology is advanced but renewable transition is negligible. Post-2022 sanctions severely limit development capacity."},
-  {n:"Indonesia",ce:11,ppp:15416,ct:3,co:36,eci:-0.09,sc:61.5,mo:51.5,rs:66,cx:73.5,desc:"11% clean energy, low ECI (-0.09), moderate state capacity (61.5), decent momentum (+6.3pp). Battery materials (nickel) give it some supply chain leverage. Scale and trajectory are the story \u2014 current position is weak. Extreme climate exposure (81.3)."},
-  {n:"India",ce:10.3,ppp:10323,ct:8,co:48,eci:0.48,sc:58.9,mo:53.4,rs:65,cx:87.5,desc:"10.3% clean energy, low PPP ($10k), but growing on every axis. Clean tech production (8), compute (11), rising ECI (0.48), state capacity (58.9). Built UPI in 8 years from zero. The index sees the current position. It can\u2019t see what 1.4 billion people moving at even modest speed produces at scale."},
-  {n:"Israel",ce:9.8,ppp:55171,ct:0,co:56,eci:1.17,sc:75.6,mo:49.5,rs:28,cx:43.5,desc:"9.8% clean energy but fast momentum (+8.8pp). Strong ECI (1.17), decent compute (8.5), high state capacity (75.6). Solved its water crisis through desalination. Innovation ecosystem punches above its weight. But resource security of 28 — small, arid, import-dependent."},
-  {n:"Mexico",ce:9.6,ppp:25243,ct:5,co:36,eci:1.14,sc:52.3,mo:46.0,rs:61,cx:69.0,desc:"9.6% clean energy, low momentum (+2.0pp). But high ECI (1.14) and growing clean tech score (5) from nearshoring EV assembly. State capacity (52.3) limits execution. Extreme climate exposure (85.4) — hurricanes, drought, and heat."},
-  {n:"UAE",ce:9,ppp:77955,ct:0,co:48,eci:0.12,sc:81.1,mo:45.3,rs:11,cx:61.0,desc:"9% clean energy \u2014 highest among petrostates. Exceptional state capacity (81.1, approaching Singapore), fastest petrostate momentum (+9.0pp). Barakah nuclear online. 77% of GDP now non-oil. The only petrostate with a credible electrostate trajectory. But resource security of 11 — can\u2019t feed or water itself."},
-  {n:"Morocco",ce:8.7,ppp:9895,ct:0,co:31,eci:-0.35,sc:56.1,mo:50.5,rs:49,cx:55.0,desc:"8.7% clean energy with moderate momentum (+4.5pp). Noor Ouarzazate CSP (world\u2019s largest concentrated solar) and Africa\u2019s first HSR. Moderate state capacity (56.1). But negative ECI (-0.35), low PPP ($10k). Building impressive flagship projects without the broad industrial base to scale them."},
-  {n:"Taiwan",ce:8.6,ppp:73344,ct:3,co:64,eci:1.80,sc:84.8,mo:39.5,rs:37,cx:42.5,desc:"8.6% clean energy and going backwards (-1.15pp \u2014 nuclear phasedown). But compute score of 40 (TSMC manufactures 90% of advanced chips) and ECI of 1.80 (#5 globally). High state capacity (84.8). Extreme semiconductor leverage but high climate exposure (56.6)."},
-  {n:"Malaysia",ce:8.3,ppp:36467,ct:6,co:44,eci:0.95,sc:69.8,mo:49.0,rs:53,cx:58.5,desc:"8.3% clean energy, moderate ECI (0.95), decent state capacity (69.8). 13% of global semiconductor packaging. Growing as a data center hub. But slow momentum (+4.6pp) and low clean energy share."},
-  {n:"Thailand",ce:7.4,ppp:23519,ct:7,co:38,eci:1.12,sc:59.0,mo:54.7,rs:68,cx:67.5,desc:"7.4% clean energy, decent ECI (1.12), clean tech score (7) from Chinese-invested EV assembly. But weak state capacity (59.0) and low momentum (+3.2pp). Manufacturing hub potential constrained by institutional instability."},
-  {n:"Egypt",ce:5.8,ppp:18525,ct:0,co:33,eci:-0.13,sc:46.7,mo:46.7,rs:38,cx:75.5,desc:"5.8% clean energy, negative ECI (-0.13), weak state capacity (46.7), minimal momentum (+1.9pp). Benban Solar Park (Africa\u2019s largest) and Suez Canal expansion show ambition. But population growth outpaces infrastructure investment."},
-  {n:"South Africa",ce:5,ppp:15200,ct:0,co:37,eci:-0.15,sc:49.3,mo:39.0,rs:53,cx:53.0,desc:"5% clean energy, negative ECI (-0.15), weak state capacity (49.3), low momentum (+1.7pp). Eskom\u2019s rolling blackouts are the headline \u2014 years of load shedding despite renewable potential. A country that knows what to do and can\u2019t execute."},
-  {n:"Singapore",ce:0.5,ppp:143786,ct:4,co:58,eci:1.83,sc:89.5,mo:41.1,rs:12,cx:56.5,desc:"Near-zero clean energy (0.5%) \u2014 the lowest in the dataset. But perfect state execution (100 WGI), highest PPP ($144k), high ECI (1.83), strong compute (13). Governance compensates but resource security of 12 and sea-level climate exposure make the structural vulnerability real."},
-  {n:"Saudi Arabia",ce:0.7,ppp:71565,ct:0,co:42,eci:0.62,sc:66.4,mo:45.1,rs:18,cx:65.5,desc:"0.7% clean energy, zero clean tech, zero compute. But $72k PPP and 66.4 state capacity. Vision 2030 has ambition but the numbers haven\u2019t moved. Resource security of 18 — can\u2019t feed or water itself. The wealth buys time, not transition."},
-  {n:"Iran",ce:1.9,ppp:18917,ct:0,co:26,eci:-0.19,sc:36.8,mo:42.7,rs:40,cx:57.5,desc:"1.9% clean energy, near-zero everything else. State capacity (36.8) crippled by sanctions, institutional decay, and regime maintenance priorities. Nuclear technology exists but isn\u2019t deployed for transition."},
-  {n:"Bangladesh",ce:1.1,ppp:9148,ct:0,co:22,eci:-0.76,sc:41.2,mo:55.4,rs:41,cx:91.5,desc:"1.1% clean energy, negative ECI (-0.76), very low PPP ($9k), weak state capacity (41.2). Extremely vulnerable to climate shocks (66.2 exposure) with minimal capacity to respond. The country that most needs the transition and least has the means."},
-  {n:"Qatar",ce:0.8,ppp:129368,ct:0,co:38,eci:-0.38,sc:74.5,mo:44.6,rs:8,cx:62.5,desc:"0.8% clean energy, $129k PPP \u2014 the second-highest in the dataset. But zero on clean tech, compute, and negative ECI (-0.38). Resource security of 8 — the lowest. Rich, stuck, and dependent."},
-  {n:"Kuwait",ce:0.1,ppp:52000,ct:0,co:32,eci:0.13,sc:58.4,mo:42.5,rs:9,cx:64.0,desc:"0.1% clean energy \u2014 effectively zero. $52k PPP but zero on every other dimension. Resource security of 9 — near-zero self-sufficiency. The purest petrostate in the dataset: wealth from the ground, nothing else."},
-  {n:"Algeria",ce:0.2,ppp:16824,ct:0,co:25,eci:-0.63,sc:44.1,mo:41.9,rs:43,cx:53.5,desc:"0.2% clean energy despite massive Saharan solar potential. Negative ECI (-0.63), weak state capacity (44.1), near-zero momentum (+0.1pp). The gap between potential (unlimited solar) and reality (0.2%) is the widest in the dataset."},
-  {n:"Iraq",ce:0.6,ppp:14653,ct:0,co:18,eci:-0.80,sc:31.1,mo:34.5,rs:33,cx:74.0,desc:"0.6% clean energy, lowest state capacity in the dataset (31.1). 90% of revenue from oil. Post-conflict infrastructure devastated. The most structurally trapped country on the index."},
-  {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:25,eci:-1.62,sc:30.4,mo:36.8,rs:36,cx:78.5,desc:"0.5% clean energy, lowest infrastructure score globally, lowest state capacity alongside Iraq (30.4). Negative ECI (-1.62). Oil dependency with unreliable power grid. High climate exposure (50.6) compounds everything."},
-  {n:"Kenya",ce:4,ppp:6317,ct:0,co:29,eci:-0.35,sc:43.1,mo:41.6,rs:33,cx:70.5,desc:"4% clean energy, negative ECI (-0.35), low PPP ($6k), weak state capacity (43.1). But M-Pesa mobile money revolution shows digital adoption capacity. Momentum (+6.7pp) from a low base but moving."},
-  {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:19,eci:-0.88,sc:33.4,mo:61.4,rs:35,cx:72.0,desc:"3% clean energy, lowest SPI in the dataset (43.3), weak state capacity (33.4). But the Grand Renaissance Dam (5.15 GW, Africa\u2019s largest hydroelectric). Momentum (+6.6pp) if stability holds."},
-  {n:"Costa Rica",ce:35.0,ppp:28909,ct:0,co:35,eci:0.35,sc:72.0,mo:51.2,rs:55,cx:42.0,desc:"35% clean energy, near-100% renewable electricity but primary energy still includes transport fossil fuels. Good state capacity (72.0), decent ECI (0.35). No clean tech production or compute. A consumption-side success story."},
-  {n:"Uruguay",ce:38.0,ppp:25000,ct:0,co:36,eci:0.24,sc:74.0,mo:71.6,rs:83,cx:36.5,desc:"38% clean primary energy, 98% renewable electricity \u2014 one of the cleanest grids on earth. Good state capacity (74.0). But low ECI (0.24), zero clean tech, zero compute. High resource security (83). Clean consumption without production capability."},
-  {n:"Rwanda",ce:5.0,ppp:3399,ct:0,co:28,eci:-0.75,sc:58.0,mo:60.7,rs:44,cx:52.5,desc:"Only 5% clean energy, very low PPP ($3.4k), negative ECI. But 58.0 state capacity outscores South Africa, Indonesia, and Turkey. \u2018Africa\u2019s Singapore\u2019 in ambition. The governance is the story."},
-  {n:"Kazakhstan",ce:5.1,ppp:38515,ct:0,co:32,eci:-0.47,sc:50.0,mo:61.6,rs:82,cx:45.5,desc:"5.1% clean energy, moderate PPP ($39k) from oil and gas. Negative ECI (-0.47), weak state capacity (50.0). A Central Asian petrostate that hasn\u2019t begun the transition. High resource security (82) from vast land and water."},
-  {n:"Azerbaijan",ce:4.3,ppp:18000,ct:0,co:27,eci:-1.03,sc:38.0,mo:56.5,rs:48,cx:44.5,desc:"4.3% clean energy, deeply negative ECI (-1.03), weak state capacity (38.0). Oil and gas dominate. Hosted COP29 while producing almost no clean energy."},
-  {n:"Luxembourg",ce:14.3,ppp:150508,ct:0,co:45,eci:0.50,sc:88.0,mo:42.6,rs:30,cx:20.5,desc:"Highest PPP in the world ($151k) and strong state capacity (88.0). But only 14.3% clean energy, modest ECI (0.50), zero clean tech or compute. A financial center, not an industrial economy."},
-  {n:"Tunisia",ce:4.0,ppp:14041,ct:0,co:31,eci:0.39,sc:50.0,mo:46.3,rs:46,cx:52.0,desc:"4% clean energy despite excellent solar potential. Moderate ECI (0.39). But low PPP ($14k), weak state capacity (50.0), political instability post-2011 revolution."},
-  {n:"Ghana",ce:3.0,ppp:7556,ct:0,co:26,eci:-1.18,sc:48.0,mo:48.5,rs:32,cx:60.0,desc:"3% clean energy, deeply negative ECI (-1.18), low PPP ($7.6k). But state capacity (48.0) above regional average and relatively stable democracy. Drifting toward resource dependency."},
-  {n:"Jordan",ce:5.0,ppp:10412,ct:0,co:32,eci:0.09,sc:55.0,mo:47.3,rs:26,cx:51.0,desc:"5% clean energy but growing solar rapidly (+4pp momentum). Low PPP ($10k), modest ECI (0.09). State capacity (55.0) reflects stability in a volatile region. No fossil fuel reserves \u2014 necessity drives transition."},
-  {n:"Georgia",ce:6.0,ppp:20000,ct:0,co:33,eci:0.06,sc:55.0,mo:60.7,rs:54,cx:35.5,desc:"6% clean energy (hydro-dominated), modest PPP ($20k), near-zero ECI (0.06). EU path would accelerate transition, Russian orbit would stall it."},
-  {n:"Serbia",ce:10.0,ppp:24000,ct:0,co:35,eci:0.73,sc:52.0,mo:53.9,rs:57,cx:34.0,desc:"10% clean energy, decent ECI (0.73), moderate PPP ($24k). Coal-dependent but growing renewable capacity. EU accession process is the transition lever."},
-  {n:"Bolivia",ce:15.0,ppp:12892,ct:0,co:25,eci:-0.98,sc:40.0,mo:45.6,rs:78,cx:50.5,desc:"15% clean energy from hydro, but deeply negative ECI (-0.98), low PPP ($13k), weak state capacity (40.0). Major lithium reserves but hasn\u2019t been able to industrialize extraction."},
-  {n:"Dominican Republic",ce:8.0,ppp:25840,ct:0,co:29,eci:0.08,sc:52.0,mo:60.6,rs:44,cx:59.0,desc:"8% clean energy, modest PPP ($26k), near-zero ECI (0.08). Growing solar and wind from a low base. Tourism-dependent economy with limited manufacturing depth."},
-  {n:"Oman",ce:1.1,ppp:35000,ct:0,co:33,eci:-0.16,sc:58.0,mo:46.7,rs:20,cx:54.0,desc:"1.1% clean energy, moderate PPP ($35k) from oil and gas. Resource security of 20. Green hydrogen ambitions are real \u2014 Oman is positioning itself as a hydrogen export hub."},
-  {n:"Cyprus",ce:10.8,ppp:42000,ct:0,co:38,eci:0.38,sc:65.0,mo:45.3,rs:25,cx:40.0,desc:"10.8% clean energy with good momentum (+5pp from solar growth). Decent PPP ($42k). Offshore gas discoveries create a petrostate temptation at exactly the moment it should be going the other direction."},
-  {n:"Greece",ce:21.1,ppp:42711,ct:0,co:39,eci:0.25,sc:62.5,mo:48.5,rs:51,cx:41.0,desc:"21% clean energy with growing solar and wind. Moderate PPP ($43k) but low ECI (0.25) \u2014 tourism and shipping economy, not manufacturing. State capacity (62.5) recovering from the 2010s debt crisis."},
-  {n:"Slovenia",ce:43,ppp:53000,ct:1,co:40,eci:1.59,sc:72.0,mo:46.5,rs:52,cx:27.5,desc:"43% clean energy (nuclear + hydro), very high ECI (1.59 \u2014 9th globally). Small but sophisticated manufacturing economy. A micro-Austria: quietly strong across most dimensions."},
-  {n:"Croatia",ce:27.8,ppp:40000,ct:0,co:38,eci:0.77,sc:63.0,mo:51.8,rs:60,cx:34.5,desc:"28% clean energy from hydro, moderate ECI (0.77), EU membership driving institutional improvement. The Adriatic hydro base gives it a cleaner starting position than most of Central Europe."},
-  {n:"Bulgaria",ce:36.7,ppp:32000,ct:0,co:36,eci:0.62,sc:55.0,mo:62.0,rs:69,cx:33.0,desc:"37% clean energy \u2014 nuclear (20%) plus hydro and growing renewables. Moderate ECI (0.62). The nuclear baseload is a structural advantage most neighbors lack."},
-  {n:"Latvia",ce:29.7,ppp:38000,ct:0,co:41,eci:0.73,sc:64.0,mo:53.4,rs:70,cx:25.0,desc:"30% clean energy from hydro and biomass. Moderate ECI (0.73), decent state capacity (64.0). Small Baltic economy \u2014 well-governed relative to size."},
-  {n:"Lithuania",ce:23.4,ppp:46000,ct:0,co:42,eci:0.89,sc:66.0,mo:51.0,rs:70,cx:23.0,desc:"23% clean energy, rising ECI (0.89), solid PPP ($46k). Closed its Soviet-era nuclear plant without replacement \u2014 a self-inflicted energy vulnerability."},
-  {n:"Estonia",ce:17.9,ppp:45000,ct:0,co:48,eci:0.99,sc:70.0,mo:52.2,rs:69,cx:22.5,desc:"18% clean energy, strong ECI (0.99), remarkable digital governance (e-Residency, e-government pioneer). Oil shale legacy and small economy limit transition scale."},
-  {n:"Sri Lanka",ce:23.2,ppp:14456,ct:0,co:29,eci:-0.24,sc:45.0,mo:50.2,rs:36,cx:62.0,desc:"23% clean energy from hydro, but 2022 economic collapse devastated institutional capacity. A country that was making progress until sovereign debt crisis erased a decade of gains."},
-  {n:"Ecuador",ce:25.4,ppp:15919,ct:0,co:27,eci:-1.07,sc:45.0,mo:47.1,rs:55,cx:51.5,desc:"25% clean energy from hydro, but deeply negative ECI (-1.07), low PPP ($16k), weak state capacity (45.0). Oil-dependent economy with no manufacturing complexity."},
-  {n:"Venezuela",ce:25.8,ppp:8000,ct:0,co:19,eci:-1.28,sc:28.0,mo:23.5,rs:56,cx:49.0,desc:"26% clean energy from hydro (Guri Dam), but institutional collapse has destroyed all other capacity. Once Latin America\u2019s richest country; now a case study in how political dysfunction can reverse decades of development."},
+  {n:"Iceland",ce:80.5,ppp:81608,ct:0,co:42,eci:0.10,sc:90.6,mo:37.6,rs:50,cx:17.5,pop:0.4,desc:"Highest clean energy share on Earth (80.5%) from geothermal and hydro. Strong PPP and state capacity, but near-zero on clean tech, compute, and ECI. Energy sovereign but not an electrostate \u2014 it consumes clean power without producing the technology."},
+  {n:"Sweden",ce:72.2,ppp:69226,ct:3,co:54,eci:1.54,sc:88.2,mo:34.0,rs:71,cx:21.5,pop:10.5,desc:"Top-tier across all dimensions. 72% clean energy, high ECI (1.54), strong state capacity (88.2), solid momentum (+4.3pp). The closest thing to a complete electrostate profile in the dataset. Weak only on clean tech exports and compute."},
+  {n:"Norway",ce:71.8,ppp:103638,ct:0,co:50,eci:0.39,sc:90.3,mo:31.7,rs:59,cx:19.0,pop:5.5,desc:"71.8% clean energy from hydro, highest PPP among Nordics ($104k), exceptional state capacity (90.3). But ECI is only 0.39 \u2014 oil wealth didn\u2019t build manufacturing complexity. A sovereign wealth fund is not an industrial base."},
+  {n:"Finland",ce:63.2,ppp:63415,ct:0,co:54,eci:1.36,sc:90.1,mo:41.0,rs:73,cx:18.5,pop:5.5,desc:"Fastest momentum on Earth (+20.6pp in a decade). Strong state capacity (90.1), solid ECI (1.36). Jumped from 42% to 63% clean energy through nuclear and wind buildout. The model for rapid, governed transition."},
+  {n:"Switzerland",ce:56.8,ppp:95142,ct:0,co:52,eci:2.14,sc:89.7,mo:39.5,rs:58,cx:16.5,pop:9.0,desc:"Second-highest ECI globally (2.14), near-perfect governance (99.5 WGI), 57% clean energy from hydro and nuclear. Infrastructure score #1 worldwide. Lacks only clean tech production scale and compute presence."},
+  {n:"France",ce:53.9,ppp:60839,ct:2,co:56,eci:1.34,sc:80.8,mo:42.5,rs:84,cx:31.0,pop:68,desc:"Nuclear advantage: 37% of primary energy from nuclear gives it 54% clean energy total. Strong ECI (1.34), decent compute (14), solid state capacity (80.8). The nuclear baseload makes it structurally resilient, but clean tech exports are minimal."},
+  {n:"Brazil",ce:50.6,ppp:21176,ct:0,co:41,eci:-0.16,sc:52.6,mo:43.4,rs:92,cx:54.5,pop:216,desc:"50.6% clean energy from legacy hydro \u2014 third highest in dataset. But negative ECI (-0.16), weak state capacity (52.6), zero clean tech production. Strong momentum (+11.9pp) from wind and solar additions. Clean but structurally fragile. Can\u2019t build the transition, only buy it."},
+  {n:"Austria",ce:43.3,ppp:73545,ct:0,co:47,eci:1.68,sc:84.0,mo:44.5,rs:64,cx:24.5,pop:9.1,desc:"43% clean energy, strong ECI (1.68), high PPP ($74k), good state capacity (84.0). A quiet overachiever \u2014 strong on most dimensions without dominating any. Alpine hydro and high industrial sophistication create a solid foundation."},
+  {n:"New Zealand",ce:42.6,ppp:54697,ct:0,co:47,eci:0.20,sc:86.3,mo:37.3,rs:81,cx:32.0,pop:5.2,desc:"42.6% clean energy from hydro and geothermal, excellent state capacity (86.3), best COVID response globally. But low ECI (0.20), zero compute, zero clean tech. Geographically isolated, residentially clean, industrially dependent."},
+  {n:"Denmark",ce:41.7,ppp:77892,ct:10,co:51,eci:1.06,sc:90.7,mo:45.0,rs:72,cx:22.0,pop:5.9,desc:"Highest state capacity in the dataset (90.7). Second-fastest momentum (+16.4pp). Wind power pioneer \u2014 Vestas controls ~20% of global turbine market. One of the few countries that both deploys AND produces transition technology at scale."},
+  {n:"Portugal",ce:39.7,ppp:49353,ct:2,co:43,eci:0.74,sc:80.2,mo:52.8,rs:56,cx:37.5,pop:10.3,desc:"39.7% clean energy with strong momentum (+10pp). Decent state capacity (80.2). But modest ECI (0.74), low compute, minimal clean tech exports. A transition success story on the consumption side; still a customer on the production side."},
+  {n:"Slovakia",ce:36.1,ppp:39840,ct:2,co:39,eci:1.46,sc:66.8,mo:44.9,rs:61,cx:26.0,pop:5.4,desc:"36% clean energy (nuclear + hydro), surprisingly high ECI (1.46) for its size. Growing battery manufacturing hub from Asian FDI. Low compute and modest state capacity (66.8). A small country punching above its weight on manufacturing complexity."},
+  {n:"Spain",ce:34.2,ppp:55682,ct:5,co:48,eci:0.76,sc:75.0,mo:45.8,rs:57,cx:38.5,pop:48,desc:"34% clean energy, moderate ECI (0.76), decent compute (7.5). 3,600km of HSR (#2 globally). But state capacity (75.0) held back by 2008 crisis hangover and institutional fragility. Strong infrastructure buildout capacity, weaker on manufacturing sophistication."},
+  {n:"Canada",ce:32.6,ppp:64219,ct:3,co:57,eci:0.58,sc:84.6,mo:32.4,rs:88,cx:37.0,pop:40,desc:"32.6% clean energy but going backwards (-1.3pp momentum). High PPP ($64k), good state capacity (84.6), strong infrastructure (#5 globally). But ECI only 0.58 and zero clean tech production. Oil sands growth is actively undermining the transition. The anti-momentum case study."},
+  {n:"Chile",ce:32.3,ppp:33145,ct:0,co:40,eci:-0.30,sc:75.5,mo:51.3,rs:60,cx:31.5,pop:19.5,desc:"32% clean energy with explosive momentum (+12.7pp) \u2014 one of the fastest solar buildouts on earth driven by the Atacama Desert. Good state capacity (75.5). But negative ECI (-0.30) and zero compute mean it\u2019s deploying imported technology, not building its own."},
+  {n:"Czech Republic",ce:28.3,ppp:55761,ct:2,co:44,eci:1.75,sc:74.5,mo:49.0,rs:64,cx:24.0,pop:10.9,desc:"28% clean energy, high ECI (1.75 \u2014 6th globally). Growing as a European manufacturing hub. Moderate state capacity (74.5). Nuclear expansion planned. Strong industrial base that could pivot to clean tech production if directed."},
+  {n:"Hungary",ce:27.8,ppp:46592,ct:4,co:42,eci:1.52,sc:64.2,mo:54.9,rs:76,cx:30.5,pop:9.6,desc:"28% clean energy (nuclear + renewables), high ECI (1.52), growing battery manufacturing from CATL and Samsung FDI. But declining institutional quality (64.2 state capacity) and EU conflicts threaten the trajectory. Industrial capacity without governance stability."},
+  {n:"Romania",ce:26.7,ppp:45982,ct:0,co:39,eci:1.23,sc:59.9,mo:70.6,rs:77,cx:33.5,pop:19,desc:"27% clean energy, decent ECI (1.23), EU funds driving modernization. But low state capacity (59.9) and minimal momentum (+1.2pp). Has the latent potential but not the institutional machinery to deploy it quickly."},
+  {n:"Peru",ce:26.7,ppp:17011,ct:0,co:31,eci:-0.86,sc:48.2,mo:45.5,rs:62,cx:56.0,pop:34,desc:"27% clean energy from hydro, but negative ECI (-0.86), low PPP ($17k), weak state capacity (48.2), minimal momentum (+1.9pp). Six presidents in five years. Clean energy from legacy infrastructure, zero capacity to build the next phase."},
+  {n:"United Kingdom",ce:26.5,ppp:59911,ct:0,co:61,eci:1.61,sc:77.5,mo:41.6,rs:45,cx:27.0,pop:68,desc:"26.5% clean energy with strong momentum (+10.7pp). High ECI (1.61), significant compute (18), decent state capacity (77.5). Arm Holdings gives it outsized semiconductor leverage. Offshore wind leadership. But aging infrastructure and post-Brexit institutional strain limit execution speed."},
+  {n:"Colombia",ce:26.1,ppp:21246,ct:0,co:35,eci:-0.13,sc:52.8,mo:45.0,rs:68,cx:63.5,pop:52,desc:"26% clean energy from hydro, but negative ECI (-0.13), low PPP ($21k), weak state capacity (52.8), near-zero momentum (+0.8pp). Diversifying from oil but lacks the industrial complexity to build transition technology domestically."},
+  {n:"Germany",ce:24,ppp:71684,ct:28,co:59,eci:1.94,sc:82.3,mo:38.4,rs:63,cx:26.5,pop:84,desc:"Only major Western net clean tech exporter (score: 28). Fourth-highest ECI globally (1.94). Strong compute (20), high state capacity (82.3). But nuclear exit dropped clean energy to 24%. Builds the transition tools without having fully deployed them at home. The producer-consumer paradox."},
+  {n:"Belgium",ce:23.4,ppp:71946,ct:5,co:48,eci:1.18,sc:78.4,mo:40.2,rs:47,cx:28.5,pop:11.7,desc:"23% clean energy, good ECI (1.18), high PPP ($72k). EU institutional hub. Major EV re-export port (Antwerp/Zeebrugge). But modest state capacity (78.4) and low momentum (+4.2pp). A logistics node, not a production powerhouse."},
+  {n:"Ireland",ce:22.2,ppp:129683,ct:0,co:54,eci:1.44,sc:85.6,mo:56.0,rs:58,cx:23.5,pop:5.1,desc:"22% clean energy with strong momentum (+11.2pp). Highest PPP in Europe ($130k, partially tax-driven). Major cloud computing hub (AWS, Azure, Google European HQs). High state capacity (85.6). But zero clean tech production and modest ECI (1.44)."},
+  {n:"Vietnam",ce:21.5,ppp:15034,ct:9,co:35,eci:0.04,sc:63.1,mo:68.3,rs:63,cx:77.0,pop:100,desc:"21.5% clean energy but going backwards (-0.7pp \u2014 coal growth outpacing renewables). Scores 9 on clean tech but it\u2019s Chinese FDI re-export, not indigenous capability. Near-zero ECI (0.04). A manufacturing platform, not a manufacturing power. The momentum direction is the warning signal."},
+  {n:"Italy",ce:20.9,ppp:60030,ct:2,co:47,eci:1.35,sc:71.2,mo:46.1,rs:48,cx:41.5,pop:59,desc:"21% clean energy, strong ECI (1.35), decent compute (8.5). STMicroelectronics gives it some semiconductor presence. But low momentum (+2.4pp) and declining state capacity (71.2). Industrial sophistication without the institutional drive to deploy it for the transition."},
+  {n:"Turkey",ce:19.8,ppp:42786,ct:2,co:39,eci:0.61,sc:51.4,mo:60.5,rs:55,cx:46.0,pop:85,desc:"20% clean energy with surprisingly strong momentum (+10.3pp). Moderate ECI (0.61). But weak state capacity (51.4) and institutional quality declining. Building renewable capacity fast but governance instability could stall the trajectory at any point."},
+  {n:"China",ce:19.7,ppp:25179,ct:100,co:71,eci:1.33,sc:69.4,mo:77.6,rs:54,cx:66.0,pop:1412,desc:"Dominates clean tech production (100 \u2014 80% of solar, 83% of batteries, 70% of EVs). Strong compute (60), good ECI (1.33), high momentum (+9.1pp). But only 19.7% clean energy and state capacity (69.4) constrained by social stability concerns. The manufacturing engine of the global transition \u2014 the question is whether the society can sustain the pace."},
+  {n:"United States",ce:19.7,ppp:82305,ct:0,co:95,eci:1.40,sc:77.1,mo:37.3,rs:89,cx:46.5,pop:335,desc:"Dominates compute & AI (97 \u2014 half of global hyperscale plus world-leading AI readiness). High PPP ($82k), decent state capacity (77.1). But net clean tech importer, only 19.7% clean energy, declining ECI ranking (13th to 20th), and modest momentum (+4.4pp). Betting everything on AI and compute while the energy transition happens elsewhere."},
+  {n:"Netherlands",ce:19.1,ppp:81729,ct:2,co:57,eci:0.99,sc:87.6,mo:42.0,rs:45,cx:44.0,pop:17.9,desc:"19% clean energy but third-fastest momentum (+14.4pp). High PPP ($82k), strong state capacity (87.6). ASML \u2014 sole manufacturer of EUV lithography \u2014 gives it irreplaceable semiconductor leverage. A small country with outsized chokepoint power and accelerating energy transition."},
+  {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:27,eci:-0.57,sc:35.8,mo:35.3,rs:50,cx:84.0,pop:230,desc:"19% clean energy (hydro + nuclear) but negative ECI (-0.57), $6k PPP, extremely weak state capacity (35.8). Some momentum (+6.6pp). Massive population (230M) with minimal industrial capacity for the transition. Vulnerable to energy and climate shocks simultaneously."},
+  {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:61,eci:2.04,sc:84.8,mo:38.1,rs:47,cx:39.0,pop:52,desc:"Third-highest ECI globally (2.04). Strong compute (27.5), significant clean tech production (16), high state capacity (84.8). But only 17.5% clean energy and modest momentum (+4.1pp). The industrial capability exists for rapid transition \u2014 the commitment hasn\u2019t matched it."},
+  {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:36,eci:-0.20,sc:56.7,mo:42.5,rs:87,cx:43.0,pop:46,desc:"17% clean energy, negative ECI (-0.20), moderate PPP ($30k), weak state capacity (56.7). Recurring economic crises prevent sustained transformation. Strong human capital and renewable potential (Patagonian wind) but institutional instability is the binding constraint."},
+  {n:"Japan",ce:17,ppp:50662,ct:14,co:58,eci:2.26,sc:83.8,mo:32.0,rs:42,cx:39.5,pop:124,desc:"Highest ECI on Earth (2.26) \u2014 the most sophisticated manufacturing economy ever built. Strong compute (25), good clean tech production (14), high state capacity (83.8), solid momentum (+10.4pp). But only 17% clean energy. The latent electrostate: every capability exists, the deployment lags."},
+  {n:"Australia",ce:14.7,ppp:72273,ct:0,co:53,eci:-0.55,sc:86.1,mo:34.2,rs:85,cx:48.0,pop:26,desc:"High PPP ($72k), strong state capacity (86.1), good momentum (+9.1pp). But negative ECI (-0.55) \u2014 manufacturing base hollowed out. Zero clean tech production. World\u2019s largest lithium exporter but imports all finished clean technology. Rich and well-governed but can\u2019t build the transition, only buy it."},
+  {n:"Poland",ce:13,ppp:48473,ct:4,co:45,eci:1.02,sc:71.6,mo:54.8,rs:75,cx:29.5,pop:37,desc:"13% clean energy, decent ECI (1.02), moderate state capacity (71.6), solid momentum (+7.1pp). Growing battery manufacturing hub from EU-directed FDI. The only EU country to avoid the 2008 recession. Transitioning from coal, slowly. Intel fab planned for Wroclaw."},
+  {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:32,eci:0.76,sc:52.9,mo:56.6,rs:52,cx:88.0,pop:117,desc:"12.8% clean energy and going backwards (-2.0pp). Low PPP ($11k), weak state capacity (52.9). Coal growth is outpacing renewable additions. One of the few countries actively regressing on energy transition. Extreme climate exposure (89.2) compounds the vulnerability."},
+  {n:"Russia",ce:11.8,ppp:44269,ct:0,co:35,eci:0.19,sc:44.5,mo:50.7,rs:74,cx:48.5,pop:144,desc:"11.8% clean energy, near-zero momentum (+0.6pp). Negative ECI trend, declining state capacity (44.5). Nuclear technology is advanced but renewable transition is negligible. Post-2022 sanctions severely limit development capacity."},
+  {n:"Indonesia",ce:11,ppp:15416,ct:3,co:36,eci:-0.09,sc:61.5,mo:51.5,rs:66,cx:73.5,pop:277,desc:"11% clean energy, low ECI (-0.09), moderate state capacity (61.5), decent momentum (+6.3pp). Battery materials (nickel) give it some supply chain leverage. Scale and trajectory are the story \u2014 current position is weak. Extreme climate exposure (81.3)."},
+  {n:"India",ce:10.3,ppp:10323,ct:8,co:48,eci:0.48,sc:58.9,mo:53.4,rs:65,cx:87.5,pop:1440,desc:"10.3% clean energy, low PPP ($10k), but growing on every axis. Clean tech production (8), compute (11), rising ECI (0.48), state capacity (58.9). Built UPI in 8 years from zero. The index sees the current position. It can\u2019t see what 1.4 billion people moving at even modest speed produces at scale."},
+  {n:"Israel",ce:9.8,ppp:55171,ct:0,co:56,eci:1.17,sc:75.6,mo:49.5,rs:28,cx:43.5,pop:9.8,desc:"9.8% clean energy but fast momentum (+8.8pp). Strong ECI (1.17), decent compute (8.5), high state capacity (75.6). Solved its water crisis through desalination. Innovation ecosystem punches above its weight. But resource security of 28 — small, arid, import-dependent."},
+  {n:"Mexico",ce:9.6,ppp:25243,ct:5,co:36,eci:1.14,sc:52.3,mo:46.0,rs:61,cx:69.0,pop:130,desc:"9.6% clean energy, low momentum (+2.0pp). But high ECI (1.14) and growing clean tech score (5) from nearshoring EV assembly. State capacity (52.3) limits execution. Extreme climate exposure (85.4) — hurricanes, drought, and heat."},
+  {n:"UAE",ce:9,ppp:77955,ct:0,co:48,eci:0.12,sc:81.1,mo:45.3,rs:11,cx:61.0,pop:10,desc:"9% clean energy \u2014 highest among petrostates. Exceptional state capacity (81.1, approaching Singapore), fastest petrostate momentum (+9.0pp). Barakah nuclear online. 77% of GDP now non-oil. The only petrostate with a credible electrostate trajectory. But resource security of 11 — can\u2019t feed or water itself."},
+  {n:"Morocco",ce:8.7,ppp:9895,ct:0,co:31,eci:-0.35,sc:56.1,mo:50.5,rs:49,cx:55.0,pop:37,desc:"8.7% clean energy with moderate momentum (+4.5pp). Noor Ouarzazate CSP (world\u2019s largest concentrated solar) and Africa\u2019s first HSR. Moderate state capacity (56.1). But negative ECI (-0.35), low PPP ($10k). Building impressive flagship projects without the broad industrial base to scale them."},
+  {n:"Taiwan",ce:8.6,ppp:73344,ct:3,co:64,eci:1.80,sc:84.8,mo:39.5,rs:37,cx:42.5,pop:24,desc:"8.6% clean energy and going backwards (-1.15pp \u2014 nuclear phasedown). But compute score of 40 (TSMC manufactures 90% of advanced chips) and ECI of 1.80 (#5 globally). High state capacity (84.8). Extreme semiconductor leverage but high climate exposure (56.6)."},
+  {n:"Malaysia",ce:8.3,ppp:36467,ct:6,co:44,eci:0.95,sc:69.8,mo:49.0,rs:53,cx:58.5,pop:34,desc:"8.3% clean energy, moderate ECI (0.95), decent state capacity (69.8). 13% of global semiconductor packaging. Growing as a data center hub. But slow momentum (+4.6pp) and low clean energy share."},
+  {n:"Thailand",ce:7.4,ppp:23519,ct:7,co:38,eci:1.12,sc:59.0,mo:54.7,rs:68,cx:67.5,pop:72,desc:"7.4% clean energy, decent ECI (1.12), clean tech score (7) from Chinese-invested EV assembly. But weak state capacity (59.0) and low momentum (+3.2pp). Manufacturing hub potential constrained by institutional instability."},
+  {n:"Egypt",ce:5.8,ppp:18525,ct:0,co:33,eci:-0.13,sc:46.7,mo:46.7,rs:38,cx:75.5,pop:110,desc:"5.8% clean energy, negative ECI (-0.13), weak state capacity (46.7), minimal momentum (+1.9pp). Benban Solar Park (Africa\u2019s largest) and Suez Canal expansion show ambition. But population growth outpaces infrastructure investment."},
+  {n:"South Africa",ce:5,ppp:15200,ct:0,co:37,eci:-0.15,sc:49.3,mo:39.0,rs:53,cx:53.0,pop:60,desc:"5% clean energy, negative ECI (-0.15), weak state capacity (49.3), low momentum (+1.7pp). Eskom\u2019s rolling blackouts are the headline \u2014 years of load shedding despite renewable potential. A country that knows what to do and can\u2019t execute."},
+  {n:"Singapore",ce:0.5,ppp:143786,ct:4,co:58,eci:1.83,sc:89.5,mo:41.1,rs:12,cx:56.5,pop:5.9,desc:"Near-zero clean energy (0.5%) \u2014 the lowest in the dataset. But perfect state execution (100 WGI), highest PPP ($144k), high ECI (1.83), strong compute (13). Governance compensates but resource security of 12 and sea-level climate exposure make the structural vulnerability real."},
+  {n:"Saudi Arabia",ce:0.7,ppp:71565,ct:0,co:42,eci:0.62,sc:66.4,mo:45.1,rs:18,cx:65.5,pop:36,desc:"0.7% clean energy, zero clean tech, zero compute. But $72k PPP and 66.4 state capacity. Vision 2030 has ambition but the numbers haven\u2019t moved. Resource security of 18 — can\u2019t feed or water itself. The wealth buys time, not transition."},
+  {n:"Iran",ce:1.9,ppp:18917,ct:0,co:26,eci:-0.19,sc:36.8,mo:42.7,rs:40,cx:57.5,pop:88,desc:"1.9% clean energy, near-zero everything else. State capacity (36.8) crippled by sanctions, institutional decay, and regime maintenance priorities. Nuclear technology exists but isn\u2019t deployed for transition."},
+  {n:"Bangladesh",ce:1.1,ppp:9148,ct:0,co:22,eci:-0.76,sc:41.2,mo:55.4,rs:41,cx:91.5,pop:170,desc:"1.1% clean energy, negative ECI (-0.76), very low PPP ($9k), weak state capacity (41.2). Extremely vulnerable to climate shocks (66.2 exposure) with minimal capacity to respond. The country that most needs the transition and least has the means."},
+  {n:"Qatar",ce:0.8,ppp:129368,ct:0,co:38,eci:-0.38,sc:74.5,mo:44.6,rs:8,cx:62.5,pop:2.7,desc:"0.8% clean energy, $129k PPP \u2014 the second-highest in the dataset. But zero on clean tech, compute, and negative ECI (-0.38). Resource security of 8 — the lowest. Rich, stuck, and dependent."},
+  {n:"Kuwait",ce:0.1,ppp:52000,ct:0,co:32,eci:0.13,sc:58.4,mo:42.5,rs:9,cx:64.0,pop:4.3,desc:"0.1% clean energy \u2014 effectively zero. $52k PPP but zero on every other dimension. Resource security of 9 — near-zero self-sufficiency. The purest petrostate in the dataset: wealth from the ground, nothing else."},
+  {n:"Algeria",ce:0.2,ppp:16824,ct:0,co:25,eci:-0.63,sc:44.1,mo:41.9,rs:43,cx:53.5,pop:45,desc:"0.2% clean energy despite massive Saharan solar potential. Negative ECI (-0.63), weak state capacity (44.1), near-zero momentum (+0.1pp). The gap between potential (unlimited solar) and reality (0.2%) is the widest in the dataset."},
+  {n:"Iraq",ce:0.6,ppp:14653,ct:0,co:18,eci:-0.80,sc:31.1,mo:34.5,rs:33,cx:74.0,pop:43,desc:"0.6% clean energy, lowest state capacity in the dataset (31.1). 90% of revenue from oil. Post-conflict infrastructure devastated. The most structurally trapped country on the index."},
+  {n:"Nigeria",ce:0.5,ppp:8705,ct:0,co:25,eci:-1.62,sc:30.4,mo:36.8,rs:36,cx:78.5,pop:224,desc:"0.5% clean energy, lowest infrastructure score globally, lowest state capacity alongside Iraq (30.4). Negative ECI (-1.62). Oil dependency with unreliable power grid. High climate exposure (50.6) compounds everything."},
+  {n:"Kenya",ce:4,ppp:6317,ct:0,co:29,eci:-0.35,sc:43.1,mo:41.6,rs:33,cx:70.5,pop:54,desc:"4% clean energy, negative ECI (-0.35), low PPP ($6k), weak state capacity (43.1). But M-Pesa mobile money revolution shows digital adoption capacity. Momentum (+6.7pp) from a low base but moving."},
+  {n:"Ethiopia",ce:3,ppp:3061,ct:0,co:19,eci:-0.88,sc:33.4,mo:61.4,rs:35,cx:72.0,pop:126,desc:"3% clean energy, lowest SPI in the dataset (43.3), weak state capacity (33.4). But the Grand Renaissance Dam (5.15 GW, Africa\u2019s largest hydroelectric). Momentum (+6.6pp) if stability holds."},
+  {n:"Costa Rica",ce:35.0,ppp:28909,ct:0,co:35,eci:0.35,sc:72.0,mo:51.2,rs:55,cx:42.0,pop:5.2,desc:"35% clean energy, near-100% renewable electricity but primary energy still includes transport fossil fuels. Good state capacity (72.0), decent ECI (0.35). No clean tech production or compute. A consumption-side success story."},
+  {n:"Uruguay",ce:38.0,ppp:25000,ct:0,co:36,eci:0.24,sc:74.0,mo:71.6,rs:83,cx:36.5,pop:3.4,desc:"38% clean primary energy, 98% renewable electricity \u2014 one of the cleanest grids on earth. Good state capacity (74.0). But low ECI (0.24), zero clean tech, zero compute. High resource security (83). Clean consumption without production capability."},
+  {n:"Rwanda",ce:5.0,ppp:3399,ct:0,co:28,eci:-0.75,sc:58.0,mo:60.7,rs:44,cx:52.5,pop:14,desc:"Only 5% clean energy, very low PPP ($3.4k), negative ECI. But 58.0 state capacity outscores South Africa, Indonesia, and Turkey. \u2018Africa\u2019s Singapore\u2019 in ambition. The governance is the story."},
+  {n:"Kazakhstan",ce:5.1,ppp:38515,ct:0,co:32,eci:-0.47,sc:50.0,mo:61.6,rs:82,cx:45.5,pop:20,desc:"5.1% clean energy, moderate PPP ($39k) from oil and gas. Negative ECI (-0.47), weak state capacity (50.0). A Central Asian petrostate that hasn\u2019t begun the transition. High resource security (82) from vast land and water."},
+  {n:"Azerbaijan",ce:4.3,ppp:18000,ct:0,co:27,eci:-1.03,sc:38.0,mo:56.5,rs:48,cx:44.5,pop:10.2,desc:"4.3% clean energy, deeply negative ECI (-1.03), weak state capacity (38.0). Oil and gas dominate. Hosted COP29 while producing almost no clean energy."},
+  {n:"Luxembourg",ce:14.3,ppp:150508,ct:0,co:45,eci:0.50,sc:88.0,mo:42.6,rs:30,cx:20.5,pop:0.66,desc:"Highest PPP in the world ($151k) and strong state capacity (88.0). But only 14.3% clean energy, modest ECI (0.50), zero clean tech or compute. A financial center, not an industrial economy."},
+  {n:"Tunisia",ce:4.0,ppp:14041,ct:0,co:31,eci:0.39,sc:50.0,mo:46.3,rs:46,cx:52.0,pop:12,desc:"4% clean energy despite excellent solar potential. Moderate ECI (0.39). But low PPP ($14k), weak state capacity (50.0), political instability post-2011 revolution."},
+  {n:"Ghana",ce:3.0,ppp:7556,ct:0,co:26,eci:-1.18,sc:48.0,mo:48.5,rs:32,cx:60.0,pop:33,desc:"3% clean energy, deeply negative ECI (-1.18), low PPP ($7.6k). But state capacity (48.0) above regional average and relatively stable democracy. Drifting toward resource dependency."},
+  {n:"Jordan",ce:5.0,ppp:10412,ct:0,co:32,eci:0.09,sc:55.0,mo:47.3,rs:26,cx:51.0,pop:11.5,desc:"5% clean energy but growing solar rapidly (+4pp momentum). Low PPP ($10k), modest ECI (0.09). State capacity (55.0) reflects stability in a volatile region. No fossil fuel reserves \u2014 necessity drives transition."},
+  {n:"Georgia",ce:6.0,ppp:20000,ct:0,co:33,eci:0.06,sc:55.0,mo:60.7,rs:54,cx:35.5,pop:3.7,desc:"6% clean energy (hydro-dominated), modest PPP ($20k), near-zero ECI (0.06). EU path would accelerate transition, Russian orbit would stall it."},
+  {n:"Serbia",ce:10.0,ppp:24000,ct:0,co:35,eci:0.73,sc:52.0,mo:53.9,rs:57,cx:34.0,pop:6.6,desc:"10% clean energy, decent ECI (0.73), moderate PPP ($24k). Coal-dependent but growing renewable capacity. EU accession process is the transition lever."},
+  {n:"Bolivia",ce:15.0,ppp:12892,ct:0,co:25,eci:-0.98,sc:40.0,mo:45.6,rs:78,cx:50.5,pop:12.4,desc:"15% clean energy from hydro, but deeply negative ECI (-0.98), low PPP ($13k), weak state capacity (40.0). Major lithium reserves but hasn\u2019t been able to industrialize extraction."},
+  {n:"Dominican Republic",ce:8.0,ppp:25840,ct:0,co:29,eci:0.08,sc:52.0,mo:60.6,rs:44,cx:59.0,pop:11,desc:"8% clean energy, modest PPP ($26k), near-zero ECI (0.08). Growing solar and wind from a low base. Tourism-dependent economy with limited manufacturing depth."},
+  {n:"Oman",ce:1.1,ppp:35000,ct:0,co:33,eci:-0.16,sc:58.0,mo:46.7,rs:20,cx:54.0,pop:4.6,desc:"1.1% clean energy, moderate PPP ($35k) from oil and gas. Resource security of 20. Green hydrogen ambitions are real \u2014 Oman is positioning itself as a hydrogen export hub."},
+  {n:"Cyprus",ce:10.8,ppp:42000,ct:0,co:38,eci:0.38,sc:65.0,mo:45.3,rs:25,cx:40.0,pop:1.3,desc:"10.8% clean energy with good momentum (+5pp from solar growth). Decent PPP ($42k). Offshore gas discoveries create a petrostate temptation at exactly the moment it should be going the other direction."},
+  {n:"Greece",ce:21.1,ppp:42711,ct:0,co:39,eci:0.25,sc:62.5,mo:48.5,rs:51,cx:41.0,pop:10.3,desc:"21% clean energy with growing solar and wind. Moderate PPP ($43k) but low ECI (0.25) \u2014 tourism and shipping economy, not manufacturing. State capacity (62.5) recovering from the 2010s debt crisis."},
+  {n:"Slovenia",ce:43,ppp:53000,ct:1,co:40,eci:1.59,sc:72.0,mo:46.5,rs:52,cx:27.5,pop:2.1,desc:"43% clean energy (nuclear + hydro), very high ECI (1.59 \u2014 9th globally). Small but sophisticated manufacturing economy. A micro-Austria: quietly strong across most dimensions."},
+  {n:"Croatia",ce:27.8,ppp:40000,ct:0,co:38,eci:0.77,sc:63.0,mo:51.8,rs:60,cx:34.5,pop:3.9,desc:"28% clean energy from hydro, moderate ECI (0.77), EU membership driving institutional improvement. The Adriatic hydro base gives it a cleaner starting position than most of Central Europe."},
+  {n:"Bulgaria",ce:36.7,ppp:32000,ct:0,co:36,eci:0.62,sc:55.0,mo:62.0,rs:69,cx:33.0,pop:6.5,desc:"37% clean energy \u2014 nuclear (20%) plus hydro and growing renewables. Moderate ECI (0.62). The nuclear baseload is a structural advantage most neighbors lack."},
+  {n:"Latvia",ce:29.7,ppp:38000,ct:0,co:41,eci:0.73,sc:64.0,mo:53.4,rs:70,cx:25.0,pop:1.8,desc:"30% clean energy from hydro and biomass. Moderate ECI (0.73), decent state capacity (64.0). Small Baltic economy \u2014 well-governed relative to size."},
+  {n:"Lithuania",ce:23.4,ppp:46000,ct:0,co:42,eci:0.89,sc:66.0,mo:51.0,rs:70,cx:23.0,pop:2.8,desc:"23% clean energy, rising ECI (0.89), solid PPP ($46k). Closed its Soviet-era nuclear plant without replacement \u2014 a self-inflicted energy vulnerability."},
+  {n:"Estonia",ce:17.9,ppp:45000,ct:0,co:48,eci:0.99,sc:70.0,mo:52.2,rs:69,cx:22.5,pop:1.4,desc:"18% clean energy, strong ECI (0.99), remarkable digital governance (e-Residency, e-government pioneer). Oil shale legacy and small economy limit transition scale."},
+  {n:"Sri Lanka",ce:23.2,ppp:14456,ct:0,co:29,eci:-0.24,sc:45.0,mo:50.2,rs:36,cx:62.0,pop:22,desc:"23% clean energy from hydro, but 2022 economic collapse devastated institutional capacity. A country that was making progress until sovereign debt crisis erased a decade of gains."},
+  {n:"Ecuador",ce:25.4,ppp:15919,ct:0,co:27,eci:-1.07,sc:45.0,mo:47.1,rs:55,cx:51.5,pop:18,desc:"25% clean energy from hydro, but deeply negative ECI (-1.07), low PPP ($16k), weak state capacity (45.0). Oil-dependent economy with no manufacturing complexity."},
+  {n:"Venezuela",ce:25.8,ppp:8000,ct:0,co:19,eci:-1.28,sc:28.0,mo:23.5,rs:56,cx:49.0,pop:28,desc:"26% clean energy from hydro (Guri Dam), but institutional collapse has destroyed all other capacity. Once Latin America\u2019s richest country; now a case study in how political dysfunction can reverse decades of development."},
 ];
 
 const annotations=[
@@ -1823,8 +1809,7 @@ const annotations=[
 
 let data=[],sortCol='composite',sortDir=-1;
 let searchFilter='';
-let view3D=false;
-let showAnnotations=true;
+const view3D=true;
 let activeStory=null;
 
 function nPPP(v){return Math.max(0,Math.min(1,(Math.log(v)-LN_MIN)/LN_R));}
@@ -2039,54 +2024,11 @@ document.getElementById('countrySearch').addEventListener('input',function(e){
   renderTop();
 });
 
-/* ═══ 3D TOGGLE ═══ */
+/* ═══ 3D SCENE ═══ */
 let scene3D=null, camera3D=null, renderer3D=null, controls3D=null;
 let spheres3D=[], labelSprites3D=[], raycaster3D=null, mouse3D=null;
 let needsRender3D=false;
 let axisGroup3D=null;
-
-function toggle3D(){
-  view3D=!view3D;
-  document.getElementById('toggle3d').classList.toggle('active',view3D);
-  const svg=document.getElementById('scatterChart');
-  const canvas=document.getElementById('scatter3D');
-  const legend3d=document.getElementById('legend3d');
-  if(view3D){
-    svg.style.display='none';
-    canvas.classList.add('active');
-    if(legend3d) legend3d.classList.add('active');
-    if(!scene3D) init3DScene();
-    else update3DScene();
-    requestRender3D();
-  } else {
-    canvas.classList.remove('active');
-    if(legend3d) legend3d.classList.remove('active');
-    svg.style.display='block';
-    if(renderer3D){
-      renderer3D.dispose();
-      renderer3D=null;
-      scene3D=null;
-      camera3D=null;
-      controls3D=null;
-      spheres3D=[];
-      labelSprites3D=[];
-      axisGroup3D=null;
-    }
-    renderScatter();
-  }
-}
-
-function toggleAnnotations(){
-  showAnnotations=!showAnnotations;
-  document.getElementById('toggleLabels').classList.toggle('active',showAnnotations);
-  if(view3D){
-    // Toggle 3D country name labels
-    labelSprites3D.forEach(s=>{ s.visible=showAnnotations; });
-    requestRender3D();
-  } else {
-    renderScatter();
-  }
-}
 
 function requestRender3D(){
   if(!needsRender3D){
@@ -2331,6 +2273,9 @@ function update3DScene(){
   const sorted=[...data].sort((a,b)=>b.composite-a.composite);
   const top10=new Set(sorted.slice(0,10).map(c=>c.n));
 
+  const w8=+document.getElementById('w8').value;
+  const w9=+document.getElementById('w9').value;
+
   data.forEach(c=>{
     const cc=clusterColors[c.cluster]||clusterColors['default'];
     const hex=cc.replace('#','');
@@ -2339,7 +2284,9 @@ function update3DScene(){
     const b3=parseInt(hex.substring(4,6),16)/255;
     const col=new THREE.Color(r3,g3,b3);
 
-    const radius=0.6+(c.composite/100)*2.2;
+    // Population-based sizing: log scale so China/India don't dominate
+    const popLog = Math.log10(Math.max(c.pop, 0.5));
+    const radius = 0.5 + popLog * 0.7;
     const mat=new THREE.MeshPhongMaterial({
       color:col,
       transparent:true,
@@ -2351,11 +2298,11 @@ function update3DScene(){
     const mesh=new THREE.Mesh(sphereGeo,mat);
     mesh.scale.set(radius,radius,radius);
 
-    // X = eSov (Transition Readiness), Y = ePow (Power to Execute), Z = compound exposure inverted
+    // X = eSov (Transition Readiness), Y = ePow (Power to Execute), Z = compound exposure
     const px=c.eSov;
     const py=c.ePow;
-    const expN=(c.cxN+(1-c.rsN))/2;
-    const pz=(1-expN)*100; // invert so less exposed = higher Z
+    const exposureN = (w9*c.cxN + w8*(1-c.rsN)) / (w8+w9 || 1);
+    const pz = (1 - exposureN) * 100; // Invert so less exposed = higher/further
     mesh.position.set(px,py,pz);
     mesh.userData={country:c};
     scene3D.add(mesh);
@@ -2391,6 +2338,8 @@ function on3DMouseMove(e){
       const pr=canvasEl.closest('.viewscreen').getBoundingClientRect();
       tt.innerHTML=`
         <div class="tt-name">${c.n}</div>
+        <div class="tt-row"><span class="tt-label">Population</span><span class="tt-val">${c.pop}m</span></div>
+        <div class="tt-divider"></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--energy)">Energy</span><span class="tt-val">${c.ceS.toFixed(0)}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--ppp)">PPP</span><span class="tt-val">${c.ppS.toFixed(0)}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Tech</span><span class="tt-val">${c.ctS.toFixed(0)}</span></div>
@@ -2438,245 +2387,6 @@ function resize3D(){
   requestRender3D();
 }
 
-function renderScatter(){
-  const svg=document.getElementById('scatterChart');
-  const rect=svg.parentElement.getBoundingClientRect();
-  const w=rect.width,h=rect.height;
-  if(w<100||h<100)return;
-  const p={t:32,r:24,b:42,l:46};
-  const pw=w-p.l-p.r,ph=h-p.t-p.b;
-  svg.setAttribute('viewBox',`0 0 ${w} ${h}`);
-  let s='<defs><filter id="storyGlow"><feGaussianBlur stdDeviation="3" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>';
-
-  const hexToRgb=hex=>{const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return`${r},${g},${b}`;};
-
-  if(view3D){
-    // ═══ 3D ISOMETRIC VIEW ═══
-    // Grid lines for X and Y
-    for(let i=0;i<=4;i++){
-      const frac=i/4;
-      // X-axis grid (horizontal lines at different Y levels)
-      const y=p.t+ph*(1-frac);
-      s+=`<line class="grid-line" x1="${p.l}" y1="${y}" x2="${w-p.r}" y2="${y}"/>`;
-      s+=`<text class="tick-label" x="${p.l-6}" y="${y+3}" text-anchor="end">${i*25}</text>`;
-      // X ticks along bottom
-      const x=p.l+pw*frac;
-      s+=`<line class="grid-line" x1="${x}" y1="${p.t}" x2="${x}" y2="${h-p.b}"/>`;
-      s+=`<text class="tick-label" x="${x}" y="${h-p.b+12}" text-anchor="middle">${i*25}</text>`;
-    }
-
-    // Crosshair
-    const scx=p.l+pw*0.5,scy=p.t+ph*0.5;
-    s+=`<line class="crosshair" x1="${p.l}" y1="${scy}" x2="${w-p.r}" y2="${scy}"/>`;
-    s+=`<line class="crosshair" x1="${scx}" y1="${p.t}" x2="${scx}" y2="${h-p.b}"/>`;
-
-    // Z-axis line (diagonal from center toward upper-right)
-    const zLen=Math.min(pw,ph)*0.35;
-    const zEndX=scx+zLen*0.4;
-    const zEndY=scy-zLen*0.3;
-    s+=`<line class="crosshair" x1="${scx}" y1="${scy}" x2="${zEndX}" y2="${zEndY}" stroke-dasharray="2,2"/>`;
-    s+=`<text class="axis-label" x="${zEndX+6}" y="${zEndY+3}" fill="#b91c1c" font-size="8" font-weight="600">Z: Compound Exposure</text>`;
-
-    // Axis labels
-    s+=`<text class="axis-label" x="${p.l+pw/2}" y="${h-3}" text-anchor="middle" fill="#6e7c90">X: Transition Readiness</text>`;
-    s+=`<text class="axis-label" x="10" y="${p.t+ph/2}" text-anchor="middle" fill="#6e7c90" transform="rotate(-90,10,${p.t+ph/2})">Y: Power to Execute</text>`;
-
-    // Quadrant labels
-    s+=`<text class="quadrant-label" x="${p.l+8}" y="${p.t+14}" fill="#0a7058" fill-opacity="0.22">Ready but Weak</text>`;
-    s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${p.t+14}" text-anchor="end" fill="#165a96" fill-opacity="0.28">Electrostates</text>`;
-    s+=`<text class="quadrant-label" x="${p.l+8}" y="${h-p.b-6}" fill="#a82028" fill-opacity="0.18">Exposed</text>`;
-    s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${h-p.b-6}" text-anchor="end" fill="#9a6508" fill-opacity="0.22">Petrostates</text>`;
-
-    // HUD coords
-    s+=`<text class="hud-coord" x="${p.l}" y="${p.t+7}">X:00 Y:100</text>`;
-    s+=`<text class="hud-coord" x="${w-p.r}" y="${p.t+7}" text-anchor="end">X:100 Y:100</text>`;
-    s+=`<text class="hud-coord" x="${p.l}" y="${h-p.b-3}">X:00 Y:00</text>`;
-    s+=`<text class="hud-coord" x="${w-p.r}" y="${h-p.b-3}" text-anchor="end">X:100 Y:00</text>`;
-
-    // Dots with isometric offset for Z (compound exposure)
-    const sorted=[...data].sort((a,b)=>a.composite-b.composite);
-    sorted.forEach(c=>{
-      const baseX=p.l+(c.eSov/100)*pw;
-      const baseY=p.t+ph-(c.ePow/100)*ph;
-      const zOffset=(c.cxN+(1-c.rsN))/2; // compound exposure
-      const x=baseX+zOffset*pw*0.12;
-      const y=baseY-zOffset*ph*0.09;
-      const r=2.5+(c.composite/100)*8;
-      const alpha=0.2+c.composite/100*0.55;
-      const cc=clusterColors[c.cluster]||clusterColors['default'];
-      s+=`<circle class="scatter-dot" cx="${x}" cy="${y}" r="${r}"
-        fill="${cc}" fill-opacity="${alpha}"
-        stroke="${cc}" stroke-width="0.7" stroke-opacity="${0.25+c.composite/100*0.4}"
-        data-n="${c.n}" data-ce="${c.ceS.toFixed(0)}" data-pp="${c.ppS.toFixed(0)}"
-        data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-sc="${c.scS.toFixed(0)}" data-mo="${c.moS.toFixed(0)}" data-rs="${c.rsS.toFixed(0)}" data-cx="${c.cxS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
-    });
-
-    // Annotations (3D-isometric mode)
-    annotations.forEach(a=>{
-      const c=data.find(d=>d.n===a.n);
-      if(!c)return;
-      const baseX=p.l+(c.eSov/100)*pw;
-      const baseY=p.t+ph-(c.ePow/100)*ph;
-      const isoExpN=(c.cxN+(1-c.rsN))/2;
-      const x=baseX+isoExpN*pw*0.12;
-      const y=baseY-isoExpN*ph*0.09;
-      const r=2.5+(c.composite/100)*8;
-      const lx=x+a.dx,ly=y+a.dy;
-      s+=`<line class="annotation-line" x1="${x+Math.sign(a.dx)*r}" y1="${y}" x2="${lx}" y2="${ly}"/>`;
-      const anchor=a.dx<0?'end':'start';
-      const tx=lx+(a.dx<0?-3:3);
-      s+=`<text class="annotation-text" x="${tx}" y="${ly+3}" text-anchor="${anchor}">${c.n}</text>`;
-      s+=`<text class="annotation-sub" x="${tx}" y="${ly+11}" text-anchor="${anchor}">${a.t}</text>`;
-    });
-
-  } else {
-    // ═══ 2D VIEW (default) ═══
-    for(let i=0;i<=4;i++){
-      const x=p.l+(pw*i/4),y=p.t+(ph*i/4);
-      s+=`<line class="grid-line" x1="${p.l}" y1="${y}" x2="${w-p.r}" y2="${y}"/>`;
-      s+=`<line class="grid-line" x1="${x}" y1="${p.t}" x2="${x}" y2="${h-p.b}"/>`;
-      s+=`<text class="tick-label" x="${x}" y="${h-p.b+12}" text-anchor="middle">${i*25}</text>`;
-      s+=`<text class="tick-label" x="${p.l-6}" y="${h-p.b-(ph*i/4)+3}" text-anchor="end">${i*25}</text>`;
-    }
-
-    const scx=p.l+pw*0.5,scy=p.t+ph*0.5;
-    const maxR=Math.min(pw,ph)*0.46;
-    for(let i=1;i<=5;i++){
-      s+=`<circle cx="${scx}" cy="${scy}" r="${maxR*i/5}" class="ring-line"/>`;
-    }
-
-    s+=`<line class="crosshair" x1="${p.l}" y1="${scy}" x2="${w-p.r}" y2="${scy}"/>`;
-    s+=`<line class="crosshair" x1="${scx}" y1="${p.t}" x2="${scx}" y2="${h-p.b}"/>`;
-
-    s+=`<text class="quadrant-label" x="${p.l+8}" y="${p.t+14}" fill="#0a7058" fill-opacity="0.22">Ready but Weak</text>`;
-    s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${p.t+14}" text-anchor="end" fill="#165a96" fill-opacity="0.28">Electrostates</text>`;
-    s+=`<text class="quadrant-label" x="${p.l+8}" y="${h-p.b-6}" fill="#a82028" fill-opacity="0.18">Exposed</text>`;
-    s+=`<text class="quadrant-label" x="${w-p.r-8}" y="${h-p.b-6}" text-anchor="end" fill="#9a6508" fill-opacity="0.22">Petrostates</text>`;
-
-    s+=`<text class="hud-coord" x="${p.l}" y="${p.t+7}">X:00 Y:100</text>`;
-    s+=`<text class="hud-coord" x="${w-p.r}" y="${p.t+7}" text-anchor="end">X:100 Y:100</text>`;
-    s+=`<text class="hud-coord" x="${p.l}" y="${h-p.b-3}">X:00 Y:00</text>`;
-    s+=`<text class="hud-coord" x="${w-p.r}" y="${h-p.b-3}" text-anchor="end">X:100 Y:00</text>`;
-
-    s+=`<text class="axis-label" x="${p.l+pw/2}" y="${h-3}" text-anchor="middle" fill="#6e7c90">Transition Readiness (Energy + Tech + Compute/AI + Complexity)</text>`;
-    s+=`<text class="axis-label" x="10" y="${p.t+ph/2}" text-anchor="middle" fill="#6e7c90" transform="rotate(-90,10,${p.t+ph/2})">Power to Execute (PPP + State Capacity + Momentum)</text>`;
-
-    const sorted=[...data].sort((a,b)=>a.composite-b.composite);
-    sorted.forEach(c=>{
-      const x=p.l+(c.eSov/100)*pw;
-      const y=p.t+ph-(c.ePow/100)*ph;
-      // Dot size based on compound exposure (climate + inverted resource security)
-      const exposureN=(w9*c.cxN+w8*(1-c.rsN))/(w8+w9||1);
-      const r=3+exposureN*12;
-      const alpha=0.2+c.composite/100*0.55;
-      const cc=clusterColors[c.cluster]||clusterColors['default'];
-      s+=`<circle class="scatter-dot" cx="${x}" cy="${y}" r="${r}"
-        fill="${cc}" fill-opacity="${0.2+c.composite/100*0.55}"
-        stroke="${cc}" stroke-width="0.7" stroke-opacity="${0.25+c.composite/100*0.4}"
-        data-n="${c.n}" data-ce="${c.ceS.toFixed(0)}" data-pp="${c.ppS.toFixed(0)}"
-        data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-sc="${c.scS.toFixed(0)}" data-mo="${c.moS.toFixed(0)}" data-rs="${c.rsS.toFixed(0)}" data-cx="${c.cxS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
-    });
-
-    annotations.forEach(a=>{
-      const c=data.find(d=>d.n===a.n);
-      if(!c)return;
-      const x=p.l+(c.eSov/100)*pw;
-      const y=p.t+ph-(c.ePow/100)*ph;
-      const aExpN=(w9*c.cxN+w8*(1-c.rsN))/(w8+w9||1);
-      const r=3+aExpN*12;
-      const lx=x+a.dx,ly=y+a.dy;
-      s+=`<line class="annotation-line" x1="${x+Math.sign(a.dx)*r}" y1="${y}" x2="${lx}" y2="${ly}"/>`;
-      const anchor=a.dx<0?'end':'start';
-      const tx=lx+(a.dx<0?-3:3);
-      s+=`<text class="annotation-text" x="${tx}" y="${ly+3}" text-anchor="${anchor}">${c.n}</text>`;
-      s+=`<text class="annotation-sub" x="${tx}" y="${ly+11}" text-anchor="${anchor}">${a.t}</text>`;
-    });
-
-    // Cluster-level annotations
-    if(showAnnotations){
-      const clusters={};
-      data.forEach(c=>{
-        if(!clusters[c.cluster]) clusters[c.cluster]={xs:[],ys:[],count:0};
-        clusters[c.cluster].xs.push(c.eSov);
-        clusters[c.cluster].ys.push(c.ePow);
-        clusters[c.cluster].count++;
-      });
-
-      const clusterLabels={
-        leader:'Balanced Leaders',
-        latent:'Latent Electrostates',
-        power:'Single-Dimension Powers',
-        petro:'Petrostates',
-        crisis:'Crisis States',
-        fragile:'Clean but Fragile'
-      };
-
-      Object.entries(clusters).forEach(([key,cl])=>{
-        if(!clusterLabels[key]||cl.count<2) return;
-        const cx=cl.xs.reduce((a,b)=>a+b,0)/cl.count;
-        const cy=cl.ys.reduce((a,b)=>a+b,0)/cl.count;
-        const sx=p.l+(cx/100)*pw;
-        const sy=p.t+ph-(cy/100)*ph;
-        s+=`<circle cx="${sx}" cy="${sy}" r="28" fill="none" stroke="${clusterColors[key]}" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>`;
-        s+=`<text x="${sx}" y="${sy-32}" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" font-weight="700" fill="${clusterColors[key]}" fill-opacity="0.6" letter-spacing="0.08em">${clusterLabels[key]}</text>`;
-      });
-    }
-  }
-
-  // Legend (same for both views)
-  const legendX=p.l+8,legendY=h-p.b-102;
-  const legendItems=[
-    {color:'#0a7058',label:'Balanced Leaders'},
-    {color:'#b45309',label:'Latent Electrostates'},
-    {color:'#165a96',label:'Single-Dimension Powers'},
-    {color:'#a82028',label:'Petrostates'},
-    {color:'#991b1b',label:'Crisis States'},
-    {color:'#7c3aed',label:'Clean but Fragile'},
-    {color:'#6b7094',label:'Other'}
-  ];
-
-  if(!view3D){
-    // Add dot size note
-    s+=`<text x="${p.l+8}" y="${legendY-14}" font-family="'JetBrains Mono',monospace" font-size="6" fill="#9aa8b8" letter-spacing="0.05em">DOT SIZE = COMPOUND EXPOSURE (Climate + Resource Vulnerability)</text>`;
-  }
-
-  s+=`<rect x="${legendX-4}" y="${legendY-6}" width="118" height="${legendItems.length*13+8}" rx="2" fill="rgba(255,255,255,0.82)" stroke="rgba(188,198,212,0.4)" stroke-width="0.5"/>`;
-  legendItems.forEach((item,i)=>{
-    const ly=legendY+i*13+4;
-    s+=`<circle cx="${legendX+3.5}" cy="${ly}" r="3.5" fill="${item.color}" fill-opacity="0.7"/>`;
-    s+=`<text x="${legendX+11}" y="${ly+2.5}" font-family="'IBM Plex Sans',sans-serif" font-size="7.5" fill="#384458">${item.label}</text>`;
-  });
-
-  svg.innerHTML=s;
-
-  const tt=document.getElementById('tooltip');
-  svg.querySelectorAll('.scatter-dot').forEach(dot=>{
-    dot.addEventListener('mouseenter',e=>{
-      const d=e.target.dataset;
-      tt.innerHTML=`
-        <div class="tt-name">${d.n}</div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--energy)">Energy</span><span class="tt-val">${d.ce}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--ppp)">PPP</span><span class="tt-val">${d.pp}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Tech</span><span class="tt-val">${d.ct}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute & AI</span><span class="tt-val">${d.co}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--eci)">Complexity</span><span class="tt-val">${d.ec}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--state)">State Cap.</span><span class="tt-val">${d.sc}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--momentum)">Momentum</span><span class="tt-val">${d.mo}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--resource)">Resource Sec.</span><span class="tt-val">${d.rs}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--climate)">Climate Exp.</span><span class="tt-val">${d.cx}</span></div>
-        <div class="tt-divider"></div>
-        <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${d.comp}</span></div>`;
-      tt.classList.add('visible');
-    });
-    dot.addEventListener('mousemove',e=>{
-      const pr=svg.closest('.viewscreen').getBoundingClientRect();
-      tt.style.left=(e.clientX-pr.left+12)+'px';
-      tt.style.top=(e.clientY-pr.top-8)+'px';
-    });
-    dot.addEventListener('mouseleave',()=>tt.classList.remove('visible'));
-  });
-}
-
 function updateIndex(){
   // Clear any active story when sliders change
   if(activeStory){
@@ -2687,11 +2397,7 @@ function updateIndex(){
   }
   compute();
   renderTop();
-  if(view3D){
-    update3DScene();
-  } else {
-    renderScatter();
-  }
+  update3DScene();
 }
 
 const storyPresets = {
@@ -2765,36 +2471,8 @@ function playStory(key) {
     return false;
   }
 
-  // 2D SVG dots
-  document.querySelectorAll('.scatter-dot').forEach(dot => {
-    const name = dot.getAttribute('data-n');
-    const country = data.find(c => c.n === name);
-    if (!country) return;
-    const cc = clusterColors[country.cluster] || clusterColors['default'];
-
-    if (!activeStory) {
-      dot.setAttribute('fill', cc);
-      dot.setAttribute('fill-opacity', '0.55');
-      dot.setAttribute('stroke', cc);
-      dot.setAttribute('stroke-opacity', '0.6');
-      dot.removeAttribute('filter');
-    } else if (isTargetCountry(country)) {
-      dot.setAttribute('fill', cc);
-      dot.setAttribute('fill-opacity', '0.9');
-      dot.setAttribute('stroke', cc);
-      dot.setAttribute('stroke-opacity', '1');
-      dot.setAttribute('filter', 'url(#storyGlow)');
-    } else {
-      dot.setAttribute('fill', '#b0b8c4');
-      dot.setAttribute('fill-opacity', '0.1');
-      dot.setAttribute('stroke', '#b0b8c4');
-      dot.setAttribute('stroke-opacity', '0.08');
-      dot.removeAttribute('filter');
-    }
-  });
-
   // 3D Three.js spheres
-  if (view3D && spheres3D.length > 0) {
+  if (spheres3D.length > 0) {
     spheres3D.forEach(mesh => {
       const country = mesh.userData.country;
       if (!country) return;
@@ -2868,14 +2546,10 @@ setInterval(updateClock,1000);
 updateClock();
 
 updateIndex();
-
-// Default to 3D on desktop, 2D on mobile
-if(window.innerWidth > 900 && !('ontouchstart' in window)){
-  toggle3D();
-}
+init3DScene();
 
 window.addEventListener('resize',function(){
-  if(view3D){ resize3D(); } else { renderScatter(); }
+  resize3D();
 });
 </script>
 </body>
