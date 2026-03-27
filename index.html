@@ -705,6 +705,24 @@ html,body{height:100%;overflow:hidden;}
   color: var(--text);
 }
 
+.top-bars {
+  display: flex;
+  gap: 1.5px;
+  align-items: flex-end;
+  height: 16px;
+}
+
+.mini-bar { width: 2.5px; border-radius: 1px; min-height: 1px; opacity: 0.65; }
+.mini-bar.energy { background: var(--energy); }
+.mini-bar.ppp { background: var(--ppp); }
+.mini-bar.cleantech { background: var(--cleantech); }
+.mini-bar.compute { background: var(--compute); }
+.mini-bar.eci { background: var(--eci); }
+.mini-bar.state { background: var(--state); }
+.mini-bar.momentum { background: var(--momentum); }
+.mini-bar.resource { background: var(--resource); }
+.mini-bar.climate { background: var(--climate); }
+
 .top-score {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -2015,12 +2033,20 @@ function renderTop(){
   document.getElementById('topCards').innerHTML=filtered.map(c=>{
     const rank=sorted.indexOf(c)+1;
     const gc=rank<=3?' g':'';
-    const tag=clusterTags[c.cluster]||'';
-    const tagColor=clusterColors[c.cluster]||clusterColors['default'];
     return `<div class="top-entry" data-country="${c.n}" onclick="openDetail('${c.n.replace(/'/g,"\\'")}')">
       <span class="top-rank${gc}">${String(rank).padStart(2,'0')}</span>
       <span class="top-name">${c.n}</span>
-      ${tag?`<span class="cluster-tag" style="color:${tagColor};border-color:${tagColor}">${tag}</span>`:''}
+      <span class="top-bars">
+        <span class="mini-bar energy" style="height:${Math.max(1,c.ceS/100*16)}px"></span>
+        <span class="mini-bar ppp" style="height:${Math.max(1,c.ppS/100*16)}px"></span>
+        <span class="mini-bar cleantech" style="height:${Math.max(1,c.ctS/100*16)}px"></span>
+        <span class="mini-bar compute" style="height:${Math.max(1,c.coS/100*16)}px"></span>
+        <span class="mini-bar eci" style="height:${Math.max(1,c.ecS/100*16)}px"></span>
+        <span class="mini-bar state" style="height:${Math.max(1,c.scS/100*16)}px"></span>
+        <span class="mini-bar momentum" style="height:${Math.max(1,c.moS/100*16)}px"></span>
+        <span class="mini-bar resource" style="height:${Math.max(1,c.rsS/100*16)}px"></span>
+        <span class="mini-bar climate" style="height:${Math.max(1,(1-c.cxN)*16)}px"></span>
+      </span>
       <span class="top-score">${c.composite.toFixed(1)}</span>
     </div>`;
   }).join('');
@@ -2342,8 +2368,8 @@ function update3DScene(){
     const col=new THREE.Color(r3,g3,b3);
 
     // Population-based sizing: log scale so China/India don't dominate
-    const popLog = Math.log10(Math.max(c.pop, 0.5));
-    const radius = 0.5 + popLog * 0.7;
+    const popLog = Math.log10(Math.max(c.pop, 1));
+    const radius = 0.6 + popLog * 0.45;
     const mat=new THREE.MeshPhongMaterial({
       color:col,
       transparent:true,
