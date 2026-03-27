@@ -2220,6 +2220,20 @@ function makeCountryLabel(text,color){
   return sprite;
 }
 
+let dampActive = false;
+let dampTimeout = null;
+
+function dampLoop() {
+  if (!controls3D || !dampActive) return;
+  controls3D.update();
+  requestRender3D();
+  if (controls3D.enableDamping) {
+    requestAnimationFrame(dampLoop);
+  } else {
+    dampActive = false;
+  }
+}
+
 function init3DScene(){
   const container=document.querySelector('.viewscreen');
   const rect=container.getBoundingClientRect();
@@ -2271,16 +2285,13 @@ function init3DScene(){
     requestRender3D();
   });
 
-  // Damping animation loop (lightweight, only when controls are active)
-  function dampLoop(){
-    if(!controls3D)return;
-    if(controls3D.enableDamping){
-      controls3D.update();
-      requestRender3D();
-    }
-    requestAnimationFrame(dampLoop);
-  }
-  dampLoop();
+  controls3D.addEventListener('start', function() {
+    if (dampTimeout) { clearTimeout(dampTimeout); dampTimeout = null; }
+    if (!dampActive) { dampActive = true; dampLoop(); }
+  });
+  controls3D.addEventListener('end', function() {
+    dampTimeout = setTimeout(function() { dampActive = false; dampTimeout = null; }, 1200);
+  });
 }
 
 function build3DAxes(){
