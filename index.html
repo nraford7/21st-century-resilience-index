@@ -1963,12 +1963,17 @@ function adjustAxisWeight(axis) {
   }[axis];
 
   const subVals = subIds.map(id => +document.getElementById(id).value);
-  const subTotal = subVals.reduce((a,b) => a+b, 0) || 1;
+  const subTotal = subVals.reduce((a,b) => a+b, 0);
 
-  subIds.forEach((id, i) => {
-    const newVal = Math.round(masterVal * (subVals[i] / subTotal));
-    document.getElementById(id).value = newVal;
-  });
+  if (subTotal === 0) {
+    // All subs are 0 — distribute master evenly
+    const each = Math.round(masterVal / subIds.length);
+    subIds.forEach(id => { document.getElementById(id).value = each; });
+  } else {
+    subIds.forEach((id, i) => {
+      document.getElementById(id).value = Math.round(masterVal * (subVals[i] / subTotal));
+    });
+  }
 
   updateIndex();
 }
