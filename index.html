@@ -1415,8 +1415,8 @@ html,body{height:100%;overflow:hidden;}
         <span class="dim-tip">Composite 20-year momentum: clean energy share change (30%), ECI rank improvement (25%), GDP per capita growth (25%), and internet penetration increase (20%). Captures all forms of infrastructure and economic transformation, not just energy. Source: OWID, Harvard Growth Lab, World Bank, ITU.</span>
       </div>
 
-      <!-- Z — Exposure -->
-      <div class="slider-group-label">Z — Exposure <span class="axis-hint">What you face?</span></div>
+      <!-- Z — Climate Resilience -->
+      <div class="slider-group-label">Z — Climate Resilience <span class="axis-hint">How resilient?</span></div>
       <div class="dim-compact climate">
         <span class="dim-tag">09</span>
         <div class="dim-info">
@@ -1431,7 +1431,7 @@ html,body{height:100%;overflow:hidden;}
           <span class="dim-name">Resource Security</span>
           <span class="dim-desc">Food & water self-sufficiency (inverted = exposure)</span>
         </div>
-        <span class="dim-tip">Composite of food import dependency (FAO), water stress (WRI Aqueduct), and arable land per capita. Low resource security = high exposure. Inverted in the Z-axis calculation so low scores increase compound exposure. Gulf states and Singapore score lowest (8-12). Source: FAO, WRI Aqueduct 4.0, World Bank.</span>
+        <span class="dim-tip">Composite of food import dependency (FAO), water stress (WRI Aqueduct), and arable land per capita. Low resource security = high exposure. Higher resource security = higher climate resilience on the Z axis. Gulf states and Singapore score lowest (8-12). Source: FAO, WRI Aqueduct 4.0, World Bank.</span>
       </div>
     </div>
 
@@ -1493,8 +1493,8 @@ html,body{height:100%;overflow:hidden;}
       <div class="axis-group">
         <div class="axis-header" onclick="toggleAxisGroup(this)">
           <span class="axis-toggle">&#9654;</span>
-          <span class="axis-name">Z — Exposure</span>
-          <span class="axis-hint-col">What you face?</span>
+          <span class="axis-name">Z — Climate Resilience</span>
+          <span class="axis-hint-col">How resilient?</span>
           <span class="axis-weight-val" id="axZv">22%</span>
         </div>
         <input type="range" class="axis-slider" id="axZ" min="0" max="100" value="22" oninput="adjustAxisWeight('Z')">
@@ -1627,7 +1627,7 @@ html,body{height:100%;overflow:hidden;}
     <h2>The Resource Security Penalty</h2>
     <p>Resource security now lives on the Z axis (Compound Exposure), inverted &mdash; low resource security means higher exposure. Gulf states take a compound hit: already petrostate-trapped on the X axis, their dot size swells because they can&rsquo;t feed or water themselves. <strong>Qatar</strong> &mdash; resource security of 8, climate 62.5 &mdash; has among the largest compound exposure dots on the chart. Kuwait at 9. UAE at 11. Singapore&rsquo;s perfect governance score contrasts sharply with its compound exposure: resource security of 12 and sea-level climate risk of 56.5. Israel (28) faces similar structural vulnerability. The countries that buy everything are exposed to everything.</p>
 
-    <h2>Compound Exposure as Urgency</h2>
+    <h2>Climate Resilience as the Third Axis</h2>
     <p>The Z dimension (dot size in 2D, spatial axis in 3D) now combines climate vulnerability <em>and</em> resource insecurity into compound exposure. <strong>Bangladesh (climate 91.5, resource 41), Philippines (88.0, 52), India (87.5, 65), Pakistan (84.0, 50), Nigeria (78.5, 36)</strong> face the worst compound pressure. Gulf petrostates also swell &mdash; low climate scores compounded by near-zero resource self-sufficiency. The dot-size makes this visible: big dots in the bottom-left corner = crisis. Small dots in the upper-right corner = the countries that could help but face the least pressure to do so.</p>
 
     <h2>What Different Weight Configurations Reveal</h2>
@@ -1744,7 +1744,7 @@ html,body{height:100%;overflow:hidden;}
 
   <div class="narrative-slide" id="nSlide4">
     <h2>85 nations. 9 dimensions. 3 axes. Your weights.</h2>
-    <p>The scatter plot maps <strong>Transition Readiness</strong> (what you have) against <strong>Power to Execute</strong> (what you've proven). Dot size shows compound exposure — climate vulnerability combined with resource insecurity. Toggle to 3D to see exposure as a spatial axis.</p>
+    <p>The scatter plot maps <strong>Transition Readiness</strong> (what you have) against <strong>Power to Execute</strong> (what you've proven). Sphere size shows population. The Z axis shows Climate Resilience — higher means less climate exposure and more resource security. Lower means more vulnerable.</p>
     <p>Adjust the weight sliders to test your own hypotheses about what matters most. The rankings dissolve and reform. <em>There is no single answer — only trade-offs.</em></p>
     <div class="narrative-nav">
       <span></span>
@@ -2256,7 +2256,7 @@ function build3DAxes(){
   const yLabel=makeTextSprite('\u2191 POWER TO EXECUTE',{textColor:'rgba(64,160,64,0.85)',fontSize:96,scale:0.7});
   yLabel.position.set(-6,55,0);
   axisGroup3D.add(yLabel);
-  const zLabel=makeTextSprite('COMPOUND EXPOSURE \u2192',{textColor:'rgba(64,96,192,0.85)',fontSize:96,scale:0.7});
+  const zLabel=makeTextSprite('CLIMATE RESILIENCE \u2192',{textColor:'rgba(64,96,192,0.85)',fontSize:96,scale:0.7});
   zLabel.position.set(0,-6,55);
   axisGroup3D.add(zLabel);
 
@@ -2355,11 +2355,11 @@ function update3DScene(){
     const mesh=new THREE.Mesh(sphereGeo,mat);
     mesh.scale.set(radius,radius,radius);
 
-    // X = eSov (Transition Readiness), Y = ePow (Power to Execute), Z = compound exposure
+    // X = Transition Readiness, Y = Power to Execute, Z = Climate Resilience (high = good)
     const px=c.eSov;
     const py=c.ePow;
-    const exposureN = (w9*c.cxN + w8*(1-c.rsN)) / (w8+w9 || 1);
-    const pz = (1 - exposureN) * 100; // Invert so less exposed = higher/further
+    const resilienceN = (w9*(1-c.cxN) + w8*c.rsN) / (w8+w9 || 1);
+    const pz = resilienceN * 100;
     mesh.position.set(px,py,pz);
     mesh.userData={country:c};
     scene3D.add(mesh);
