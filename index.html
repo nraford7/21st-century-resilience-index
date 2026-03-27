@@ -1485,23 +1485,23 @@ html,body{height:100%;overflow:hidden;}
           <span class="axis-name">X — Transition Readiness</span>
           <span class="axis-weight-val" id="axXv">44%</span>
         </div>
-        <input type="range" class="axis-slider" id="axX" min="0" max="100" value="44" oninput="adjustAxisWeight('X')">
+        <input type="range" class="axis-slider" id="axX" min="0" max="100" value="44">
         <div class="axis-detail">
           <div class="slider-v energy">
             <label>Energy <span class="wv" id="w1v">11%</span></label>
-            <input type="range" id="w1" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w1" min="0" max="100" value="11">
           </div>
           <div class="slider-v cleantech">
             <label>Clean Tech <span class="wv" id="w3v">11%</span></label>
-            <input type="range" id="w3" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w3" min="0" max="100" value="11">
           </div>
           <div class="slider-v compute">
             <label>Compute & AI <span class="wv" id="w4v">11%</span></label>
-            <input type="range" id="w4" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w4" min="0" max="100" value="11">
           </div>
           <div class="slider-v eci">
             <label>Complexity <span class="wv" id="w5v">11%</span></label>
-            <input type="range" id="w5" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w5" min="0" max="100" value="11">
           </div>
         </div>
       </div>
@@ -1511,19 +1511,19 @@ html,body{height:100%;overflow:hidden;}
           <span class="axis-name">Y — Power to Execute</span>
           <span class="axis-weight-val" id="axYv">33%</span>
         </div>
-        <input type="range" class="axis-slider" id="axY" min="0" max="100" value="33" oninput="adjustAxisWeight('Y')">
+        <input type="range" class="axis-slider" id="axY" min="0" max="100" value="33">
         <div class="axis-detail">
           <div class="slider-v ppp">
             <label>PPP <span class="wv" id="w2v">11%</span></label>
-            <input type="range" id="w2" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w2" min="0" max="100" value="11">
           </div>
           <div class="slider-v state">
             <label>State Cap. <span class="wv" id="w6v">11%</span></label>
-            <input type="range" id="w6" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w6" min="0" max="100" value="11">
           </div>
           <div class="slider-v momentum">
             <label>Momentum <span class="wv" id="w7v">11%</span></label>
-            <input type="range" id="w7" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w7" min="0" max="100" value="11">
           </div>
         </div>
       </div>
@@ -1533,15 +1533,15 @@ html,body{height:100%;overflow:hidden;}
           <span class="axis-name">Z — Climate Resilience</span>
           <span class="axis-weight-val" id="axZv">22%</span>
         </div>
-        <input type="range" class="axis-slider" id="axZ" min="0" max="100" value="22" oninput="adjustAxisWeight('Z')">
+        <input type="range" class="axis-slider" id="axZ" min="0" max="100" value="22">
         <div class="axis-detail">
           <div class="slider-v climate">
             <label>Climate <span class="wv" id="w9v">11%</span></label>
-            <input type="range" id="w9" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w9" min="0" max="100" value="11">
           </div>
           <div class="slider-v resource">
             <label>Resource Sec. <span class="wv" id="w8v">11%</span></label>
-            <input type="range" id="w8" min="0" max="100" value="11" oninput="updateIndex()">
+            <input type="range" id="w8" min="0" max="100" value="11">
           </div>
         </div>
       </div>
@@ -1561,12 +1561,12 @@ html,body{height:100%;overflow:hidden;}
       <button class="toggle-3d" id="resetCamera" title="Reset camera">&#x21BA;</button>
     </div>
     <div class="story-bar">
-      <button class="story-btn" onclick="playStory('reset')">Reset</button>
-      <button class="story-btn" onclick="playStory('petroClock')">Petrostate Clock</button>
-      <button class="story-btn" onclick="playStory('usGamble')">America's Gamble</button>
-      <button class="story-btn" onclick="playStory('moving')">Who's Moving</button>
-      <button class="story-btn" onclick="playStory('breadth')">Breadth Wins</button>
-      <button class="story-btn" onclick="playStory('crisis')">Crisis States</button>
+      <button class="story-btn" data-story="reset">Reset</button>
+      <button class="story-btn" data-story="petroClock">Petrostate Clock</button>
+      <button class="story-btn" data-story="usGamble">America's Gamble</button>
+      <button class="story-btn" data-story="moving">Who's Moving</button>
+      <button class="story-btn" data-story="breadth">Breadth Wins</button>
+      <button class="story-btn" data-story="crisis">Crisis States</button>
     </div>
     <svg id="scatter2D" style="display:none; width:100%; height:100%; position:absolute; top:0; left:0;"></svg>
     <canvas id="scatter3D"></canvas>
@@ -1742,9 +1742,9 @@ html,body{height:100%;overflow:hidden;}
     <p>Nations whose power comes from <em>manufacturing</em> clean energy technology — not extracting fossil fuels from the ground.</p>
     <p>This index measures which countries are positioned to lead that transition, and which are trapped.</p>
     <div class="narrative-nav">
-      <button class="narrative-btn skip" onclick="dismissNarrative()">Skip</button>
+      <button class="narrative-btn skip">Skip</button>
       <div class="narrative-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-      <button class="narrative-btn" onclick="nextSlide()">Next</button>
+      <button class="narrative-btn">Next</button>
     </div>
   </div>
 
@@ -1753,9 +1753,9 @@ html,body{height:100%;overflow:hidden;}
     <p>The transition requires a compound of clean energy, manufacturing sophistication, economic complexity, compute capacity, governance quality, resource security, and momentum — simultaneously.</p>
     <p>Most countries have one or two. Almost none have all of them.</p>
     <div class="narrative-nav">
-      <button class="narrative-btn skip" onclick="dismissNarrative()">Skip</button>
+      <button class="narrative-btn skip">Skip</button>
       <div class="narrative-dots"><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
-      <button class="narrative-btn" onclick="nextSlide()">Next</button>
+      <button class="narrative-btn">Next</button>
     </div>
   </div>
 
@@ -1764,9 +1764,9 @@ html,body{height:100%;overflow:hidden;}
     <p>Bangladesh, Philippines, Pakistan, Nigeria — facing the worst projected climate impacts by 2050, with the lowest capacity to transition.</p>
     <p>The gap between who <em>needs</em> the transition and who <em>can</em> execute it is the moral center of this index.</p>
     <div class="narrative-nav">
-      <button class="narrative-btn skip" onclick="dismissNarrative()">Skip</button>
+      <button class="narrative-btn skip">Skip</button>
       <div class="narrative-dots"><span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
-      <button class="narrative-btn" onclick="nextSlide()">Next</button>
+      <button class="narrative-btn">Next</button>
     </div>
   </div>
 
@@ -1775,9 +1775,9 @@ html,body{height:100%;overflow:hidden;}
     <p>Qatar has $129k GDP per capita and scores near the bottom. Japan has the world's deepest manufacturing capability and hasn't deployed it. Canada is going backwards on clean energy.</p>
     <p>The index reveals what headlines miss: who's <em>actually</em> building the future, and who's coasting on the past.</p>
     <div class="narrative-nav">
-      <button class="narrative-btn skip" onclick="dismissNarrative()">Skip</button>
+      <button class="narrative-btn skip">Skip</button>
       <div class="narrative-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span></div>
-      <button class="narrative-btn" onclick="nextSlide()">Next</button>
+      <button class="narrative-btn">Next</button>
     </div>
   </div>
 
@@ -1788,7 +1788,7 @@ html,body{height:100%;overflow:hidden;}
     <div class="narrative-nav">
       <span></span>
       <div class="narrative-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span></div>
-      <button class="narrative-btn" onclick="dismissNarrative()">Explore the data</button>
+      <button class="narrative-btn">Explore the data</button>
     </div>
   </div>
 </div>
@@ -2704,7 +2704,7 @@ function playStory(key) {
   // Update active button state
   document.querySelectorAll('.story-btn').forEach(b => b.classList.remove('active'));
   if (key !== 'reset') {
-    const btn = document.querySelector('[onclick="playStory(\'' + key + '\')"]');
+    const btn = document.querySelector('[data-story="' + key + '"]');
     if (btn) btn.classList.add('active');
   }
 
@@ -2799,11 +2799,12 @@ function playStory(key) {
   // Create popup
   const popup = document.createElement('div');
   popup.className = 'story-popup';
-  popup.innerHTML = '<button class="story-close" onclick="playStory(\'reset\')">&times;</button>' +
+  popup.innerHTML = '<button class="story-close">&times;</button>' +
     '<h3>' + preset.title + '</h3>' +
     '<p>' + preset.body + '</p>' +
     '<div class="story-countries">' + preset.countries + '</div>';
   document.querySelector('.viewscreen').appendChild(popup);
+  popup.querySelector('.story-close').addEventListener('click', function() { playStory('reset'); });
 }
 
 let currentSlide = 0;
@@ -2847,6 +2848,24 @@ window.addEventListener('resize',function(){
 
 document.getElementById('toggleView').addEventListener('click', toggleViewMode);
 document.getElementById('resetCamera').addEventListener('click', resetCamera);
+
+document.querySelectorAll('.story-btn[data-story]').forEach(function(btn) {
+  btn.addEventListener('click', function() { playStory(this.dataset.story); });
+});
+
+['w1','w2','w3','w4','w5','w6','w7','w8','w9'].forEach(function(id) {
+  document.getElementById(id).addEventListener('input', updateIndex);
+});
+['X','Y','Z'].forEach(function(axis) {
+  document.getElementById('ax' + axis).addEventListener('input', function() { adjustAxisWeight(axis); });
+});
+
+document.querySelectorAll('.narrative-btn').forEach(function(btn) {
+  var text = btn.textContent.trim();
+  if (text === 'Skip') btn.addEventListener('click', dismissNarrative);
+  else if (text === 'Next') btn.addEventListener('click', nextSlide);
+  else if (text === 'Explore the data') btn.addEventListener('click', dismissNarrative);
+});
 </script>
 </body>
 </html>
