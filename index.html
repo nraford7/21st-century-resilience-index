@@ -1329,9 +1329,46 @@ html,body{height:100%;overflow:hidden;}
     z-index: 195;
   }
 }
+
+.mobile-gate {
+  display: none;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  font-family: var(--sans);
+  color: var(--text-2);
+  height: 100vh;
+  overflow-y: auto;
+  background: var(--surface);
+}
+.mobile-gate h2 {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  margin-bottom: 1rem;
+}
+.mobile-gate p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 0.8rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 860px) {
+  .bridge { display: none !important; }
+  .mobile-gate { display: block; }
+  html, body { overflow: auto; }
+}
 </style>
 </head>
 <body>
+<div class="mobile-gate">
+  <h2>21st Century Resilience Index</h2>
+  <p>This interactive tool is designed for desktop screens (860px+ width). The 3D scatter plot, weight sliders, and analysis panels need the space.</p>
+  <p>Open this page on a laptop or desktop browser for the full experience.</p>
+  <p style="font-family:var(--mono);font-size:0.7rem;color:var(--text-4);margin-top:2rem;">SYS.21CRI v7.0 // 85 NATIONS // 9 DIMENSIONS</p>
+</div>
 <div class="bridge">
 
 <!-- ═══ TOP STATUS BAR ═══ -->
