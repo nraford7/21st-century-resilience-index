@@ -1525,7 +1525,7 @@ html,body{height:100%;overflow:hidden;}
 
       <div class="axis-group">
         <div class="axis-header">
-          <span class="axis-name">Z — Climate Resilience</span>
+          <span class="axis-name">Z — Compound Exposure</span>
           <span class="axis-weight-val" id="axZv">22%</span>
         </div>
         <input type="range" class="axis-slider" id="axZ" min="0" max="100" value="22">
@@ -1947,12 +1947,18 @@ function prof(d){
 // crisis:  High climate exposure + weak state capacity
 // default: Everything else (mixed profiles, boundary cases like Chile)
 function cluster(c) {
-  if (c.exN > 0.75 && c.ceN > 0.35 && c.rmN >= 0.45) return 'leader';
+  // Balanced Leaders: high execution + clean energy + material security
+  if (c.exN > 0.70 && c.ceN > 0.30 && c.rmN >= 0.35) return 'leader';
+  // Single-dimension: US (compute monopoly) or China (clean tech monopoly)
   if (c.coN > 0.85 || c.ctN > 0.5) return 'power';
-  if (c.ecN > 0.75 && c.exN > 0.55 && c.ceN < 0.35) return 'latent';
-  if (c.ceN < 0.05 && c.cmN > 0.45) return 'petro';
+  // Latent electrostates: high complexity + decent execution but low clean energy
+  if (c.ecN > 0.70 && c.exN > 0.50 && c.ceN < 0.35) return 'latent';
+  // Petrostates: near-zero clean energy + some capital (from oil wealth)
+  if (c.ceN < 0.05 && c.cmN > 0.20 && c.ecN < 0.70) return 'petro';
+  // Clean but fragile: some clean energy but weak execution and low complexity
   if (c.ceN > 0.20 && c.exN < 0.55 && c.ecN < 0.50) return 'fragile';
-  if (c.cxN > 0.5 && c.exN < 0.55) return 'crisis';
+  // Crisis: high climate exposure + weak execution
+  if (c.cxN > 0.60 && c.exN < 0.50) return 'crisis';
   return 'default';
 }
 
@@ -2714,8 +2720,9 @@ const storyPresets = {
     weights: {w1:0,w2:0,w3:0,w4:0,w5:5,w6:5,w7:0,w8:30,w9:30},
     title: 'The Petrostate Clock',
     body: 'Weight material security and climate exposure to reveal compound vulnerability. These countries import 80\u201390% of their food, desalinate almost all their water, have zero critical mineral reserves, and face approaching-unsurvivable temperatures by 2050. Capital buys time, not transition.',
-    highlight: ['petro'],
-    countries: 'Qatar (materials 8.4, climate 62.5) \u00b7 Kuwait (materials 9.1, climate 64.0) \u00b7 Saudi Arabia (materials 16.3, climate 65.5) \u00b7 UAE (materials 14.7, climate 61.0)'
+    highlight: null,
+    highlightFn: function(c){ return ['Saudi Arabia','Qatar','Kuwait','UAE','Iran','Iraq','Algeria','Oman'].indexOf(c.n) >= 0; },
+    countries: 'Qatar (materials 7.6, climate 62.5) \u00b7 Kuwait (materials 9.1, climate 64.0) \u00b7 Saudi Arabia (materials 16.3, climate 65.5) \u00b7 UAE (materials 14.7, climate 61.0) \u00b7 Iran \u00b7 Iraq \u00b7 Algeria \u00b7 Oman'
   },
   usGamble: {
     weights: {w1:5,w2:5,w3:50,w4:5,w5:5,w6:5,w7:5,w8:5,w9:5},
@@ -2737,14 +2744,16 @@ const storyPresets = {
     weights: {w1:11,w2:11,w3:11,w4:11,w5:11,w6:11,w7:11,w8:11,w9:11},
     title: 'The Breadth Advantage',
     body: 'Equal weights across all nine dimensions reward countries with diverse capability, not single-dimension dominance. The Nordics and Switzerland rise to the top \u2014 not because they\'re the wealthiest or the most powerful, but because they score well on everything. Monocultures are fragile. Diverse ecosystems survive.',
-    highlight: ['leader'],
-    countries: 'Denmark (breadth 75+) \u00b7 Sweden \u00b7 Finland \u00b7 Switzerland \u00b7 Singapore \u2014 vs US (breadth ~45) \u00b7 China (~45) \u00b7 Qatar (~25)'
+    highlight: null,
+    highlightFn: function(c){ return c.cluster === 'leader'; },
+    countries: 'Sweden \u00b7 Denmark \u00b7 Finland \u00b7 Norway \u00b7 Switzerland \u00b7 France \u2014 vs US (breadth ~45) \u00b7 China (~45) \u00b7 Qatar (~25)'
   },
   crisis: {
     weights: {w1:0,w2:0,w3:0,w4:0,w5:20,w6:0,w7:0,w8:20,w9:40},
     title: 'Crisis States',
     body: 'The moral center of the index. These countries face the worst projected climate impacts by 2050 and have the least execution capacity to adapt. They didn\'t cause climate change. They can\'t build their way out of it. The gap between who needs the transition and who can execute it is structural, not incidental.',
-    highlight: ['crisis'],
+    highlight: null,
+    highlightFn: function(c){ return c.cxN > 0.60 && c.exN < 0.50; },
     countries: 'Bangladesh (climate 91.5, exec. cap. 32) \u00b7 Philippines (88.0, 45) \u00b7 India (87.5, 55) \u00b7 Pakistan (84.0, 30) \u00b7 Nigeria (78.5, 22)'
   },
   decay: {
