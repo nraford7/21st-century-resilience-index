@@ -425,6 +425,58 @@ html,body{height:100%;overflow:hidden;}
 .toggle-3d:hover { border-color: var(--blue-light); color: var(--blue); }
 .toggle-3d.active { background: var(--blue); color: white; border-color: var(--blue); }
 
+/* ═══ STORY BUTTONS ═══ */
+.story-bar {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 4px;
+  pointer-events: all;
+}
+
+.story-btn {
+  font-family: var(--mono);
+  font-size: 0.48rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  color: var(--text-3);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.story-btn:hover { color: var(--blue); border-color: var(--blue); }
+.story-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
+
+.story-annotation {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--blue-dark);
+  background: rgba(255,255,255,0.92);
+  padding: 4px 12px;
+  border-left: 2px solid var(--blue);
+  max-width: 80%;
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.story-annotation.visible { opacity: 1; }
+
 #scatterChart {
   width: 100%;
   height: 100%;
@@ -1336,6 +1388,15 @@ html,body{height:100%;overflow:hidden;}
       <span class="vs-label">Transition Readiness vs Power to Execute</span>
       <button class="toggle-3d" id="toggle3d" onclick="toggle3D()">3D</button>
     </div>
+    <div class="story-bar">
+      <button class="story-btn" onclick="playStory('reset')">Reset</button>
+      <button class="story-btn" onclick="playStory('petroClock')">Petrostate Clock</button>
+      <button class="story-btn" onclick="playStory('usGamble')">America's Gamble</button>
+      <button class="story-btn" onclick="playStory('moving')">Who's Moving</button>
+      <button class="story-btn" onclick="playStory('breadth')">Breadth Wins</button>
+      <button class="story-btn" onclick="playStory('crisis')">Crisis States</button>
+    </div>
+    <div class="story-annotation" id="storyAnnotation"></div>
     <svg id="scatterChart"></svg>
     <canvas id="scatter3D"></canvas>
     <div class="tooltip" id="tooltip"></div>
@@ -2452,6 +2513,50 @@ function updateIndex(){
   } else {
     renderScatter();
   }
+}
+
+const storyPresets = {
+  reset: {
+    weights: {w1:11,w2:11,w3:11,w4:11,w5:11,w6:11,w7:11,w8:11,w9:11},
+    annotation: ''
+  },
+  petroClock: {
+    weights: {w1:0,w2:5,w3:0,w4:0,w5:0,w6:5,w7:0,w8:30,w9:30},
+    annotation: 'Resource security + climate exposure reveal the petrostate trap. Qatar, Kuwait, Saudi Arabia: 80-90% food imported, approaching unsurvivable temperatures by 2050.'
+  },
+  usGamble: {
+    weights: {w1:5,w2:5,w3:5,w4:50,w5:5,w6:5,w7:5,w8:5,w9:5},
+    annotation: 'Weight compute heavily and the US leads. Zero it out and the US collapses to mid-table. A one-dimensional bet.'
+  },
+  moving: {
+    weights: {w1:0,w2:0,w3:0,w4:0,w5:0,w6:0,w7:70,w8:0,w9:0},
+    annotation: '20-year momentum: China 77.6, Vietnam 68.3, Romania 70.6. Japan 32.0, Norway 31.7, Venezuela 23.5. Who is actually transforming?'
+  },
+  breadth: {
+    weights: {w1:11,w2:11,w3:11,w4:11,w5:11,w6:11,w7:11,w8:11,w9:11},
+    annotation: 'Equal weights reward breadth over depth. The Nordics rise. Single-dimension powers (US, China) drop. Diverse capability beats concentrated advantage.'
+  },
+  crisis: {
+    weights: {w1:0,w2:0,w3:0,w4:0,w5:0,w6:20,w7:0,w8:20,w9:40},
+    annotation: 'Climate exposure + resource dependency + weak governance = crisis. Bangladesh (91.5 climate, 41 state capacity), Philippines (88, 53), Pakistan (84, 36). Most exposed, least capable.'
+  }
+};
+
+function playStory(key) {
+  const preset = storyPresets[key];
+  Object.entries(preset.weights).forEach(([id, val]) => {
+    const el = document.getElementById(id);
+    if (el) el.value = val;
+  });
+
+  document.querySelectorAll('.story-btn').forEach(b => b.classList.remove('active'));
+  if (key !== 'reset') event.target.classList.add('active');
+
+  const ann = document.getElementById('storyAnnotation');
+  ann.textContent = preset.annotation;
+  ann.classList.toggle('visible', !!preset.annotation);
+
+  updateIndex();
 }
 
 let currentSlide = 0;
