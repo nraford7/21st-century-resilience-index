@@ -2435,6 +2435,18 @@ function update3DScene(){
   requestRender3D();
 }
 
+function positionTooltip(tt, clientX, clientY, container) {
+  var pr = container.getBoundingClientRect();
+  var ttW = 200, ttH = 280;
+  var x = clientX - pr.left + 12;
+  var y = clientY - pr.top - 8;
+  if (x + ttW > pr.width) x = clientX - pr.left - ttW - 12;
+  if (y + ttH > pr.height) y = pr.height - ttH - 8;
+  if (y < 8) y = 8;
+  tt.style.left = x + 'px';
+  tt.style.top = y + 'px';
+}
+
 function on3DMouseMove(e){
   if(!renderer3D||!camera3D)return;
   const canvasEl=document.getElementById('scatter3D');
@@ -2466,8 +2478,7 @@ function on3DMouseMove(e){
         <div class="tt-row"><span class="tt-label" style="color:var(--climate)">Climate Exp.</span><span class="tt-val">${c.cxS.toFixed(0)}</span></div>
         <div class="tt-divider"></div>
         <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${c.composite.toFixed(1)}</span></div>`;
-      tt.style.left=(e.clientX-pr.left+12)+'px';
-      tt.style.top=(e.clientY-pr.top-8)+'px';
+      positionTooltip(tt, e.clientX, e.clientY, canvasEl.closest('.viewscreen'));
       tt.classList.add('visible');
       canvasEl.style.cursor='pointer';
     }
