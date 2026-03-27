@@ -50,8 +50,8 @@ html,body{height:100%;overflow:hidden;}
 /* ═══ BRIDGE LAYOUT ═══ */
 .bridge {
   display: grid;
-  grid-template-rows: 36px 1fr 320px 26px;
-  height: 100vh;
+  grid-template-rows: 36px 1fr 200px 26px;
+  height: 100dvh;
   background: var(--border);
   gap: 1px;
   overflow: hidden;
@@ -111,7 +111,7 @@ html,body{height:100%;overflow:hidden;}
   flex: 1;
   text-align: center;
   color: var(--text-4);
-  font-size: 0.52rem;
+  font-size: 0.6rem;
   letter-spacing: 0.16em;
 }
 
@@ -198,7 +198,7 @@ html,body{height:100%;overflow:hidden;}
 .slider-group-label:first-child { margin-top: 0; }
 
 .slider-group-label .axis-hint {
-  font-size: 0.44rem;
+  font-size: 0.6rem;
   font-weight: 400;
   color: var(--text-4);
   letter-spacing: 0.04em;
@@ -317,7 +317,15 @@ html,body{height:100%;overflow:hidden;}
 
 .slider-v input::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 10px; height: 10px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.slider-v input::-moz-range-thumb {
+  width: 16px; height: 16px;
   border-radius: 50%;
   cursor: pointer;
   border: 2px solid var(--surface);
@@ -334,6 +342,16 @@ html,body{height:100%;overflow:hidden;}
 .slider-v.resource input::-webkit-slider-thumb { background: var(--resource); }
 .slider-v.climate input::-webkit-slider-thumb { background: var(--climate); }
 
+.slider-v.energy input::-moz-range-thumb { background: var(--energy); }
+.slider-v.ppp input::-moz-range-thumb { background: var(--ppp); }
+.slider-v.cleantech input::-moz-range-thumb { background: var(--cleantech); }
+.slider-v.compute input::-moz-range-thumb { background: var(--compute); }
+.slider-v.eci input::-moz-range-thumb { background: var(--eci); }
+.slider-v.momentum input::-moz-range-thumb { background: var(--momentum); }
+.slider-v.state input::-moz-range-thumb { background: var(--state); }
+.slider-v.resource input::-moz-range-thumb { background: var(--resource); }
+.slider-v.climate input::-moz-range-thumb { background: var(--climate); }
+
 /* ═══ AXIS GROUPS ═══ */
 .axis-group { margin-bottom: 0.4rem; }
 
@@ -346,7 +364,7 @@ html,body{height:100%;overflow:hidden;}
 
 .axis-name {
   font-family: var(--mono);
-  font-size: 0.52rem;
+  font-size: 0.6rem;
   font-weight: 600;
   color: var(--text-2);
   letter-spacing: 0.06em;
@@ -355,14 +373,14 @@ html,body{height:100%;overflow:hidden;}
 
 .axis-hint-col {
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   color: var(--text-4);
   margin-left: auto;
 }
 
 .axis-weight-val {
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   font-weight: 700;
   color: var(--blue);
   min-width: 2rem;
@@ -380,8 +398,18 @@ html,body{height:100%;overflow:hidden;}
 
 .axis-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 12px;
-  height: 12px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.axis-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background: var(--blue);
   cursor: pointer;
@@ -403,40 +431,10 @@ html,body{height:100%;overflow:hidden;}
   position: relative;
   min-height: 0;
   overflow: hidden;
+  animation: fadeIn 0.4s ease-out;
 }
 
-/* Corner brackets */
-.corner {
-  position: absolute;
-  width: 18px; height: 18px;
-  z-index: 4;
-  pointer-events: none;
-}
-.corner.tl { top: 10px; left: 10px; border-top: 2px solid var(--blue); border-left: 2px solid var(--blue); }
-.corner.tr { top: 10px; right: 10px; border-top: 2px solid var(--blue); border-right: 2px solid var(--blue); }
-.corner.bl { bottom: 10px; left: 10px; border-bottom: 2px solid var(--blue); border-left: 2px solid var(--blue); }
-.corner.br { bottom: 10px; right: 10px; border-bottom: 2px solid var(--blue); border-right: 2px solid var(--blue); }
 
-/* Scan line */
-.viewscreen::after {
-  content: '';
-  position: absolute;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 5%, var(--blue-pale) 30%, var(--blue-pale) 70%, transparent 95%);
-  opacity: 0.25;
-  animation: scanline 5s linear infinite;
-  pointer-events: none;
-  z-index: 3;
-}
-
-@keyframes scanline {
-  0% { top: 5%; opacity: 0; }
-  5% { opacity: 0.25; }
-  95% { opacity: 0.25; }
-  100% { top: 95%; opacity: 0; }
-}
 
 .vs-header {
   position: absolute;
@@ -476,6 +474,7 @@ html,body{height:100%;overflow:hidden;}
 }
 
 .toggle-3d:hover { border-color: var(--blue-light); color: var(--blue); }
+.toggle-3d:active { transform: scale(0.97); }
 .toggle-3d.active { background: var(--blue); color: white; border-color: var(--blue); }
 
 /* ═══ STORY BUTTONS ═══ */
@@ -506,6 +505,7 @@ html,body{height:100%;overflow:hidden;}
 }
 
 .story-btn:hover { color: var(--blue); border-color: var(--blue); }
+.story-btn:active { transform: scale(0.97); }
 .story-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
 
 .story-popup {
@@ -521,7 +521,7 @@ html,body{height:100%;overflow:hidden;}
   padding: 1.2rem 1.5rem;
   max-width: 420px;
   width: 85%;
-  box-shadow: 0 12px 40px rgba(12,37,64,0.15);
+  box-shadow: 0 12px 40px rgba(12,37,64,0.15), inset 0 1px 0 rgba(255,255,255,0.15);
   pointer-events: all;
 }
 
@@ -542,7 +542,7 @@ html,body{height:100%;overflow:hidden;}
 
 .story-popup .story-countries {
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   color: var(--text-3);
   margin-top: 0.5rem;
   line-height: 1.6;
@@ -662,6 +662,7 @@ html,body{height:100%;overflow:hidden;}
 
 .top-entry:last-child { border-bottom: none; }
 .top-entry:hover { background: var(--blue-wash); }
+.top-entry:active { transform: scale(0.98); }
 
 .top-rank {
   font-family: var(--mono);
@@ -711,7 +712,7 @@ html,body{height:100%;overflow:hidden;}
 
 .cluster-tag {
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -730,7 +731,7 @@ html,body{height:100%;overflow:hidden;}
 
 .finding-num {
   font-family: var(--mono);
-  font-size: 0.58rem;
+  font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -934,7 +935,7 @@ html,body{height:100%;overflow:hidden;}
 
 .modal .dim-pill {
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -967,6 +968,7 @@ html,body{height:100%;overflow:hidden;}
 }
 
 .modal-btn:hover { background: var(--blue-dark); }
+.modal-btn:active { transform: scale(0.97); }
 
 .modal .src {
   font-family: var(--mono);
@@ -979,12 +981,13 @@ html,body{height:100%;overflow:hidden;}
 .narrative-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(12,37,64,0.6);
+  background: linear-gradient(90deg, rgba(12,37,64,0.72) 0%, rgba(12,37,64,0.55) 50%, rgba(12,37,64,0.18) 100%);
   backdrop-filter: blur(6px);
   z-index: 100;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+  padding-left: 8vw;
   animation: fadeIn 0.5s ease;
 }
 
@@ -992,8 +995,8 @@ html,body{height:100%;overflow:hidden;}
 
 .narrative-slide {
   background: var(--surface-2);
-  max-width: 640px;
-  width: 90%;
+  max-width: 45%;
+  width: 45%;
   padding: 2.5rem 3rem;
   position: relative;
   box-shadow: 0 24px 80px rgba(12,37,64,0.25);
@@ -1001,6 +1004,7 @@ html,body{height:100%;overflow:hidden;}
   transform: translateY(20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
   display: none;
+  text-align: left;
 }
 
 .narrative-slide.active {
@@ -1070,6 +1074,7 @@ html,body{height:100%;overflow:hidden;}
 }
 
 .narrative-btn:hover { background: var(--blue-dark); }
+.narrative-btn:active { transform: scale(0.97); }
 
 .narrative-btn.skip {
   background: transparent;
@@ -1257,7 +1262,7 @@ html,body{height:100%;overflow:hidden;}
 
 .detail-bar-val {
   font-family: var(--mono);
-  font-size: 0.55rem;
+  font-size: 0.6rem;
   font-weight: 600;
   color: var(--text-2);
   width: 2rem;
@@ -1541,10 +1546,6 @@ html,body{height:100%;overflow:hidden;}
 
   <!-- VIEWSCREEN -->
   <div class="viewscreen">
-    <div class="corner tl"></div>
-    <div class="corner tr"></div>
-    <div class="corner bl"></div>
-    <div class="corner br"></div>
     <div class="vs-header">
       <span class="vs-label">Transition Readiness vs Power to Execute</span>
       <button class="toggle-3d active" id="toggleView">3D</button>
@@ -1587,7 +1588,7 @@ html,body{height:100%;overflow:hidden;}
         <span class="mini-bar momentum" style="width:6px;height:6px;display:inline-block;border-radius:1px;"></span>
         <span class="mini-bar resource" style="width:6px;height:6px;display:inline-block;border-radius:1px;"></span>
         <span class="mini-bar climate" style="width:6px;height:6px;display:inline-block;border-radius:1px;"></span>
-        <span style="font-family:var(--mono);font-size:0.55rem;color:var(--text-4);margin-left:4px;">EN PP CT CO EC SC MO RS CX</span>
+        <span style="font-family:var(--mono);font-size:0.6rem;color:var(--text-4);margin-left:4px;">EN PP CT CO EC SC MO RS CX</span>
       </div>
       <input type="text" class="country-search" id="countrySearch" placeholder="Search countries..." autocomplete="off">
       <div id="topCards" class="rankings-scroll"></div>
@@ -1603,7 +1604,7 @@ html,body{height:100%;overflow:hidden;}
       <button class="detail-close" id="detailClose">&times;</button>
       <div class="detail-name" id="detailName"></div>
       <div class="detail-composite" id="detailComposite"></div>
-      <div id="detailBreadth" style="font-family:var(--mono);font-size:0.55rem;color:var(--text-3);margin-top:0.3rem;"></div>
+      <div id="detailBreadth" style="font-family:var(--mono);font-size:0.6rem;color:var(--text-3);margin-top:0.3rem;"></div>
     </div>
     <div class="detail-body">
       <div class="detail-bars" id="detailBars"></div>
@@ -1729,7 +1730,7 @@ html,body{height:100%;overflow:hidden;}
       <p>Transition velocity uses recent data (1-5 year trends) but infrastructure condition delta relies partly on evidence-based scoring. A country could be accelerating in ways not yet captured, or decaying faster than the data shows. The US ASCE grade is from 2021 &mdash; conditions may have worsened since.</p>
     </div>
 
-    <p style="margin-top:1rem;font-family:var(--mono);font-size:0.48rem;color:var(--text-4);">Data: OWID / Energy Institute 2025 · IEA / BNEF / UNCTAD 2024 · Harvard Growth Lab ECI 2024 · Synergy / TOP500 / SIA 2024 · WEF GCI / World Bank LPI (execution) · OECD / CPI / SWF Institute (capital) · IRENA / ASCE (velocity) · USGS MCS 2025 / FAO / WRI (materials) · WRI 2025 / ND-GAIN 2023 (climate). Custom evidence-based scoring where quantitative data unavailable.</p>
+    <p style="margin-top:1rem;font-family:var(--mono);font-size:0.6rem;color:var(--text-4);">Data: OWID / Energy Institute 2025 · IEA / BNEF / UNCTAD 2024 · Harvard Growth Lab ECI 2024 · Synergy / TOP500 / SIA 2024 · WEF GCI / World Bank LPI (execution) · OECD / CPI / SWF Institute (capital) · IRENA / ASCE (velocity) · USGS MCS 2025 / FAO / WRI (materials) · WRI 2025 / ND-GAIN 2023 (climate). Custom evidence-based scoring where quantitative data unavailable.</p>
 
   </div>
 </section>
@@ -2060,6 +2061,10 @@ function compute(){
 function renderTop(){
   const sorted=[...data].sort((a,b)=>b.composite-a.composite);
   const filtered=searchFilter?sorted.filter(c=>c.n.toLowerCase().includes(searchFilter)):sorted;
+  if(filtered.length===0){
+    document.getElementById('topCards').innerHTML='<div style="padding:2rem 1rem;text-align:center;color:var(--text-4);font-family:var(--mono);font-size:0.7rem;">No countries match</div>';
+    return;
+  }
   document.getElementById('topCards').innerHTML=filtered.map(c=>{
     const rank=sorted.indexOf(c)+1;
     const gc=rank<=3?' g':'';
@@ -2107,7 +2112,7 @@ function openDetail(name){
 
   const breadthEl=document.getElementById('detailBreadth');
   if(breadthEl){
-    breadthEl.innerHTML=`Breadth: <span style="font-weight:700;color:var(--blue)">${c.breadth.toFixed(0)}</span>/100 <span style="font-size:0.48rem;color:var(--text-4);margin-left:0.3rem;">${c.breadth>70?'Balanced':c.breadth>45?'Moderate':'Concentrated'}</span>`;
+    breadthEl.innerHTML=`Breadth: <span style="font-weight:700;color:var(--blue)">${c.breadth.toFixed(0)}</span>/100 <span style="font-size:0.6rem;color:var(--text-4);margin-left:0.3rem;">${c.breadth>70?'Balanced':c.breadth>45?'Moderate':'Concentrated'}</span>`;
   }
 
   const dims=[
@@ -2165,7 +2170,7 @@ function renderComparison(primary, compare) {
         '<div class="detail-bar-fill ' + d.key + '" style="width:' + d.v1 + '%;position:relative;z-index:2;"></div>' +
         '<div style="width:' + d.v2 + '%;position:absolute;top:0;left:0;height:100%;background:var(--text-4);opacity:0.3;z-index:1;"></div>' +
       '</div>' +
-      '<span class="detail-bar-val" style="font-size:0.55rem;">' + d.v1.toFixed(0) + '<span style="color:var(--text-4);"> / ' + d.v2.toFixed(0) + '</span></span>' +
+      '<span class="detail-bar-val" style="font-size:0.6rem;">' + d.v1.toFixed(0) + '<span style="color:var(--text-4);"> / ' + d.v2.toFixed(0) + '</span></span>' +
     '</div>';
   }).join('');
 
