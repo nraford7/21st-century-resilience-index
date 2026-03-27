@@ -2001,6 +2001,9 @@ function compute(){
       ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,ecS:ecN*100,scS:scN*100,moS:moN*100,rsS:rsN*100,cxS:cxN*100,
       composite:comp,eSov,ePow,
       pf:prof({ceN,ppN,ctN,coN,ecN,scN,moN,rsN,cxN})};
+    // Breadth: 1 - (std/0.35) normalized to 0-100. The 0.35 constant is the std deviation of a
+    // maximally polarized profile (half dimensions at 1.0, half at 0.0), so breadth=0 means
+    // "concentrated in a few dimensions" and breadth=100 means "perfectly balanced across all."
     const _dims=[obj.ceN,obj.ppN,obj.ctN,obj.coN,obj.ecN,obj.scN,obj.moN,obj.rsN,1-obj.cxN];
     const _mean=_dims.reduce((a,b)=>a+b,0)/_dims.length;
     const _var=_dims.reduce((a,b)=>a+(b-_mean)**2,0)/_dims.length;
