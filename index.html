@@ -609,6 +609,35 @@ html,body{height:100%;overflow:hidden;}
   opacity: 0.7;
 }
 
+/* ═══ RANK GROUP HEADERS ═══ */
+.rank-group-header {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 0.5rem 0.25rem;
+  margin-top: 0.3rem;
+  border-bottom: 1px solid var(--border-faint);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.rank-group-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.rank-group-desc {
+  font-weight: 400;
+  font-size: 0.45rem;
+  color: var(--text-4);
+  letter-spacing: 0.04em;
+  margin-left: auto;
+}
+
 /* Compact findings */
 .finding {
   border-left: 2px solid var(--blue-pale);
@@ -1817,13 +1846,8 @@ function compute(){
   });
 }
 
-function renderTop(){
-  const t=[...data].sort((a,b)=>b.composite-a.composite);
-  const filtered=searchFilter?t.filter(c=>c.n.toLowerCase().includes(searchFilter)):t;
-  document.getElementById('topCards').innerHTML=filtered.map((c,i)=>{
-    const rank=t.indexOf(c);
-    const gc=rank<3?' g':'';
-    return`<div class="top-entry" data-country="${c.n}" onclick="openDetail('${c.n.replace(/'/g,"\\'")}')">
+function renderTopEntry(c,rank,gc){
+  return`<div class="top-entry" data-country="${c.n}" onclick="openDetail('${c.n.replace(/'/g,"\\'")}')">
       <span class="top-rank${gc}">${String(rank+1).padStart(2,'0')}</span>
       <span class="top-name">${c.n}</span>
       <span class="top-bars">
@@ -1840,7 +1864,48 @@ function renderTop(){
       <span class="top-score">${c.composite.toFixed(1)}</span>
       <span class="top-breadth" title="Breadth: balanced capability across dimensions">${c.breadth.toFixed(0)}</span>
     </div>`;
-  }).join('');
+}
+
+function renderTop(){
+  const sorted=[...data].sort((a,b)=>b.composite-a.composite);
+  const filtered=searchFilter?sorted.filter(c=>c.n.toLowerCase().includes(searchFilter)):sorted;
+
+  if(searchFilter){
+    document.getElementById('topCards').innerHTML=filtered.map(c=>{
+      const rank=sorted.indexOf(c);
+      const gc=rank<3?' g':'';
+      return renderTopEntry(c,rank,gc);
+    }).join('');
+    return;
+  }
+
+  const groupOrder=[
+    {key:'leader',label:'Balanced Leaders',desc:'Breadth across all dimensions',color:'#0a7058'},
+    {key:'latent',label:'Latent Electrostates',desc:'Capability without commitment',color:'#b45309'},
+    {key:'power',label:'Single-Dimension Powers',desc:'Monopoly positions',color:'#165a96'},
+    {key:'fragile',label:'Clean but Fragile',desc:'Clean energy, weak foundation',color:'#7c3aed'},
+    {key:'petro',label:'Petrostates',desc:'Wealth without transition',color:'#a82028'},
+    {key:'crisis',label:'Crisis States',desc:'Most exposed, least capable',color:'#991b1b'},
+    {key:'default',label:'Other',desc:'',color:'#6b7094'}
+  ];
+
+  let html='';
+  groupOrder.forEach(g=>{
+    const members=filtered.filter(c=>c.cluster===g.key);
+    if(members.length===0)return;
+    html+=`<div class="rank-group-header">
+      <span class="rank-group-dot" style="background:${g.color}"></span>
+      ${g.label}
+      <span class="rank-group-desc">${g.desc}</span>
+    </div>`;
+    members.forEach(c=>{
+      const rank=sorted.indexOf(c);
+      const gc=rank<3?' g':'';
+      html+=renderTopEntry(c,rank,gc);
+    });
+  });
+
+  document.getElementById('topCards').innerHTML=html;
 }
 
 /* ═══ COUNTRY DETAIL PANEL ═══ */
