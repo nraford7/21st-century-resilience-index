@@ -455,27 +455,58 @@ html,body{height:100%;overflow:hidden;}
 .story-btn:hover { color: var(--blue); border-color: var(--blue); }
 .story-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
 
-.story-annotation {
+.story-popup {
   position: absolute;
-  top: 28px;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
-  font-family: var(--sans);
-  font-size: 0.68rem;
-  font-weight: 500;
-  color: var(--blue-dark);
-  background: rgba(255,255,255,0.92);
-  padding: 4px 12px;
-  border-left: 2px solid var(--blue);
-  max-width: 80%;
-  text-align: center;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--blue);
+  padding: 1.2rem 1.5rem;
+  max-width: 420px;
+  width: 85%;
+  box-shadow: 0 12px 40px rgba(12,37,64,0.15);
+  pointer-events: all;
 }
 
-.story-annotation.visible { opacity: 1; }
+.story-popup h3 {
+  font-family: var(--display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--blue-dark);
+  margin-bottom: 0.5rem;
+}
+
+.story-popup p {
+  font-size: 0.75rem;
+  color: var(--text-2);
+  line-height: 1.6;
+  margin-bottom: 0.4rem;
+}
+
+.story-popup .story-countries {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  color: var(--text-3);
+  margin-top: 0.5rem;
+  line-height: 1.6;
+}
+
+.story-popup .story-close {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  font-size: 1rem;
+  color: var(--text-4);
+  cursor: pointer;
+  background: none;
+  border: none;
+  line-height: 1;
+}
+
+.story-popup .story-close:hover { color: var(--text); }
 
 #scatterChart {
   width: 100%;
@@ -778,14 +809,6 @@ html,body{height:100%;overflow:hidden;}
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
-
-/* ═══ RIGHT PANEL ANALYSIS OVERRIDES ═══ */
-.right-panel .analysis-scroll { padding: 0.5rem 0.6rem; }
-.right-panel .analysis-scroll h2 { font-size: 0.78rem; }
-.right-panel .analysis-scroll h3 { font-size: 0.65rem; }
-.right-panel .analysis-scroll p { font-size: 0.58rem; }
-.right-panel .analysis-scroll .archetype { margin-bottom: 0.4rem; }
-.right-panel .analysis-scroll .weight-test { padding: 0.3rem 0.5rem; }
 
 .finding-detail { display: none; }
 .finding:hover .finding-detail { display: block; }
@@ -1434,7 +1457,6 @@ html,body{height:100%;overflow:hidden;}
       <button class="story-btn" onclick="playStory('breadth')">Breadth Wins</button>
       <button class="story-btn" onclick="playStory('crisis')">Crisis States</button>
     </div>
-    <div class="story-annotation" id="storyAnnotation"></div>
     <svg id="scatterChart"></svg>
     <canvas id="scatter3D"></canvas>
     <div class="tooltip" id="tooltip"></div>
@@ -1443,117 +1465,12 @@ html,body{height:100%;overflow:hidden;}
   <!-- RIGHT PANEL -->
   <aside class="right-panel">
     <div class="rp-section">
-      <div class="section-label">Analysis</div>
-      <div class="analysis-scroll">
-
-    <h2>No Country Dominates All Nine Dimensions</h2>
-    <p>There is no unambiguous leader. Every country has structural blind spots — and adding resource security and projected 2050 climate exposure makes this even starker. The Nordics + Switzerland come closest to balanced excellence but are weak on clean tech production and compute. China dominates clean tech (100) but sits at only 19.7% clean energy with modest PPP and high projected climate exposure (66.0). The US dominates compute (100) but is a net clean tech <em>importer</em> with declining ECI and significant 2050 climate exposure (46.5). Singapore's perfect governance gets diluted by resource security of 12. The transition won't be led by a single hegemon.</p>
-
-    <h2>Six Country Archetypes</h2>
-
-    <div class="archetype">
-      <div class="archetype-name">Balanced Leaders — Sweden, Denmark, Finland, Norway, Switzerland, Singapore*</div>
-      <p>High across most dimensions. Change the weights however you want — they stay near the top. Singapore proves governance quality can partially compensate for energy deficits (0.5% clean energy, 100 WGI) if you have the manufacturing sophistication to build what you don't have. *Singapore's position is now more nuanced — perfect governance but resource security of 12 and projected 2050 climate exposure of 56.5 (sea level rise). The governance compensates but the structural vulnerability is real.</p>
-    </div>
-
-    <div class="archetype">
-      <div class="archetype-name">Latent Electrostates — Japan, South Korea, Germany, Taiwan</div>
-      <p>The world's deepest manufacturing capability (top 6 ECI globally), but they haven't fully committed. Japan is #1 ECI with only 17% clean energy. This is the most strategically interesting cluster — if they commit, they could collectively challenge China's clean tech dominance within a decade. Their ECI says they can. Their 20-year momentum says they haven't yet.</p>
-    </div>
-
-    <div class="archetype">
-      <div class="archetype-name">Single-Dimension Powers — United States, China</div>
-      <p>Each dominates one dimension so completely it distorts the index. China at 100 on clean tech (next highest: 28). US at 100 on compute (next: 60). The ranking is almost a referendum on how much weight you give these two monopoly positions. Both are trying to shore up their weak flank — China building compute, the US trying clean tech via the IRA.</p>
-    </div>
-
-    <div class="archetype">
-      <div class="archetype-name">Clean but Fragile — Brazil, Peru, Colombia</div>
-      <p>High clean energy from legacy hydro (Brazil 50.6%) but low PPP, zero tech production, negligible compute, negative ECI, weak state capacity. Clean grids don't equal transition readiness. <strong>Chile is the exception</strong> — 20yr momentum of 51.3 (Atacama solar revolution + GDP growth), 75.5 state capacity. The only country in this group with a plausible electrostate trajectory.</p>
-    </div>
-
-    <div class="archetype">
-      <div class="archetype-name">Petrostates — Saudi Arabia, Qatar, Kuwait, UAE, Iran, Iraq</div>
-      <p>Near-zero on most dimensions. High PPP creates an illusion of capability. <strong>UAE stands apart:</strong> 81.1 state capacity (approaching Singapore-level governance), 20yr momentum of 45.3, 9% clean energy from Barakah nuclear. If any petrostate makes the transition, it's the UAE. The rest are on a clock they can't buy their way off.</p>
-    </div>
-
-    <div class="archetype">
-      <div class="archetype-name">Crisis States — Philippines, Bangladesh, Pakistan, Nigeria</div>
-      <p>High projected 2050 climate exposure, low state capacity, low resource security. The countries most pressured to transition and least able to do so. Philippines (88.0 exposure, 52.9 state capacity), Bangladesh (91.5 exposure, 41.2 state capacity), Pakistan (84.0 exposure, 35.8 state capacity), Nigeria (78.5 exposure, 30.4 state capacity). Big dots in the bottom-left corner of the scatter = crisis.</p>
-    </div>
-
-    <h2>The Resource Security Penalty</h2>
-    <p>Gulf states take a double hit. Already petrostate-trapped on the X axis, now their Y axis (Power to Execute) drops because they can't feed or water themselves. <strong>Qatar goes from "rich but stuck" to "rich, stuck, and dependent"</strong> — resource security of 8. Kuwait at 9. UAE at 11. Singapore's perfect governance score gets diluted by 12/100 resource security. Israel (28) faces similar structural vulnerability. The countries that buy everything are exposed to everything.</p>
-
-    <h2>Climate 2050 as Urgency</h2>
-    <p>The Z dimension (dot size in 2D) reveals which countries face the most projected pressure by 2050. <strong>Bangladesh (91.5), Philippines (88.0), India (87.5), Pakistan (84.0), Nigeria (78.5)</strong> are the most exposed. But exposure correlates poorly with transition readiness — the countries getting hit hardest are often the least prepared. The dot-size makes this visible: big dots in the bottom-left corner = crisis. Small dots in the upper-right corner = the countries that could help but face the least pressure to do so.</p>
-
-    <h2>What Different Weight Configurations Reveal</h2>
-
-    <div class="weight-test">
-      <div class="wt-label">Weight only Clean Energy</div>
-      <div class="wt-result">Iceland, Sweden, Norway dominate. China and the US are tied at 19.7%. Petrostates collapse. The "purist" view.</div>
-    </div>
-    <div class="weight-test">
-      <div class="wt-label">Weight only Compute</div>
-      <div class="wt-result">US at 100, China at 60, Taiwan at 40. Five countries account for essentially all advanced compute. Everyone else is noise.</div>
-    </div>
-    <div class="weight-test">
-      <div class="wt-label">Weight only ECI</div>
-      <div class="wt-result">Japan, Switzerland, South Korea, Germany, Singapore. The "who could build the future" view. The US drops to 14th, China to 18th.</div>
-    </div>
-    <div class="weight-test">
-      <div class="wt-label">Weight only Resource Security</div>
-      <div class="wt-result">Brazil (92), US (89), Canada (88), Argentina (87), Australia (85) dominate. Gulf states collapse — Qatar 8, Kuwait 9, UAE 11. Singapore falls to near-bottom. The "who can feed themselves" view.</div>
-    </div>
-    <div class="weight-test">
-      <div class="wt-label">Weight only Climate 2050 (inverted)</div>
-      <div class="wt-result">Switzerland (16.5), Iceland (17.5), Finland (18.5) lead. Bangladesh (91.5), Philippines (88.0), India (87.5) most penalized. The "who's safest by 2050" view — uncorrelated with who's richest.</div>
-    </div>
-    <div class="weight-test">
-      <div class="wt-label">Weight only 20yr Momentum</div>
-      <div class="wt-result">China 77.6, Uruguay 71.6, Romania 70.6, Vietnam 68.3. The "who's transformed the most over 20 years" view. Captures economic and infrastructure transformation, not just energy.</div>
-    </div>
-    <div class="weight-test">
-      <div class="wt-label">Weight only State Capacity</div>
-      <div class="wt-result">Denmark, Iceland, Norway, Finland, Switzerland, Singapore. Small, well-governed countries. China drops to 69.4 — state executes but society is strained.</div>
-    </div>
-
-    <h2>Five Findings That Survive Any Weighting</h2>
-    <p><strong>1. The transition is a compound problem.</strong> No single advantage is sufficient. Countries scoring high on 1-2 dimensions and zero on the rest are fragile regardless of their peak score.</p>
-    <p><strong>2. About 8-12 countries are structurally positioned to lead.</strong> Nordics, Switzerland, Singapore, South Korea, Japan, Germany, and arguably France, UK, Canada, Netherlands. Below this tier, the drop-off is steep.</p>
-    <p><strong>3. Resource security compounds petrostate vulnerability.</strong> The Gulf states were already trapped on the X axis. Now their Y axis drops too — they can't feed or water themselves. The dependency isn't just on fossil fuel revenue; it's on the entire global supply chain for survival basics.</p>
-    <p><strong>4. Projected 2050 climate exposure creates urgency without capability.</strong> The countries most exposed to climate disruption by 2050 — Bangladesh, Philippines, India, Pakistan, Nigeria — are the least equipped to transition. The pressure is highest where the capacity is lowest. This is the structural injustice the index makes visible.</p>
-    <p><strong>5. State capacity remains the multiplier.</strong> Countries with identical scores on other dimensions diverge dramatically based on governance quality. State capacity determines whether capability becomes deployment. Now amplified: state capacity also determines whether resource scarcity and climate exposure become crises or managed challenges.</p>
-
-    <h2>What the Index Cannot See</h2>
-
-    <div class="blind-spot">
-      <div class="blind-spot-label">Political Will</div>
-      <p>Japan has the highest ECI on earth but hasn't committed at the speed its capability allows. The index sees capability. It can't see the decision.</p>
-    </div>
-    <div class="blind-spot">
-      <div class="blind-spot-label">Veto Players</div>
-      <p>The US scores 77.1 on state capacity but half the political system is actively hostile to energy transition. The index can't distinguish between a state that <em>could</em> act and one that <em>will</em>.</p>
-    </div>
-    <div class="blind-spot">
-      <div class="blind-spot-label">Scale Effects</div>
-      <p>India looks bottom-quartile on current metrics but has 1.4 billion people and built the world's largest real-time payment system in 8 years. The index sees position but not the momentum of mass.</p>
-    </div>
-    <div class="blind-spot">
-      <div class="blind-spot-label">Supply Chain Dependency</div>
-      <p>Even high-scoring countries depend on Chinese clean tech and Taiwanese semiconductors. The index measures indigenous capability but not import dependency.</p>
-    </div>
-    <div class="blind-spot">
-      <div class="blind-spot-label">Beyond 2050 Climate Trajectories</div>
-      <p>The scores now project to 2050, but 2050-2100 trajectories could diverge further. Countries like Netherlands (44.0) and Singapore (56.5) already show significant projected exposure from sea level rise. Bangladesh's 91.5 by 2050 could worsen dramatically under higher-emission scenarios beyond mid-century.</p>
-    </div>
-
-    <p style="margin-top:1rem;font-family:var(--mono);font-size:0.48rem;color:var(--text-4);">Data: OWID / Energy Institute 2025, World Bank 2023, IEA / BNEF / UNCTAD 2024, Harvard Growth Lab ECI 2024, Synergy / TOP500 / SIA 2024, WGI 2023, FSI 2024, SPI 2024. FAO / WRI Aqueduct (resource security). WRI 2025 / ND-GAIN 2023 (climate exposure). Custom infrastructural adaptability scores from historical evidence.</p>
-
-      </div>
+      <div class="section-label">Transition Ranking</div>
+      <input type="text" class="country-search" id="countrySearch" placeholder="Search countries..." autocomplete="off">
+      <div id="topCards" class="rankings-scroll"></div>
     </div>
   </aside>
-
+  
   <!-- DETAIL BACKDROP -->
   <div class="detail-backdrop" id="detailBackdrop"></div>
 
@@ -1573,13 +1490,117 @@ html,body{height:100%;overflow:hidden;}
 
 </main>
 
-<!-- ═══ RANKINGS DECK ═══ -->
 <section class="analysis-deck">
-  <div class="analysis-header" style="gap:0.5rem;">
-    <div class="section-label" style="margin:0;flex-shrink:0;">Transition Ranking</div>
-    <input type="text" class="country-search" id="countrySearch" placeholder="Search countries..." autocomplete="off">
+  <div class="analysis-header">
+    <div class="section-label" style="margin:0;flex-shrink:0;">Analysis // Findings</div>
   </div>
-  <div id="topCards" class="rankings-scroll" style="flex:1;overflow-y:auto;padding:0 0.3rem;"></div>
+  <div class="analysis-scroll">
+
+    <h2>No Country Dominates All Nine Dimensions</h2>
+    <p>There is no unambiguous leader. Every country has structural blind spots &mdash; and adding resource security and projected 2050 climate exposure makes this even starker. The Nordics + Switzerland come closest to balanced excellence but are weak on clean tech production and compute. China dominates clean tech (100) but sits at only 19.7% clean energy with modest PPP and high projected climate exposure (66.0). The US dominates compute (100) but is a net clean tech <em>importer</em> with declining ECI and significant 2050 climate exposure (46.5). Singapore&rsquo;s perfect governance gets diluted by resource security of 12. The transition won&rsquo;t be led by a single hegemon.</p>
+
+    <h2>Six Country Archetypes</h2>
+
+    <div class="archetype">
+      <div class="archetype-name">Balanced Leaders &mdash; Sweden, Denmark, Finland, Norway, Switzerland, Singapore*</div>
+      <p>High across most dimensions. Change the weights however you want &mdash; they stay near the top. Singapore proves governance quality can partially compensate for energy deficits (0.5% clean energy, 100 WGI) if you have the manufacturing sophistication to build what you don&rsquo;t have. *Singapore&rsquo;s position is now more nuanced &mdash; perfect governance but resource security of 12 and projected 2050 climate exposure of 56.5 (sea level rise). The governance compensates but the structural vulnerability is real.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Latent Electrostates &mdash; Japan, South Korea, Germany, Taiwan</div>
+      <p>The world&rsquo;s deepest manufacturing capability (top 6 ECI globally), but they haven&rsquo;t fully committed. Japan is #1 ECI with only 17% clean energy. This is the most strategically interesting cluster &mdash; if they commit, they could collectively challenge China&rsquo;s clean tech dominance within a decade. Their ECI says they can. Their 20-year momentum says they haven&rsquo;t yet.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Single-Dimension Powers &mdash; United States, China</div>
+      <p>Each dominates one dimension so completely it distorts the index. China at 100 on clean tech (next highest: 28). US at 100 on compute (next: 60). The ranking is almost a referendum on how much weight you give these two monopoly positions. Both are trying to shore up their weak flank &mdash; China building compute, the US trying clean tech via the IRA.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Clean but Fragile &mdash; Brazil, Peru, Colombia</div>
+      <p>High clean energy from legacy hydro (Brazil 50.6%) but low PPP, zero tech production, negligible compute, negative ECI, weak state capacity. Clean grids don&rsquo;t equal transition readiness. <strong>Chile is the exception</strong> &mdash; 20yr momentum of 51.3 (Atacama solar revolution + GDP growth), 75.5 state capacity. The only country in this group with a plausible electrostate trajectory.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Petrostates &mdash; Saudi Arabia, Qatar, Kuwait, UAE, Iran, Iraq</div>
+      <p>Near-zero on most dimensions. High PPP creates an illusion of capability. <strong>UAE stands apart:</strong> 81.1 state capacity (approaching Singapore-level governance), 20yr momentum of 45.3, 9% clean energy from Barakah nuclear. If any petrostate makes the transition, it&rsquo;s the UAE. The rest are on a clock they can&rsquo;t buy their way off.</p>
+    </div>
+
+    <div class="archetype">
+      <div class="archetype-name">Crisis States &mdash; Philippines, Bangladesh, Pakistan, Nigeria</div>
+      <p>High projected 2050 climate exposure, low state capacity, low resource security. The countries most pressured to transition and least able to do so. Philippines (88.0 exposure, 52.9 state capacity), Bangladesh (91.5 exposure, 41.2 state capacity), Pakistan (84.0 exposure, 35.8 state capacity), Nigeria (78.5 exposure, 30.4 state capacity). Big dots in the bottom-left corner of the scatter = crisis.</p>
+    </div>
+
+    <h2>The Resource Security Penalty</h2>
+    <p>Gulf states take a double hit. Already petrostate-trapped on the X axis, now their Y axis (Power to Execute) drops because they can&rsquo;t feed or water themselves. <strong>Qatar goes from &ldquo;rich but stuck&rdquo; to &ldquo;rich, stuck, and dependent&rdquo;</strong> &mdash; resource security of 8. Kuwait at 9. UAE at 11. Singapore&rsquo;s perfect governance score gets diluted by 12/100 resource security. Israel (28) faces similar structural vulnerability. The countries that buy everything are exposed to everything.</p>
+
+    <h2>Climate 2050 as Urgency</h2>
+    <p>The Z dimension (dot size in 2D) reveals which countries face the most projected pressure by 2050. <strong>Bangladesh (91.5), Philippines (88.0), India (87.5), Pakistan (84.0), Nigeria (78.5)</strong> are the most exposed. But exposure correlates poorly with transition readiness &mdash; the countries getting hit hardest are often the least prepared. The dot-size makes this visible: big dots in the bottom-left corner = crisis. Small dots in the upper-right corner = the countries that could help but face the least pressure to do so.</p>
+
+    <h2>What Different Weight Configurations Reveal</h2>
+
+    <div class="weight-test">
+      <div class="wt-label">Weight only Clean Energy</div>
+      <div class="wt-result">Iceland, Sweden, Norway dominate. China and the US are tied at 19.7%. Petrostates collapse. The &ldquo;purist&rdquo; view.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only Compute</div>
+      <div class="wt-result">US at 100, China at 60, Taiwan at 40. Five countries account for essentially all advanced compute. Everyone else is noise.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only ECI</div>
+      <div class="wt-result">Japan, Switzerland, South Korea, Germany, Singapore. The &ldquo;who could build the future&rdquo; view. The US drops to 14th, China to 18th.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only Resource Security</div>
+      <div class="wt-result">Brazil (92), US (89), Canada (88), Argentina (87), Australia (85) dominate. Gulf states collapse &mdash; Qatar 8, Kuwait 9, UAE 11. Singapore falls to near-bottom. The &ldquo;who can feed themselves&rdquo; view.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only Climate 2050 (inverted)</div>
+      <div class="wt-result">Switzerland (16.5), Iceland (17.5), Finland (18.5) lead. Bangladesh (91.5), Philippines (88.0), India (87.5) most penalized. The &ldquo;who&rsquo;s safest by 2050&rdquo; view &mdash; uncorrelated with who&rsquo;s richest.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only 20yr Momentum</div>
+      <div class="wt-result">China 77.6, Uruguay 71.6, Romania 70.6, Vietnam 68.3. The &ldquo;who&rsquo;s transformed the most over 20 years&rdquo; view. Captures economic and infrastructure transformation, not just energy.</div>
+    </div>
+    <div class="weight-test">
+      <div class="wt-label">Weight only State Capacity</div>
+      <div class="wt-result">Denmark, Iceland, Norway, Finland, Switzerland, Singapore. Small, well-governed countries. China drops to 69.4 &mdash; state executes but society is strained.</div>
+    </div>
+
+    <h2>Five Findings That Survive Any Weighting</h2>
+    <p><strong>1. The transition is a compound problem.</strong> No single advantage is sufficient. Countries scoring high on 1-2 dimensions and zero on the rest are fragile regardless of their peak score.</p>
+    <p><strong>2. About 8-12 countries are structurally positioned to lead.</strong> Nordics, Switzerland, Singapore, South Korea, Japan, Germany, and arguably France, UK, Canada, Netherlands. Below this tier, the drop-off is steep.</p>
+    <p><strong>3. Resource security compounds petrostate vulnerability.</strong> The Gulf states were already trapped on the X axis. Now their Y axis drops too &mdash; they can&rsquo;t feed or water themselves. The dependency isn&rsquo;t just on fossil fuel revenue; it&rsquo;s on the entire global supply chain for survival basics.</p>
+    <p><strong>4. Projected 2050 climate exposure creates urgency without capability.</strong> The countries most exposed to climate disruption by 2050 &mdash; Bangladesh, Philippines, India, Pakistan, Nigeria &mdash; are the least equipped to transition. The pressure is highest where the capacity is lowest. This is the structural injustice the index makes visible.</p>
+    <p><strong>5. State capacity remains the multiplier.</strong> Countries with identical scores on other dimensions diverge dramatically based on governance quality. State capacity determines whether capability becomes deployment. Now amplified: state capacity also determines whether resource scarcity and climate exposure become crises or managed challenges.</p>
+
+    <h2>What the Index Cannot See</h2>
+
+    <div class="blind-spot">
+      <div class="blind-spot-label">Political Will</div>
+      <p>Japan has the highest ECI on earth but hasn&rsquo;t committed at the speed its capability allows. The index sees capability. It can&rsquo;t see the decision.</p>
+    </div>
+    <div class="blind-spot">
+      <div class="blind-spot-label">Veto Players</div>
+      <p>The US scores 77.1 on state capacity but half the political system is actively hostile to energy transition. The index can&rsquo;t distinguish between a state that <em>could</em> act and one that <em>will</em>.</p>
+    </div>
+    <div class="blind-spot">
+      <div class="blind-spot-label">Scale Effects</div>
+      <p>India looks bottom-quartile on current metrics but has 1.4 billion people and built the world&rsquo;s largest real-time payment system in 8 years. The index sees position but not the momentum of mass.</p>
+    </div>
+    <div class="blind-spot">
+      <div class="blind-spot-label">Supply Chain Dependency</div>
+      <p>Even high-scoring countries depend on Chinese clean tech and Taiwanese semiconductors. The index measures indigenous capability but not import dependency.</p>
+    </div>
+    <div class="blind-spot">
+      <div class="blind-spot-label">Beyond 2050 Climate Trajectories</div>
+      <p>The scores now project to 2050, but 2050-2100 trajectories could diverge further. Countries like Netherlands (44.0) and Singapore (56.5) already show significant projected exposure from sea level rise. Bangladesh&rsquo;s 91.5 by 2050 could worsen dramatically under higher-emission scenarios beyond mid-century.</p>
+    </div>
+
+    <p style="margin-top:1rem;font-family:var(--mono);font-size:0.48rem;color:var(--text-4);">Data: OWID / Energy Institute 2025 (energy + trajectory), World Bank 2023, IEA / BNEF / UNCTAD 2024, Harvard Growth Lab ECI 2024, Synergy / TOP500 / SIA 2024, WGI 2023, FSI 2024, SPI 2024. FAO / WRI Aqueduct (resource security). WRI 2025 / ND-GAIN 2023 (climate exposure). Custom infrastructural adaptability scores from historical evidence.</p>
+
+  </div>
 </section>
 
 <!-- ═══ NARRATIVE INTRO ═══ -->
@@ -2629,45 +2650,111 @@ function updateIndex(){
 const storyPresets = {
   reset: {
     weights: {w1:11,w2:11,w3:11,w4:11,w5:11,w6:11,w7:11,w8:11,w9:11},
-    annotation: ''
+    title: '',
+    body: '',
+    highlight: null,
+    countries: ''
   },
   petroClock: {
     weights: {w1:0,w2:5,w3:0,w4:0,w5:0,w6:5,w7:0,w8:30,w9:30},
-    annotation: 'Resource security + climate exposure reveal the petrostate trap. Qatar, Kuwait, Saudi Arabia: 80-90% food imported, approaching unsurvivable temperatures by 2050.'
+    title: 'The Petrostate Clock',
+    body: 'Weight resource security and climate exposure to reveal the compound vulnerability of oil-dependent economies. These countries import 80\u201390% of their food, desalinate almost all their water, and face approaching-unsurvivable temperatures by 2050. Wealth buys time, not transition.',
+    highlight: ['petro'],
+    countries: 'Qatar (food import 90%, climate 62.5) \u00b7 Kuwait (food 90%, climate 64.0) \u00b7 Saudi Arabia (food 80%, climate 65.5) \u00b7 UAE (food 85%, climate 61.0)'
   },
   usGamble: {
     weights: {w1:5,w2:5,w3:5,w4:50,w5:5,w6:5,w7:5,w8:5,w9:5},
-    annotation: 'Weight compute heavily and the US leads. Zero it out and the US collapses to mid-table. A one-dimensional bet.'
+    title: "America's Compute Gamble",
+    body: 'The US scores 100 on compute \u2014 half of global hyperscale data center capacity. But it\'s a net clean tech importer, sits at 20% clean energy, and its ECI ranking has been declining for a decade. Crank compute weight up and the US leads. Zero it out and it collapses to mid-table. A one-dimensional bet on AI supremacy.',
+    highlight: ['power'],
+    countries: 'United States (compute 100, clean tech 0, ECI rank declining 13th\u219220th) \u00b7 China (compute 60, clean tech 100 \u2014 the mirror image)'
   },
   moving: {
     weights: {w1:0,w2:0,w3:0,w4:0,w5:0,w6:0,w7:70,w8:0,w9:0},
-    annotation: '20-year momentum: China 77.6, Vietnam 68.3, Romania 70.6. Japan 32.0, Norway 31.7, Venezuela 23.5. Who is actually transforming?'
+    title: "Who's Actually Moving",
+    body: '20-year transformation momentum captures all forms of change \u2014 clean energy buildout, manufacturing sophistication gains, GDP growth, and digital transformation. The countries at the top aren\'t necessarily the richest or most powerful. They\'re the ones that moved fastest over two decades.',
+    highlight: null,
+    highlightFn: function(c){ return c.moS > 65; },
+    countries: 'China (77.6) \u00b7 Uruguay (71.6) \u00b7 Romania (70.6) \u00b7 Vietnam (68.3) \u00b7 Bulgaria (62.0) \u00b7 Kazakhstan (61.6) \u00b7 Ethiopia (61.4) \u00b7 Rwanda (60.7)'
   },
   breadth: {
     weights: {w1:11,w2:11,w3:11,w4:11,w5:11,w6:11,w7:11,w8:11,w9:11},
-    annotation: 'Equal weights reward breadth over depth. The Nordics rise. Single-dimension powers (US, China) drop. Diverse capability beats concentrated advantage.'
+    title: 'The Breadth Advantage',
+    body: 'Equal weights across all nine dimensions reward countries with diverse capability, not single-dimension dominance. The Nordics and Switzerland rise to the top \u2014 not because they\'re the richest or the most powerful, but because they score well on everything. Monocultures are fragile. Diverse ecosystems survive.',
+    highlight: ['leader'],
+    countries: 'Denmark (breadth 75+) \u00b7 Sweden \u00b7 Norway \u00b7 Finland \u00b7 Switzerland \u00b7 Singapore \u2014 vs US (breadth ~45) \u00b7 China (~45) \u00b7 Qatar (~25)'
   },
   crisis: {
     weights: {w1:0,w2:0,w3:0,w4:0,w5:0,w6:20,w7:0,w8:20,w9:40},
-    annotation: 'Climate exposure + resource dependency + weak governance = crisis. Bangladesh (91.5 climate, 41 state capacity), Philippines (88, 53), Pakistan (84, 36). Most exposed, least capable.'
+    title: 'Crisis States',
+    body: 'The moral center of the index. These countries face the worst projected climate impacts by 2050 and have the least capacity to adapt. They didn\'t cause climate change. They can\'t afford to address it. The gap between who needs the transition and who can execute it is structural, not incidental.',
+    highlight: ['crisis'],
+    countries: 'Bangladesh (climate 91.5, state capacity 41.2) \u00b7 Philippines (88.0, 52.9) \u00b7 India (87.5, 58.9) \u00b7 Pakistan (84.0, 35.8) \u00b7 Nigeria (78.5, 30.4)'
   }
 };
 
 function playStory(key) {
   const preset = storyPresets[key];
+
+  // Set slider values
   Object.entries(preset.weights).forEach(([id, val]) => {
     const el = document.getElementById(id);
     if (el) el.value = val;
   });
 
+  // Update active button state
   document.querySelectorAll('.story-btn').forEach(b => b.classList.remove('active'));
-  if (key !== 'reset') event.target.classList.add('active');
+  if (key !== 'reset') {
+    const btn = document.querySelector('[onclick="playStory(\'' + key + '\')"]');
+    if (btn) btn.classList.add('active');
+  }
 
-  const ann = document.getElementById('storyAnnotation');
-  ann.textContent = preset.annotation;
-  ann.classList.toggle('visible', !!preset.annotation);
-
+  // Recompute data with new weights
   updateIndex();
+
+  // Show/hide popup
+  const existing = document.querySelector('.story-popup');
+  if (existing) existing.remove();
+
+  if (key === 'reset') {
+    // Remove highlight dimming
+    document.querySelectorAll('.scatter-dot').forEach(d => {
+      d.setAttribute('opacity', '1');
+      d.removeAttribute('filter');
+    });
+    return;
+  }
+
+  // Dim non-target dots, highlight targets
+  document.querySelectorAll('.scatter-dot').forEach(dot => {
+    const name = dot.getAttribute('data-n');
+    const country = data.find(c => c.n === name);
+    if (!country) return;
+
+    let isTarget = false;
+    if (preset.highlightFn) {
+      isTarget = preset.highlightFn(country);
+    } else if (preset.highlight) {
+      isTarget = preset.highlight.includes(country.cluster);
+    }
+
+    if (isTarget) {
+      dot.setAttribute('opacity', '1');
+      dot.setAttribute('filter', 'drop-shadow(0 0 6px rgba(22,90,150,0.5))');
+    } else {
+      dot.setAttribute('opacity', '0.12');
+      dot.removeAttribute('filter');
+    }
+  });
+
+  // Create popup
+  const popup = document.createElement('div');
+  popup.className = 'story-popup';
+  popup.innerHTML = '<button class="story-close" onclick="playStory(\'reset\')">&times;</button>' +
+    '<h3>' + preset.title + '</h3>' +
+    '<p>' + preset.body + '</p>' +
+    '<div class="story-countries">' + preset.countries + '</div>';
+  document.querySelector('.viewscreen').appendChild(popup);
 }
 
 let currentSlide = 0;
