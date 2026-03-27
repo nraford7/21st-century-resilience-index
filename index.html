@@ -341,18 +341,8 @@ html,body{height:100%;overflow:hidden;}
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  cursor: pointer;
   padding: 0.2rem 0;
 }
-
-.axis-toggle {
-  font-size: 0.5rem;
-  color: var(--text-4);
-  width: 0.8rem;
-  transition: transform 0.2s;
-}
-
-.axis-header.open .axis-toggle { transform: rotate(90deg); }
 
 .axis-name {
   font-family: var(--mono);
@@ -406,9 +396,6 @@ html,body{height:100%;overflow:hidden;}
   padding-left: 0.8rem;
 }
 
-.axis-detail.collapsed {
-  max-height: 0;
-}
 
 /* System readout */
 .sys-readout {
@@ -1457,14 +1444,12 @@ html,body{height:100%;overflow:hidden;}
       <div class="section-label">Weights</div>
 
       <div class="axis-group">
-        <div class="axis-header" onclick="toggleAxisGroup(this)">
-          <span class="axis-toggle">&#9654;</span>
+        <div class="axis-header">
           <span class="axis-name">X — Transition Readiness</span>
-          <span class="axis-hint-col">What you have?</span>
           <span class="axis-weight-val" id="axXv">44%</span>
         </div>
         <input type="range" class="axis-slider" id="axX" min="0" max="100" value="44" oninput="adjustAxisWeight('X')">
-        <div class="axis-detail collapsed">
+        <div class="axis-detail">
           <div class="slider-v energy">
             <label>Energy <span class="wv" id="w1v">11%</span></label>
             <input type="range" id="w1" min="0" max="100" value="11" oninput="updateIndex()">
@@ -1485,14 +1470,12 @@ html,body{height:100%;overflow:hidden;}
       </div>
 
       <div class="axis-group">
-        <div class="axis-header" onclick="toggleAxisGroup(this)">
-          <span class="axis-toggle">&#9654;</span>
+        <div class="axis-header">
           <span class="axis-name">Y — Power to Execute</span>
-          <span class="axis-hint-col">What you've proven?</span>
           <span class="axis-weight-val" id="axYv">33%</span>
         </div>
         <input type="range" class="axis-slider" id="axY" min="0" max="100" value="33" oninput="adjustAxisWeight('Y')">
-        <div class="axis-detail collapsed">
+        <div class="axis-detail">
           <div class="slider-v ppp">
             <label>PPP <span class="wv" id="w2v">11%</span></label>
             <input type="range" id="w2" min="0" max="100" value="11" oninput="updateIndex()">
@@ -1509,14 +1492,12 @@ html,body{height:100%;overflow:hidden;}
       </div>
 
       <div class="axis-group">
-        <div class="axis-header" onclick="toggleAxisGroup(this)">
-          <span class="axis-toggle">&#9654;</span>
+        <div class="axis-header">
           <span class="axis-name">Z — Climate Resilience</span>
-          <span class="axis-hint-col">How resilient?</span>
           <span class="axis-weight-val" id="axZv">22%</span>
         </div>
         <input type="range" class="axis-slider" id="axZ" min="0" max="100" value="22" oninput="adjustAxisWeight('Z')">
-        <div class="axis-detail collapsed">
+        <div class="axis-detail">
           <div class="slider-v climate">
             <label>Climate <span class="wv" id="w9v">11%</span></label>
             <input type="range" id="w9" min="0" max="100" value="11" oninput="updateIndex()">
@@ -1948,11 +1929,6 @@ const clusterTags = {
   default: ''
 };
 
-function toggleAxisGroup(headerEl) {
-  headerEl.classList.toggle('open');
-  const detail = headerEl.parentElement.querySelector('.axis-detail');
-  detail.classList.toggle('collapsed');
-}
 
 function adjustAxisWeight(axis) {
   const masterVal = +document.getElementById('ax' + axis).value;
