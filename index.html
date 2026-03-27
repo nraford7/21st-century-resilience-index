@@ -397,16 +397,6 @@ html,body{height:100%;overflow:hidden;}
 }
 
 
-/* System readout */
-.sys-readout {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  color: var(--text-4);
-  line-height: 1.8;
-}
-
-.sys-readout .val { color: var(--text-2); font-weight: 600; }
-
 /* ═══ VIEWSCREEN ═══ */
 .viewscreen {
   background: var(--surface-2);
@@ -2074,7 +2064,7 @@ function renderTop(){
   document.getElementById('topCards').innerHTML=filtered.map(c=>{
     const rank=sorted.indexOf(c)+1;
     const gc=rank<=3?' g':'';
-    return `<div class="top-entry" data-country="${c.n}" onclick="openDetail('${c.n.replace(/'/g,"\\'")}')">
+    return `<div class="top-entry" data-country="${c.n}">
       <span class="top-rank${gc}">${String(rank).padStart(2,'0')}</span>
       <span class="top-name">${c.n}</span>
       <span class="top-bars">
@@ -2924,6 +2914,11 @@ document.querySelectorAll('.narrative-btn').forEach(function(btn) {
   if (text === 'Skip') btn.addEventListener('click', dismissNarrative);
   else if (text === 'Next') btn.addEventListener('click', nextSlide);
   else if (text === 'Explore the data') btn.addEventListener('click', dismissNarrative);
+});
+
+document.getElementById('topCards').addEventListener('click', function(e) {
+  var entry = e.target.closest('.top-entry');
+  if (entry && entry.dataset.country) openDetail(entry.dataset.country);
 });
 </script>
 </body>
