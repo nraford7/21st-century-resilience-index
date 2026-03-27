@@ -1387,6 +1387,7 @@ html,body{height:100%;overflow:hidden;}
     <div class="vs-header">
       <span class="vs-label">Transition Readiness vs Power to Execute</span>
       <button class="toggle-3d" id="toggle3d" onclick="toggle3D()">3D</button>
+      <button class="toggle-3d active" id="toggleLabels" onclick="toggleAnnotations()" style="margin-left:4px;">Labels</button>
     </div>
     <div class="story-bar">
       <button class="story-btn" onclick="playStory('reset')">Reset</button>
@@ -1719,6 +1720,7 @@ const annotations=[
 let data=[],sortCol='composite',sortDir=-1;
 let searchFilter='';
 let view3D=false;
+let showAnnotations=true;
 
 function nPPP(v){return Math.max(0,Math.min(1,(Math.log(v)-LN_MIN)/LN_R));}
 function nECI(v){return Math.max(0,Math.min(1,(v-ECI_MIN)/ECI_R));}
@@ -1928,6 +1930,12 @@ function toggle3D(){
     }
     renderScatter();
   }
+}
+
+function toggleAnnotations(){
+  showAnnotations=!showAnnotations;
+  document.getElementById('toggleLabels').classList.toggle('active',showAnnotations);
+  if(!view3D) renderScatter();
 }
 
 function requestRender3D(){
@@ -2449,6 +2457,36 @@ function renderScatter(){
       s+=`<text class="annotation-text" x="${tx}" y="${ly+3}" text-anchor="${anchor}">${c.n}</text>`;
       s+=`<text class="annotation-sub" x="${tx}" y="${ly+11}" text-anchor="${anchor}">${a.t}</text>`;
     });
+
+    // Cluster-level annotations
+    if(showAnnotations){
+      const clusters={};
+      data.forEach(c=>{
+        if(!clusters[c.cluster]) clusters[c.cluster]={xs:[],ys:[],count:0};
+        clusters[c.cluster].xs.push(c.eSov);
+        clusters[c.cluster].ys.push(c.ePow);
+        clusters[c.cluster].count++;
+      });
+
+      const clusterLabels={
+        leader:'Balanced Leaders',
+        latent:'Latent Electrostates',
+        power:'Single-Dimension Powers',
+        petro:'Petrostates',
+        crisis:'Crisis States',
+        fragile:'Clean but Fragile'
+      };
+
+      Object.entries(clusters).forEach(([key,cl])=>{
+        if(!clusterLabels[key]||cl.count<2) return;
+        const cx=cl.xs.reduce((a,b)=>a+b,0)/cl.count;
+        const cy=cl.ys.reduce((a,b)=>a+b,0)/cl.count;
+        const sx=p.l+(cx/100)*pw;
+        const sy=p.t+ph-(cy/100)*ph;
+        s+=`<circle cx="${sx}" cy="${sy}" r="28" fill="none" stroke="${clusterColors[key]}" stroke-width="1" stroke-dasharray="3,2" opacity="0.35"/>`;
+        s+=`<text x="${sx}" y="${sy-32}" text-anchor="middle" font-family="IBM Plex Sans,sans-serif" font-size="8" font-weight="700" fill="${clusterColors[key]}" fill-opacity="0.6" letter-spacing="0.08em">${clusterLabels[key]}</text>`;
+      });
+    }
   }
 
   // Legend (same for both views)
