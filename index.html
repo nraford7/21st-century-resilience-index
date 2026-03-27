@@ -779,6 +779,14 @@ html,body{height:100%;overflow:hidden;}
   letter-spacing: 0.06em;
 }
 
+/* ═══ RIGHT PANEL ANALYSIS OVERRIDES ═══ */
+.right-panel .analysis-scroll { padding: 0.5rem 0.6rem; }
+.right-panel .analysis-scroll h2 { font-size: 0.78rem; }
+.right-panel .analysis-scroll h3 { font-size: 0.65rem; }
+.right-panel .analysis-scroll p { font-size: 0.58rem; }
+.right-panel .analysis-scroll .archetype { margin-bottom: 0.4rem; }
+.right-panel .analysis-scroll .weight-test { padding: 0.3rem 0.5rem; }
+
 .finding-detail { display: none; }
 .finding:hover .finding-detail { display: block; }
 
@@ -1435,37 +1443,8 @@ html,body{height:100%;overflow:hidden;}
   <!-- RIGHT PANEL -->
   <aside class="right-panel">
     <div class="rp-section">
-      <div class="section-label">Transition Ranking</div>
-      <input type="text" class="country-search" id="countrySearch" placeholder="Search countries..." autocomplete="off">
-      <div id="topCards" class="rankings-scroll"></div>
-    </div>
-  </aside>
-
-  <!-- DETAIL BACKDROP -->
-  <div class="detail-backdrop" id="detailBackdrop"></div>
-
-  <!-- COUNTRY DETAIL PANEL -->
-  <div class="country-detail" id="countryDetail">
-    <div class="detail-header">
-      <button class="detail-close" id="detailClose">&times;</button>
-      <div class="detail-name" id="detailName"></div>
-      <div class="detail-composite" id="detailComposite"></div>
-      <div id="detailBreadth" style="font-family:var(--mono);font-size:0.55rem;color:var(--text-3);margin-top:0.3rem;"></div>
-    </div>
-    <div class="detail-body">
-      <div class="detail-bars" id="detailBars"></div>
-      <div class="detail-desc" id="detailDesc"></div>
-    </div>
-  </div>
-
-</main>
-
-<!-- ═══ ANALYSIS DECK ═══ -->
-<section class="analysis-deck">
-  <div class="analysis-header">
-    <div class="section-label" style="margin:0">Analysis // Findings</div>
-  </div>
-  <div class="analysis-scroll">
+      <div class="section-label">Analysis</div>
+      <div class="analysis-scroll">
 
     <h2>No Country Dominates All Nine Dimensions</h2>
     <p>There is no unambiguous leader. Every country has structural blind spots — and adding resource security and projected 2050 climate exposure makes this even starker. The Nordics + Switzerland come closest to balanced excellence but are weak on clean tech production and compute. China dominates clean tech (100) but sits at only 19.7% clean energy with modest PPP and high projected climate exposure (66.0). The US dominates compute (100) but is a net clean tech <em>importer</em> with declining ECI and significant 2050 climate exposure (46.5). Singapore's perfect governance gets diluted by resource security of 12. The transition won't be led by a single hegemon.</p>
@@ -1571,7 +1550,36 @@ html,body{height:100%;overflow:hidden;}
 
     <p style="margin-top:1rem;font-family:var(--mono);font-size:0.48rem;color:var(--text-4);">Data: OWID / Energy Institute 2025, World Bank 2023, IEA / BNEF / UNCTAD 2024, Harvard Growth Lab ECI 2024, Synergy / TOP500 / SIA 2024, WGI 2023, FSI 2024, SPI 2024. FAO / WRI Aqueduct (resource security). WRI 2025 / ND-GAIN 2023 (climate exposure). Custom infrastructural adaptability scores from historical evidence.</p>
 
+      </div>
+    </div>
+  </aside>
+
+  <!-- DETAIL BACKDROP -->
+  <div class="detail-backdrop" id="detailBackdrop"></div>
+
+  <!-- COUNTRY DETAIL PANEL -->
+  <div class="country-detail" id="countryDetail">
+    <div class="detail-header">
+      <button class="detail-close" id="detailClose">&times;</button>
+      <div class="detail-name" id="detailName"></div>
+      <div class="detail-composite" id="detailComposite"></div>
+      <div id="detailBreadth" style="font-family:var(--mono);font-size:0.55rem;color:var(--text-3);margin-top:0.3rem;"></div>
+    </div>
+    <div class="detail-body">
+      <div class="detail-bars" id="detailBars"></div>
+      <div class="detail-desc" id="detailDesc"></div>
+    </div>
   </div>
+
+</main>
+
+<!-- ═══ RANKINGS DECK ═══ -->
+<section class="analysis-deck">
+  <div class="analysis-header" style="gap:0.5rem;">
+    <div class="section-label" style="margin:0;flex-shrink:0;">Transition Ranking</div>
+    <input type="text" class="country-search" id="countrySearch" placeholder="Search countries..." autocomplete="off">
+  </div>
+  <div id="topCards" class="rankings-scroll" style="flex:1;overflow-y:auto;padding:0 0.3rem;"></div>
 </section>
 
 <!-- ═══ NARRATIVE INTRO ═══ -->
