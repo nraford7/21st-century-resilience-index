@@ -1558,6 +1558,7 @@ html,body{height:100%;overflow:hidden;}
     <div class="vs-header">
       <span class="vs-label">Transition Readiness vs Power to Execute</span>
       <button class="toggle-3d active" id="toggleView">3D</button>
+      <button class="toggle-3d" id="resetCamera" title="Reset camera">&#x21BA;</button>
     </div>
     <div class="story-bar">
       <button class="story-btn" onclick="playStory('reset')">Reset</button>
@@ -2501,6 +2502,14 @@ function resize3D(){
   requestRender3D();
 }
 
+function resetCamera() {
+  if (!camera3D || !controls3D) return;
+  camera3D.position.set(70, 60, 70);
+  controls3D.target.set(50, 50, 50);
+  controls3D.update();
+  requestRender3D();
+}
+
 function toggleViewMode() {
   is3D = !is3D;
   const btn = document.getElementById('toggleView');
@@ -2815,6 +2824,7 @@ window.addEventListener('resize',function(){
 });
 
 document.getElementById('toggleView').addEventListener('click', toggleViewMode);
+document.getElementById('resetCamera').addEventListener('click', resetCamera);
 </script>
 </body>
 </html>
