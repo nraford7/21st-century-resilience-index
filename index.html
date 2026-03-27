@@ -528,6 +528,42 @@ html,body{height:100%;overflow:hidden;}
   display: block;
 }
 
+.legend-3d {
+  display: none;
+  position: absolute;
+  bottom: 36px;
+  left: 10px;
+  z-index: 6;
+  background: rgba(246,248,251,0.88);
+  backdrop-filter: blur(3px);
+  border: 1px solid var(--border-light);
+  padding: 6px 10px;
+  pointer-events: none;
+}
+
+.legend-3d.active { display: block; }
+
+.legend-3d-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1.5px 0;
+}
+
+.legend-3d-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-3d-label {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
 .tooltip {
   position: absolute;
   background: var(--surface-2);
@@ -1460,6 +1496,15 @@ html,body{height:100%;overflow:hidden;}
     </div>
     <svg id="scatterChart"></svg>
     <canvas id="scatter3D"></canvas>
+    <div class="legend-3d" id="legend3d">
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#0a7058"></span><span class="legend-3d-label">Balanced Leaders</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#b45309"></span><span class="legend-3d-label">Latent Electrostates</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#165a96"></span><span class="legend-3d-label">Single-Dim Powers</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#a82028"></span><span class="legend-3d-label">Petrostates</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#991b1b"></span><span class="legend-3d-label">Crisis States</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#7c3aed"></span><span class="legend-3d-label">Clean but Fragile</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#6b7094"></span><span class="legend-3d-label">Other</span></div>
+    </div>
     <div class="tooltip" id="tooltip"></div>
   </div>
 
@@ -2005,14 +2050,17 @@ function toggle3D(){
   document.getElementById('toggle3d').classList.toggle('active',view3D);
   const svg=document.getElementById('scatterChart');
   const canvas=document.getElementById('scatter3D');
+  const legend3d=document.getElementById('legend3d');
   if(view3D){
     svg.style.display='none';
     canvas.classList.add('active');
+    if(legend3d) legend3d.classList.add('active');
     if(!scene3D) init3DScene();
     else update3DScene();
     requestRender3D();
   } else {
     canvas.classList.remove('active');
+    if(legend3d) legend3d.classList.remove('active');
     svg.style.display='block';
     if(renderer3D){
       renderer3D.dispose();
@@ -2251,27 +2299,7 @@ function build3DAxes(){
 
   scene3D.add(axisGroup3D);
 
-  // 3D Legend (fixed in bottom-left of scene)
-  const legendItems=[
-    {label:'Balanced Leaders',color:'#0a7058'},
-    {label:'Latent Electrostates',color:'#b45309'},
-    {label:'Single-Dim Powers',color:'#165a96'},
-    {label:'Petrostates',color:'#a82028'},
-    {label:'Crisis States',color:'#991b1b'},
-    {label:'Clean but Fragile',color:'#7c3aed'},
-    {label:'Other',color:'#6b7094'}
-  ];
-  legendItems.forEach((item,i)=>{
-    const dot=new THREE.Mesh(
-      new THREE.SphereGeometry(0.8,8,6),
-      new THREE.MeshPhongMaterial({color:item.color})
-    );
-    dot.position.set(-8, 95 - i*5, 0);
-    axisGroup3D.add(dot);
-    const lbl=makeTextSprite(item.label,{textColor:item.color,fontSize:44,scale:0.22});
-    lbl.position.set(-2, 95 - i*5, 0);
-    axisGroup3D.add(lbl);
-  });
+  // 3D legend is now a flat HTML overlay, not scene sprites
 }
 
 function update3DScene(){
