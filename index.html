@@ -2251,7 +2251,7 @@ function build3DAxes(){
   const yLabel=makeTextSprite('\u2191 POWER TO EXECUTE',{textColor:'rgba(64,160,64,0.85)',fontSize:96,scale:0.7});
   yLabel.position.set(-6,55,0);
   axisGroup3D.add(yLabel);
-  const zLabel=makeTextSprite('CLIMATE 2050 \u2192',{textColor:'rgba(64,96,192,0.85)',fontSize:96,scale:0.7});
+  const zLabel=makeTextSprite('CLIMATE EXPOSURE (2050) \u2192',{textColor:'rgba(64,96,192,0.85)',fontSize:96,scale:0.7});
   zLabel.position.set(0,-6,55);
   axisGroup3D.add(zLabel);
 
@@ -2497,29 +2497,14 @@ function renderScatter(){
       const r=2.5+(c.composite/100)*8;
       const alpha=0.2+c.composite/100*0.55;
       const cc=clusterColors[c.cluster]||clusterColors['default'];
-      let dotFill, dotStrokeOpacity, dotStroke, dotFilter='';
-      if(activeStory){
-        const preset=storyPresets[activeStory];
-        let isTarget=false;
-        if(preset.highlightFn){isTarget=preset.highlightFn(c);}
-        else if(preset.highlight){isTarget=preset.highlight.includes(c.cluster);}
-        if(isTarget){
-          dotFill=cc;dotStrokeOpacity='0.9';dotStroke=cc;dotFilter=' filter="url(#storyGlow)"';
-        } else {
-          dotFill='#b0b8c4';dotStrokeOpacity='0.1';dotStroke='#b0b8c4';
-        }
-      } else {
-        dotFill=`rgba(${hexToRgb(cc)},${alpha})`;dotStrokeOpacity=String(0.25+c.composite/100*0.4);dotStroke=cc;
-      }
-      const dotFillOpacity=activeStory?(dotFill==='#b0b8c4'?'0.1':'0.9'):'1';
       s+=`<circle class="scatter-dot" cx="${x}" cy="${y}" r="${r}"
-        fill="${dotFill}" fill-opacity="${dotFillOpacity}"
-        stroke="${dotStroke}" stroke-width="0.7" stroke-opacity="${dotStrokeOpacity}"${dotFilter}
+        fill="${cc}" fill-opacity="${alpha}"
+        stroke="${cc}" stroke-width="0.7" stroke-opacity="${0.25+c.composite/100*0.4}"
         data-n="${c.n}" data-ce="${c.ceS.toFixed(0)}" data-pp="${c.ppS.toFixed(0)}"
         data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-sc="${c.scS.toFixed(0)}" data-mo="${c.moS.toFixed(0)}" data-rs="${c.rsS.toFixed(0)}" data-cx="${c.cxS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
     });
 
-    // Annotations
+    // Annotations (3D-isometric mode)
     annotations.forEach(a=>{
       const c=data.find(d=>d.n===a.n);
       if(!c)return;
@@ -2576,24 +2561,9 @@ function renderScatter(){
       const r=3+c.cxN*12;
       const alpha=0.2+c.composite/100*0.55;
       const cc=clusterColors[c.cluster]||clusterColors['default'];
-      let dotFill, dotStrokeOpacity, dotStroke, dotFilter='';
-      if(activeStory){
-        const preset=storyPresets[activeStory];
-        let isTarget=false;
-        if(preset.highlightFn){isTarget=preset.highlightFn(c);}
-        else if(preset.highlight){isTarget=preset.highlight.includes(c.cluster);}
-        if(isTarget){
-          dotFill=cc;dotStrokeOpacity='0.9';dotStroke=cc;dotFilter=' filter="url(#storyGlow)"';
-        } else {
-          dotFill='#b0b8c4';dotStrokeOpacity='0.1';dotStroke='#b0b8c4';
-        }
-      } else {
-        dotFill=`rgba(${hexToRgb(cc)},${alpha})`;dotStrokeOpacity=String(0.25+c.composite/100*0.4);dotStroke=cc;
-      }
-      const dotFillOpacity=activeStory?(dotFill==='#b0b8c4'?'0.1':'0.9'):'1';
       s+=`<circle class="scatter-dot" cx="${x}" cy="${y}" r="${r}"
-        fill="${dotFill}" fill-opacity="${dotFillOpacity}"
-        stroke="${dotStroke}" stroke-width="0.7" stroke-opacity="${dotStrokeOpacity}"${dotFilter}
+        fill="${cc}" fill-opacity="${0.2+c.composite/100*0.55}"
+        stroke="${cc}" stroke-width="0.7" stroke-opacity="${0.25+c.composite/100*0.4}"
         data-n="${c.n}" data-ce="${c.ceS.toFixed(0)}" data-pp="${c.ppS.toFixed(0)}"
         data-ct="${c.ctS.toFixed(0)}" data-co="${c.coS.toFixed(0)}" data-ec="${c.ecS.toFixed(0)}" data-sc="${c.scS.toFixed(0)}" data-mo="${c.moS.toFixed(0)}" data-rs="${c.rsS.toFixed(0)}" data-cx="${c.cxS.toFixed(0)}" data-comp="${c.composite.toFixed(1)}"/>`;
     });
@@ -2657,7 +2627,7 @@ function renderScatter(){
 
   if(!view3D){
     // Add dot size note
-    s+=`<text x="${p.l+8}" y="${legendY-14}" font-family="'JetBrains Mono',monospace" font-size="6" fill="#9aa8b8" letter-spacing="0.05em">DOT SIZE = CLIMATE 2050</text>`;
+    s+=`<text x="${p.l+8}" y="${legendY-14}" font-family="'JetBrains Mono',monospace" font-size="6" fill="#9aa8b8" letter-spacing="0.05em">DOT SIZE = CLIMATE EXPOSURE (2050)</text>`;
   }
 
   s+=`<rect x="${legendX-4}" y="${legendY-6}" width="118" height="${legendItems.length*13+8}" rx="2" fill="rgba(255,255,255,0.82)" stroke="rgba(188,198,212,0.4)" stroke-width="0.5"/>`;
@@ -2698,6 +2668,13 @@ function renderScatter(){
 }
 
 function updateIndex(){
+  // Clear any active story when sliders change
+  if(activeStory){
+    activeStory=null;
+    document.querySelectorAll('.story-btn').forEach(b=>b.classList.remove('active'));
+    const popup=document.querySelector('.story-popup');
+    if(popup) popup.remove();
+  }
   compute();
   renderTop();
   if(view3D){
@@ -2756,14 +2733,7 @@ const storyPresets = {
 function playStory(key) {
   const preset = storyPresets[key];
 
-  // Set activeStory BEFORE updateIndex so renderScatter can use it
   activeStory = key === 'reset' ? null : key;
-
-  // Set slider values
-  Object.entries(preset.weights).forEach(([id, val]) => {
-    const el = document.getElementById(id);
-    if (el) el.value = val;
-  });
 
   // Update active button state
   document.querySelectorAll('.story-btn').forEach(b => b.classList.remove('active'));
@@ -2772,12 +2742,50 @@ function playStory(key) {
     if (btn) btn.classList.add('active');
   }
 
-  // Recompute data with new weights (renderScatter now handles highlighting via activeStory)
-  updateIndex();
-
-  // Show/hide popup
+  // Remove existing popup
   const existing = document.querySelector('.story-popup');
   if (existing) existing.remove();
+
+  // DO NOT change sliders or call updateIndex — dots stay where they are.
+  // Only change dot APPEARANCE via direct SVG manipulation.
+  document.querySelectorAll('.scatter-dot').forEach(dot => {
+    const name = dot.getAttribute('data-n');
+    const country = data.find(c => c.n === name);
+    if (!country) return;
+
+    if (!activeStory) {
+      // Reset: restore cluster color and normal opacity
+      const cc = clusterColors[country.cluster] || clusterColors['default'];
+      dot.setAttribute('fill', cc);
+      dot.setAttribute('fill-opacity', '0.55');
+      dot.setAttribute('stroke', cc);
+      dot.setAttribute('stroke-opacity', '0.6');
+      dot.removeAttribute('filter');
+      return;
+    }
+
+    let isTarget = false;
+    if (preset.highlightFn) {
+      isTarget = preset.highlightFn(country);
+    } else if (preset.highlight) {
+      isTarget = preset.highlight.includes(country.cluster);
+    }
+
+    if (isTarget) {
+      const cc = clusterColors[country.cluster] || clusterColors['default'];
+      dot.setAttribute('fill', cc);
+      dot.setAttribute('fill-opacity', '0.9');
+      dot.setAttribute('stroke', cc);
+      dot.setAttribute('stroke-opacity', '1');
+      dot.setAttribute('filter', 'url(#storyGlow)');
+    } else {
+      dot.setAttribute('fill', '#b0b8c4');
+      dot.setAttribute('fill-opacity', '0.1');
+      dot.setAttribute('stroke', '#b0b8c4');
+      dot.setAttribute('stroke-opacity', '0.08');
+      dot.removeAttribute('filter');
+    }
+  });
 
   if (key === 'reset') return;
 
