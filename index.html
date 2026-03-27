@@ -1557,6 +1557,7 @@ html,body{height:100%;overflow:hidden;}
     <div class="corner br"></div>
     <div class="vs-header">
       <span class="vs-label">Transition Readiness vs Power to Execute</span>
+      <button class="toggle-3d active" id="toggleView">3D</button>
     </div>
     <div class="story-bar">
       <button class="story-btn" onclick="playStory('reset')">Reset</button>
@@ -1566,6 +1567,7 @@ html,body{height:100%;overflow:hidden;}
       <button class="story-btn" onclick="playStory('breadth')">Breadth Wins</button>
       <button class="story-btn" onclick="playStory('crisis')">Crisis States</button>
     </div>
+    <svg id="scatter2D" style="display:none; width:100%; height:100%; position:absolute; top:0; left:0;"></svg>
     <canvas id="scatter3D"></canvas>
     <div class="legend-3d" id="legend3d">
       <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#0a7058"></span><span class="legend-3d-label">Balanced Leaders</span></div>
@@ -1906,7 +1908,7 @@ const annotations=[
 
 let data=[],sortCol='composite',sortDir=-1;
 let searchFilter='';
-const view3D=true;
+let is3D = true;
 let activeStory=null;
 
 function nPPP(v){return Math.max(0,Math.min(1,(Math.log(v)-LN_MIN)/LN_R));}
@@ -2499,6 +2501,109 @@ function resize3D(){
   requestRender3D();
 }
 
+function toggleViewMode() {
+  is3D = !is3D;
+  const btn = document.getElementById('toggleView');
+  const canvas = document.getElementById('scatter3D');
+  const svg = document.getElementById('scatter2D');
+  const legend = document.getElementById('legend3d');
+  if (is3D) {
+    btn.textContent = '3D';
+    btn.classList.add('active');
+    canvas.style.display = 'block';
+    svg.style.display = 'none';
+    if (legend) legend.style.display = 'block';
+    resize3D();
+    requestRender3D();
+  } else {
+    btn.textContent = '2D';
+    btn.classList.remove('active');
+    canvas.style.display = 'none';
+    svg.style.display = 'block';
+    if (legend) legend.style.display = 'block';
+    render2D();
+  }
+}
+
+function render2D() {
+  const svg = document.getElementById('scatter2D');
+  if (!svg) return;
+  const rect = svg.getBoundingClientRect();
+  const W = rect.width, H = rect.height;
+  const pad = { top: 30, right: 30, bottom: 40, left: 50 };
+  const plotW = W - pad.left - pad.right;
+  const plotH = H - pad.top - pad.bottom;
+  const sorted = [...data].sort((a, b) => b.composite - a.composite);
+  const top10 = new Set(sorted.slice(0, 10).map(c => c.n));
+  let html = '';
+  // Grid lines
+  [25, 50, 75].forEach(v => {
+    const x = pad.left + (v / 100) * plotW;
+    const y = pad.top + (1 - v / 100) * plotH;
+    html += '<line x1="'+x+'" y1="'+pad.top+'" x2="'+x+'" y2="'+(pad.top+plotH)+'" class="grid-line"/>';
+    html += '<line x1="'+pad.left+'" y1="'+y+'" x2="'+(pad.left+plotW)+'" y2="'+y+'" class="grid-line"/>';
+    html += '<text x="'+x+'" y="'+(pad.top+plotH+14)+'" class="tick-label" text-anchor="middle">'+v+'</text>';
+    html += '<text x="'+(pad.left-8)+'" y="'+(y+3)+'" class="tick-label" text-anchor="end">'+v+'</text>';
+  });
+  // Axis labels
+  html += '<text x="'+(pad.left+plotW/2)+'" y="'+(H-4)+'" class="axis-label" text-anchor="middle" fill="var(--text-3)">TRANSITION READINESS \u2192</text>';
+  html += '<text x="14" y="'+(pad.top+plotH/2)+'" class="axis-label" text-anchor="middle" fill="var(--text-3)" transform="rotate(-90,14,'+(pad.top+plotH/2)+')">\u2191 POWER TO EXECUTE</text>';
+  // Crosshair at 50,50
+  html += '<line x1="'+(pad.left+plotW*0.5)+'" y1="'+pad.top+'" x2="'+(pad.left+plotW*0.5)+'" y2="'+(pad.top+plotH)+'" class="crosshair"/>';
+  html += '<line x1="'+pad.left+'" y1="'+(pad.top+plotH*0.5)+'" x2="'+(pad.left+plotW)+'" y2="'+(pad.top+plotH*0.5)+'" class="crosshair"/>';
+  // Dots - largest first so small dots render on top
+  var byPop = [...data].sort((a, b) => b.pop - a.pop);
+  byPop.forEach(c => {
+    const cx = pad.left + (c.eSov / 100) * plotW;
+    const cy = pad.top + (1 - c.ePow / 100) * plotH;
+    const r = Math.max(3, 2 + Math.log10(Math.max(c.pop, 1)) * 2.5);
+    const cc = clusterColors[c.cluster] || clusterColors['default'];
+    const opacity = (0.35 + c.composite / 100 * 0.5).toFixed(2);
+    html += '<circle class="scatter-dot" cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+cc+'" fill-opacity="'+opacity+'" stroke="'+cc+'" stroke-opacity="0.3" stroke-width="0.5" data-country="'+c.n.replace(/"/g,'&quot;')+'"/>';
+  });
+  // Top 10 labels
+  sorted.slice(0, 10).forEach(c => {
+    const cx = pad.left + (c.eSov / 100) * plotW;
+    const cy = pad.top + (1 - c.ePow / 100) * plotH;
+    const r = Math.max(3, 2 + Math.log10(Math.max(c.pop, 1)) * 2.5);
+    html += '<text x="'+(cx+r+3)+'" y="'+(cy-r)+'" class="annotation-text">'+c.n+'</text>';
+  });
+  svg.innerHTML = html;
+  // Event listeners
+  svg.querySelectorAll('.scatter-dot').forEach(dot => {
+    dot.addEventListener('mousemove', function(e) {
+      const name = this.getAttribute('data-country');
+      const c = data.find(d => d.n === name);
+      if (!c) return;
+      const tt = document.getElementById('tooltip');
+      const pr = svg.closest('.viewscreen').getBoundingClientRect();
+      tt.innerHTML = '<div class="tt-name">'+c.n+'</div>'+
+        '<div class="tt-row"><span class="tt-label">Population</span><span class="tt-val">'+c.pop+'m</span></div>'+
+        '<div class="tt-divider"></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--energy)">Energy</span><span class="tt-val">'+c.ceS.toFixed(0)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--ppp)">PPP</span><span class="tt-val">'+c.ppS.toFixed(0)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Tech</span><span class="tt-val">'+c.ctS.toFixed(0)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute & AI</span><span class="tt-val">'+c.coS.toFixed(0)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--eci)">Complexity</span><span class="tt-val">'+c.ecS.toFixed(0)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--state)">State Cap.</span><span class="tt-val">'+c.scS.toFixed(0)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--momentum)">Momentum</span><span class="tt-val">'+c.moS.toFixed(0)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--resource)">Resource Sec.</span><span class="tt-val">'+c.rsS.toFixed(0)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label" style="color:var(--climate)">Climate Exp.</span><span class="tt-val">'+c.cxS.toFixed(0)+'</span></div>'+
+        '<div class="tt-divider"></div>'+
+        '<div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">'+c.composite.toFixed(1)+'</span></div>';
+      positionTooltip(tt, e.clientX, e.clientY, svg.closest('.viewscreen'));
+      tt.classList.add('visible');
+    });
+    dot.addEventListener('mouseleave', function() {
+      document.getElementById('tooltip').classList.remove('visible');
+    });
+    dot.addEventListener('click', function() {
+      const name = this.getAttribute('data-country');
+      if (name) openDetail(name);
+    });
+  });
+}
+
 function updateIndex(){
   // Clear any active story when sliders change
   if(activeStory){
@@ -2510,6 +2615,7 @@ function updateIndex(){
   compute();
   renderTop();
   update3DScene();
+  if (!is3D) render2D();
 }
 
 const storyPresets = {
@@ -2636,6 +2742,27 @@ function playStory(key) {
     requestRender3D();
   }
 
+  // 2D SVG dots
+  document.querySelectorAll('#scatter2D .scatter-dot').forEach(function(dot) {
+    var name = dot.getAttribute('data-country');
+    var c = data.find(function(d) { return d.n === name; });
+    if (!c) return;
+    var cc = clusterColors[c.cluster] || clusterColors['default'];
+    if (!activeStory) {
+      dot.setAttribute('fill', cc);
+      dot.setAttribute('fill-opacity', (0.35 + c.composite / 100 * 0.5).toFixed(2));
+      dot.setAttribute('stroke-width', '0.5');
+    } else if (isTargetCountry(c)) {
+      dot.setAttribute('fill', cc);
+      dot.setAttribute('fill-opacity', '0.95');
+      dot.setAttribute('stroke-width', '2');
+    } else {
+      dot.setAttribute('fill', '#b0b8c4');
+      dot.setAttribute('fill-opacity', '0.08');
+      dot.setAttribute('stroke-width', '0');
+    }
+  });
+
   if (key === 'reset') return;
 
   // Create popup
@@ -2686,6 +2813,8 @@ init3DScene();
 window.addEventListener('resize',function(){
   resize3D();
 });
+
+document.getElementById('toggleView').addEventListener('click', toggleViewMode);
 </script>
 </body>
 </html>
