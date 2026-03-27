@@ -547,6 +547,16 @@ html,body{height:100%;overflow:hidden;}
   color: var(--blue-dark);
 }
 
+.top-breadth {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  font-weight: 500;
+  width: 1.6rem;
+  text-align: right;
+  color: var(--text-4);
+  opacity: 0.7;
+}
+
 /* Compact findings */
 .finding {
   border-left: 2px solid var(--blue-pale);
@@ -1349,6 +1359,7 @@ html,body{height:100%;overflow:hidden;}
       <button class="detail-close" id="detailClose">&times;</button>
       <div class="detail-name" id="detailName"></div>
       <div class="detail-composite" id="detailComposite"></div>
+      <div id="detailBreadth" style="font-family:var(--mono);font-size:0.55rem;color:var(--text-3);margin-top:0.3rem;"></div>
     </div>
     <div class="detail-body">
       <div class="detail-bars" id="detailBars"></div>
@@ -1728,6 +1739,11 @@ function compute(){
       ceS:ceN*100,ppS:ppN*100,ctS:ctN*100,coS:coN*100,ecS:ecN*100,scS:scN*100,moS:moN*100,rsS:rsN*100,cxS:cxN*100,
       composite:comp,eSov,ePow,
       pf:prof({ceN,ppN,ctN,coN,ecN,scN,moN,rsN,cxN})};
+    const _dims=[obj.ceN,obj.ppN,obj.ctN,obj.coN,obj.ecN,obj.scN,obj.moN,obj.rsN,1-obj.cxN];
+    const _mean=_dims.reduce((a,b)=>a+b,0)/_dims.length;
+    const _var=_dims.reduce((a,b)=>a+(b-_mean)**2,0)/_dims.length;
+    const _std=Math.sqrt(_var);
+    obj.breadth=Math.max(0,Math.min(100,(1-_std/0.35)*100));
     obj.cluster=cluster(obj);
     return obj;
   });
@@ -1759,6 +1775,7 @@ function renderTop(){
         <span class="mini-bar climate" style="height:${Math.max(1,c.cxS/100*16)}px"></span>
       </span>
       <span class="top-score">${c.composite.toFixed(1)}</span>
+      <span class="top-breadth" title="Breadth: balanced capability across dimensions">${c.breadth.toFixed(0)}</span>
     </div>`;
   }).join('');
 }
@@ -1771,6 +1788,11 @@ function openDetail(name){
   const backdrop=document.getElementById('detailBackdrop');
   document.getElementById('detailName').textContent=c.n;
   document.getElementById('detailComposite').textContent='COMPOSITE '+c.composite.toFixed(1)+' / 100';
+
+  const breadthEl=document.getElementById('detailBreadth');
+  if(breadthEl){
+    breadthEl.innerHTML=`Breadth: <span style="font-weight:700;color:var(--blue)">${c.breadth.toFixed(0)}</span>/100 <span style="font-size:0.48rem;color:var(--text-4);margin-left:0.3rem;">${c.breadth>70?'Balanced':c.breadth>45?'Moderate':'Concentrated'}</span>`;
+  }
 
   const dims=[
     {key:'energy',label:'Energy',val:c.ceS},
