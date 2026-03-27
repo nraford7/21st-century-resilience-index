@@ -801,6 +801,110 @@ html,body{height:100%;overflow:hidden;}
   margin-top: 1rem;
 }
 
+/* ═══ NARRATIVE INTRO ═══ */
+.narrative-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(12,37,64,0.6);
+  backdrop-filter: blur(6px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.5s ease;
+}
+
+.narrative-overlay.hidden { display: none; }
+
+.narrative-slide {
+  background: var(--surface-2);
+  max-width: 640px;
+  width: 90%;
+  padding: 2.5rem 3rem;
+  position: relative;
+  box-shadow: 0 24px 80px rgba(12,37,64,0.25);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  display: none;
+}
+
+.narrative-slide.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.narrative-slide h2 {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--blue-dark);
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.narrative-slide p {
+  font-size: 0.95rem;
+  color: var(--text-2);
+  line-height: 1.75;
+  margin-bottom: 0.8rem;
+}
+
+.narrative-slide .stat-highlight {
+  font-family: var(--mono);
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--blue);
+  display: block;
+  margin: 1rem 0;
+}
+
+.narrative-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+}
+
+.narrative-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.narrative-dots .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.2s;
+}
+
+.narrative-dots .dot.active { background: var(--blue); }
+
+.narrative-btn {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.4rem;
+  background: var(--blue);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.narrative-btn:hover { background: var(--blue-dark); }
+
+.narrative-btn.skip {
+  background: transparent;
+  color: var(--text-3);
+  padding: 0.5rem 0.8rem;
+}
+
+.narrative-btn.skip:hover { color: var(--text); }
+
 /* ═══ SVG ═══ */
 .quadrant-label { font-family: 'IBM Plex Sans',sans-serif; font-size: 8px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
 .axis-label { font-family: 'IBM Plex Sans',sans-serif; font-size: 9px; font-weight: 500; }
@@ -1368,27 +1472,61 @@ html,body{height:100%;overflow:hidden;}
   </div>
 </section>
 
-<!-- ═══ INTRO MODAL ═══ -->
-<div class="modal-overlay" id="introModal">
-  <div class="modal">
-    <h2>21st Century Resilience Index</h2>
-    <p>Which countries will lead the 21st century? This index measures a nation's capacity to transition from petrostate to electrostate — deriving power from manufacturing clean energy technology rather than extracting fossil fuels.</p>
-    <p>The winners will survive energy price shocks, navigate the climate crisis, harness the AI and compute revolution, and translate industrial complexity into smart manufacturing. The losers will be customers of the winners.</p>
-    <p>85 nations scored across nine dimensions:</p>
-    <div class="dim-list">
-      <span class="dim-pill energy">Clean Energy</span>
-      <span class="dim-pill ppp">Purchasing Power</span>
-      <span class="dim-pill cleantech">Clean Tech Exports</span>
-      <span class="dim-pill compute">Compute &amp; AI</span>
-      <span class="dim-pill eci">Economic Complexity</span>
-      <span class="dim-pill state">State Capacity</span>
-      <span class="dim-pill momentum">Momentum</span>
-      <span class="dim-pill resource">Resource Security</span>
-      <span class="dim-pill climate">Climate Exposure</span>
+<!-- ═══ NARRATIVE INTRO ═══ -->
+<div class="narrative-overlay" id="narrativeIntro">
+  <div class="narrative-slide" id="nSlide0">
+    <h2>The 21st century belongs to electrostates.</h2>
+    <p>Nations whose power comes from <em>manufacturing</em> clean energy technology — not extracting fossil fuels from the ground.</p>
+    <p>This index measures which countries are positioned to lead that transition, and which are trapped.</p>
+    <div class="narrative-nav">
+      <button class="narrative-btn skip" onclick="dismissNarrative()">Skip</button>
+      <div class="narrative-dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <button class="narrative-btn" onclick="nextSlide()">Next</button>
     </div>
-    <p>The scatter plot maps Transition Readiness (do you have the technology?) against Power to Execute (do you have the money, governance, and resources?). Dot size shows projected 2050 climate exposure — bigger dots face more pressure. Toggle to 3D to see exposure as a third axis. Adjust the weight sliders to test your own hypotheses.</p>
-    <button class="modal-btn" onclick="dismissModal()">Enter</button>
-    <div class="src">Data: OWID, World Bank, IEA, Harvard Growth Lab, TOP500, WGI / FSI / SPI, FAO / WRI Aqueduct, WRI / ND-GAIN</div>
+  </div>
+
+  <div class="narrative-slide" id="nSlide1">
+    <h2>Only 8–12 countries are structurally positioned to lead.</h2>
+    <p>The transition requires a compound of clean energy, manufacturing sophistication, economic complexity, compute capacity, governance quality, resource security, and momentum — simultaneously.</p>
+    <p>Most countries have one or two. Almost none have all of them.</p>
+    <div class="narrative-nav">
+      <button class="narrative-btn skip" onclick="dismissNarrative()">Skip</button>
+      <div class="narrative-dots"><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      <button class="narrative-btn" onclick="nextSlide()">Next</button>
+    </div>
+  </div>
+
+  <div class="narrative-slide" id="nSlide2">
+    <h2>The countries most exposed to climate change are the least prepared.</h2>
+    <p>Bangladesh, Philippines, Pakistan, Nigeria — facing the worst projected climate impacts by 2050, with the lowest capacity to transition.</p>
+    <p>The gap between who <em>needs</em> the transition and who <em>can</em> execute it is the moral center of this index.</p>
+    <div class="narrative-nav">
+      <button class="narrative-btn skip" onclick="dismissNarrative()">Skip</button>
+      <div class="narrative-dots"><span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
+      <button class="narrative-btn" onclick="nextSlide()">Next</button>
+    </div>
+  </div>
+
+  <div class="narrative-slide" id="nSlide3">
+    <h2>Wealth is not resilience. Position is not momentum.</h2>
+    <p>Qatar has $129k GDP per capita and scores near the bottom. Japan has the world's deepest manufacturing capability and hasn't deployed it. Canada is going backwards on clean energy.</p>
+    <p>The index reveals what headlines miss: who's <em>actually</em> building the future, and who's coasting on the past.</p>
+    <div class="narrative-nav">
+      <button class="narrative-btn skip" onclick="dismissNarrative()">Skip</button>
+      <div class="narrative-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span><span class="dot"></span></div>
+      <button class="narrative-btn" onclick="nextSlide()">Next</button>
+    </div>
+  </div>
+
+  <div class="narrative-slide" id="nSlide4">
+    <h2>85 nations. 9 dimensions. 3 axes. Your weights.</h2>
+    <p>The scatter plot maps <strong>Transition Readiness</strong> against <strong>Power to Execute</strong>. Dot size shows projected climate exposure by 2050. Toggle to 3D to see exposure as a spatial axis.</p>
+    <p>Adjust the weight sliders to test your own hypotheses about what matters most. The rankings dissolve and reform. <em>There is no single answer — only trade-offs.</em></p>
+    <div class="narrative-nav">
+      <span></span>
+      <div class="narrative-dots"><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot active"></span></div>
+      <button class="narrative-btn" onclick="dismissNarrative()">Explore the data</button>
+    </div>
   </div>
 </div>
 
@@ -2294,12 +2432,25 @@ function updateIndex(){
   }
 }
 
-function dismissModal(){
-  document.getElementById('introModal').classList.add('hidden');
-  localStorage.setItem('21cri-intro-seen','1');
+let currentSlide = 0;
+
+function nextSlide() {
+  currentSlide++;
+  for (let i = 0; i < 5; i++) {
+    const el = document.getElementById('nSlide' + i);
+    if (el) el.classList.toggle('active', i === currentSlide);
+  }
 }
-if(localStorage.getItem('21cri-intro-seen')){
-  document.getElementById('introModal').classList.add('hidden');
+
+function dismissNarrative() {
+  document.getElementById('narrativeIntro').classList.add('hidden');
+  localStorage.setItem('21cri-intro-seen', '1');
+}
+
+if (localStorage.getItem('21cri-intro-seen')) {
+  document.getElementById('narrativeIntro').classList.add('hidden');
+} else {
+  document.getElementById('nSlide0').classList.add('active');
 }
 
 // Clock
