@@ -334,6 +334,82 @@ html,body{height:100%;overflow:hidden;}
 .slider-v.resource input::-webkit-slider-thumb { background: var(--resource); }
 .slider-v.climate input::-webkit-slider-thumb { background: var(--climate); }
 
+/* ═══ AXIS GROUPS ═══ */
+.axis-group { margin-bottom: 0.4rem; }
+
+.axis-header {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  padding: 0.2rem 0;
+}
+
+.axis-toggle {
+  font-size: 0.5rem;
+  color: var(--text-4);
+  width: 0.8rem;
+  transition: transform 0.2s;
+}
+
+.axis-header.open .axis-toggle { transform: rotate(90deg); }
+
+.axis-name {
+  font-family: var(--mono);
+  font-size: 0.52rem;
+  font-weight: 600;
+  color: var(--text-2);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.axis-hint-col {
+  font-family: var(--mono);
+  font-size: 0.45rem;
+  color: var(--text-4);
+  margin-left: auto;
+}
+
+.axis-weight-val {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: var(--blue);
+  min-width: 2rem;
+  text-align: right;
+}
+
+.axis-slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 3px;
+  background: var(--blue-pale);
+  outline: none;
+  margin: 0.25rem 0;
+}
+
+.axis-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--blue);
+  cursor: pointer;
+  border: 2px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--border);
+}
+
+.axis-detail {
+  overflow: hidden;
+  max-height: 300px;
+  transition: max-height 0.25s ease;
+  padding-left: 0.8rem;
+}
+
+.axis-detail.collapsed {
+  max-height: 0;
+}
+
 /* System readout */
 .sys-readout {
   font-family: var(--mono);
@@ -457,9 +533,9 @@ html,body{height:100%;overflow:hidden;}
 
 .story-popup {
   position: absolute;
-  top: 50%;
+  bottom: 40px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translateX(-50%);
   z-index: 10;
   background: rgba(246,248,251,0.92);
   backdrop-filter: blur(6px);
@@ -629,24 +705,6 @@ html,body{height:100%;overflow:hidden;}
   color: var(--text);
 }
 
-.top-bars {
-  display: flex;
-  gap: 1px;
-  align-items: flex-end;
-  height: 16px;
-}
-
-.mini-bar { width: 2px; border-radius: 1px; min-height: 1px; opacity: 0.65; }
-.mini-bar.energy { background: var(--energy); }
-.mini-bar.ppp { background: var(--ppp); }
-.mini-bar.cleantech { background: var(--cleantech); }
-.mini-bar.compute { background: var(--compute); }
-.mini-bar.eci { background: var(--eci); }
-.mini-bar.momentum { background: var(--momentum); }
-.mini-bar.state { background: var(--state); }
-.mini-bar.resource { background: var(--resource); }
-.mini-bar.climate { background: var(--climate); }
-
 .top-score {
   font-family: var(--mono);
   font-size: 0.68rem;
@@ -656,43 +714,16 @@ html,body{height:100%;overflow:hidden;}
   color: var(--blue-dark);
 }
 
-.top-breadth {
+.cluster-tag {
   font-family: var(--mono);
-  font-size: 0.5rem;
-  font-weight: 500;
-  width: 1.6rem;
-  text-align: right;
-  color: var(--text-4);
-  opacity: 0.7;
-}
-
-/* ═══ RANK GROUP HEADERS ═══ */
-.rank-group-header {
-  font-family: var(--mono);
-  font-size: 0.5rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  padding: 0.5rem 0.5rem 0.25rem;
-  margin-top: 0.3rem;
-  border-bottom: 1px solid var(--border-faint);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-.rank-group-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-.rank-group-desc {
-  font-weight: 400;
-  font-size: 0.45rem;
-  color: var(--text-4);
+  font-size: 0.42rem;
+  font-weight: 600;
   letter-spacing: 0.04em;
-  margin-left: auto;
+  text-transform: uppercase;
+  padding: 1px 4px;
+  border: 1px solid;
+  flex-shrink: 0;
+  line-height: 1.3;
 }
 
 /* Compact findings */
@@ -1407,46 +1438,76 @@ html,body{height:100%;overflow:hidden;}
     <div class="lp-section">
       <div class="section-label">Weights</div>
 
-      <div class="slider-group-label">Transition Readiness <span class="axis-hint">What you have?</span></div>
-      <div class="slider-v energy">
-        <label>Energy <span class="wv" id="w1v">11%</span></label>
-        <input type="range" id="w1" min="0" max="100" value="11" oninput="updateIndex()">
-      </div>
-      <div class="slider-v cleantech">
-        <label>Clean Tech <span class="wv" id="w3v">11%</span></label>
-        <input type="range" id="w3" min="0" max="100" value="11" oninput="updateIndex()">
-      </div>
-      <div class="slider-v compute">
-        <label>Compute & AI <span class="wv" id="w4v">11%</span></label>
-        <input type="range" id="w4" min="0" max="100" value="11" oninput="updateIndex()">
-      </div>
-      <div class="slider-v eci">
-        <label>Complexity <span class="wv" id="w5v">11%</span></label>
-        <input type="range" id="w5" min="0" max="100" value="11" oninput="updateIndex()">
-      </div>
-
-      <div class="slider-group-label">Power to Execute <span class="axis-hint">What you've proven?</span></div>
-      <div class="slider-v ppp">
-        <label>PPP <span class="wv" id="w2v">11%</span></label>
-        <input type="range" id="w2" min="0" max="100" value="11" oninput="updateIndex()">
-      </div>
-      <div class="slider-v state">
-        <label>State Cap. <span class="wv" id="w6v">11%</span></label>
-        <input type="range" id="w6" min="0" max="100" value="11" oninput="updateIndex()">
-      </div>
-      <div class="slider-v momentum">
-        <label>Momentum <span class="wv" id="w7v">11%</span></label>
-        <input type="range" id="w7" min="0" max="100" value="11" oninput="updateIndex()">
+      <div class="axis-group">
+        <div class="axis-header" onclick="toggleAxisGroup(this)">
+          <span class="axis-toggle">&#9654;</span>
+          <span class="axis-name">X — Transition Readiness</span>
+          <span class="axis-hint-col">What you have?</span>
+          <span class="axis-weight-val" id="axXv">44%</span>
+        </div>
+        <input type="range" class="axis-slider" id="axX" min="0" max="100" value="44" oninput="adjustAxisWeight('X')">
+        <div class="axis-detail collapsed">
+          <div class="slider-v energy">
+            <label>Energy <span class="wv" id="w1v">11%</span></label>
+            <input type="range" id="w1" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+          <div class="slider-v cleantech">
+            <label>Clean Tech <span class="wv" id="w3v">11%</span></label>
+            <input type="range" id="w3" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+          <div class="slider-v compute">
+            <label>Compute & AI <span class="wv" id="w4v">11%</span></label>
+            <input type="range" id="w4" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+          <div class="slider-v eci">
+            <label>Complexity <span class="wv" id="w5v">11%</span></label>
+            <input type="range" id="w5" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+        </div>
       </div>
 
-      <div class="slider-group-label">Exposure <span class="axis-hint">What you face?</span></div>
-      <div class="slider-v climate">
-        <label>Climate <span class="wv" id="w9v">11%</span></label>
-        <input type="range" id="w9" min="0" max="100" value="11" oninput="updateIndex()">
+      <div class="axis-group">
+        <div class="axis-header" onclick="toggleAxisGroup(this)">
+          <span class="axis-toggle">&#9654;</span>
+          <span class="axis-name">Y — Power to Execute</span>
+          <span class="axis-hint-col">What you've proven?</span>
+          <span class="axis-weight-val" id="axYv">33%</span>
+        </div>
+        <input type="range" class="axis-slider" id="axY" min="0" max="100" value="33" oninput="adjustAxisWeight('Y')">
+        <div class="axis-detail collapsed">
+          <div class="slider-v ppp">
+            <label>PPP <span class="wv" id="w2v">11%</span></label>
+            <input type="range" id="w2" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+          <div class="slider-v state">
+            <label>State Cap. <span class="wv" id="w6v">11%</span></label>
+            <input type="range" id="w6" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+          <div class="slider-v momentum">
+            <label>Momentum <span class="wv" id="w7v">11%</span></label>
+            <input type="range" id="w7" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+        </div>
       </div>
-      <div class="slider-v resource">
-        <label>Resource Sec. <span class="wv" id="w8v">11%</span></label>
-        <input type="range" id="w8" min="0" max="100" value="11" oninput="updateIndex()">
+
+      <div class="axis-group">
+        <div class="axis-header" onclick="toggleAxisGroup(this)">
+          <span class="axis-toggle">&#9654;</span>
+          <span class="axis-name">Z — Exposure</span>
+          <span class="axis-hint-col">What you face?</span>
+          <span class="axis-weight-val" id="axZv">22%</span>
+        </div>
+        <input type="range" class="axis-slider" id="axZ" min="0" max="100" value="22" oninput="adjustAxisWeight('Z')">
+        <div class="axis-detail collapsed">
+          <div class="slider-v climate">
+            <label>Climate <span class="wv" id="w9v">11%</span></label>
+            <input type="range" id="w9" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+          <div class="slider-v resource">
+            <label>Resource Sec. <span class="wv" id="w8v">11%</span></label>
+            <input type="range" id="w8" min="0" max="100" value="11" oninput="updateIndex()">
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1484,7 +1545,7 @@ html,body{height:100%;overflow:hidden;}
     <canvas id="scatter3D"></canvas>
     <div class="legend-3d" id="legend3d">
       <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#0a7058"></span><span class="legend-3d-label">Balanced Leaders</span></div>
-      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#b45309"></span><span class="legend-3d-label">Latent Electrostates</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#b45309"></span><span class="legend-3d-label">Emerging Electrostates</span></div>
       <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#165a96"></span><span class="legend-3d-label">Single-Dim Powers</span></div>
       <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#a82028"></span><span class="legend-3d-label">Petrostates</span></div>
       <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#991b1b"></span><span class="legend-3d-label">Crisis States</span></div>
@@ -1539,7 +1600,7 @@ html,body{height:100%;overflow:hidden;}
     </div>
 
     <div class="archetype">
-      <div class="archetype-name">Latent Electrostates &mdash; Japan, South Korea, Germany, Taiwan</div>
+      <div class="archetype-name">Emerging Electrostates &mdash; Japan, South Korea, Germany, Taiwan</div>
       <p>The world&rsquo;s deepest manufacturing capability (top 6 ECI globally), but they haven&rsquo;t fully committed. Japan is #1 ECI with only 17% clean energy. This is the most strategically interesting cluster &mdash; if they commit, they could collectively challenge China&rsquo;s clean tech dominance within a decade. Their ECI says they can. Their 20-year momentum says they haven&rsquo;t yet.</p>
     </div>
 
@@ -1740,7 +1801,7 @@ const raw=[
   {n:"Pakistan",ce:18.8,ppp:6014,ct:0,co:27,eci:-0.57,sc:35.8,mo:35.3,rs:50,cx:84.0,pop:230,desc:"19% clean energy (hydro + nuclear) but negative ECI (-0.57), $6k PPP, extremely weak state capacity (35.8). Some momentum (+6.6pp). Massive population (230M) with minimal industrial capacity for the transition. Vulnerable to energy and climate shocks simultaneously."},
   {n:"South Korea",ce:17.5,ppp:57430,ct:16,co:61,eci:2.04,sc:84.8,mo:38.1,rs:47,cx:39.0,pop:52,desc:"Third-highest ECI globally (2.04). Strong compute (27.5), significant clean tech production (16), high state capacity (84.8). But only 17.5% clean energy and modest momentum (+4.1pp). The industrial capability exists for rapid transition \u2014 the commitment hasn\u2019t matched it."},
   {n:"Argentina",ce:17.4,ppp:30221,ct:0,co:36,eci:-0.20,sc:56.7,mo:42.5,rs:87,cx:43.0,pop:46,desc:"17% clean energy, negative ECI (-0.20), moderate PPP ($30k), weak state capacity (56.7). Recurring economic crises prevent sustained transformation. Strong human capital and renewable potential (Patagonian wind) but institutional instability is the binding constraint."},
-  {n:"Japan",ce:17,ppp:50662,ct:14,co:58,eci:2.26,sc:83.8,mo:32.0,rs:42,cx:39.5,pop:124,desc:"Highest ECI on Earth (2.26) \u2014 the most sophisticated manufacturing economy ever built. Strong compute (25), good clean tech production (14), high state capacity (83.8), solid momentum (+10.4pp). But only 17% clean energy. The latent electrostate: every capability exists, the deployment lags."},
+  {n:"Japan",ce:17,ppp:50662,ct:14,co:58,eci:2.26,sc:83.8,mo:32.0,rs:42,cx:39.5,pop:124,desc:"Highest ECI on Earth (2.26) \u2014 the most sophisticated manufacturing economy ever built. Strong compute (25), good clean tech production (14), high state capacity (83.8), solid momentum (+10.4pp). But only 17% clean energy. The emerging electrostate: every capability exists, the deployment lags."},
   {n:"Australia",ce:14.7,ppp:72273,ct:0,co:53,eci:-0.55,sc:86.1,mo:34.2,rs:85,cx:48.0,pop:26,desc:"High PPP ($72k), strong state capacity (86.1), good momentum (+9.1pp). But negative ECI (-0.55) \u2014 manufacturing base hollowed out. Zero clean tech production. World\u2019s largest lithium exporter but imports all finished clean technology. Rich and well-governed but can\u2019t build the transition, only buy it."},
   {n:"Poland",ce:13,ppp:48473,ct:4,co:45,eci:1.02,sc:71.6,mo:54.8,rs:75,cx:29.5,pop:37,desc:"13% clean energy, decent ECI (1.02), moderate state capacity (71.6), solid momentum (+7.1pp). Growing battery manufacturing hub from EU-directed FDI. The only EU country to avoid the 2008 recession. Transitioning from coal, slowly. Intel fab planned for Wroclaw."},
   {n:"Philippines",ce:12.8,ppp:10986,ct:0,co:32,eci:0.76,sc:52.9,mo:56.6,rs:52,cx:88.0,pop:117,desc:"12.8% clean energy and going backwards (-2.0pp). Low PPP ($11k), weak state capacity (52.9). Coal growth is outpacing renewable additions. One of the few countries actively regressing on energy transition. Extreme climate exposure (89.2) compounds the vulnerability."},
@@ -1859,6 +1920,41 @@ const clusterColors = {
   default: '#6b7094'
 };
 
+const clusterTags = {
+  leader: 'Balanced',
+  latent: 'Emerging',
+  power: 'Power',
+  petro: 'Petrostate',
+  crisis: 'Crisis',
+  fragile: 'Fragile',
+  default: ''
+};
+
+function toggleAxisGroup(headerEl) {
+  headerEl.classList.toggle('open');
+  const detail = headerEl.parentElement.querySelector('.axis-detail');
+  detail.classList.toggle('collapsed');
+}
+
+function adjustAxisWeight(axis) {
+  const masterVal = +document.getElementById('ax' + axis).value;
+  const subIds = {
+    X: ['w1','w3','w4','w5'],
+    Y: ['w2','w6','w7'],
+    Z: ['w8','w9']
+  }[axis];
+
+  const subVals = subIds.map(id => +document.getElementById(id).value);
+  const subTotal = subVals.reduce((a,b) => a+b, 0) || 1;
+
+  subIds.forEach((id, i) => {
+    const newVal = Math.round(masterVal * (subVals[i] / subTotal));
+    document.getElementById(id).value = newVal;
+  });
+
+  updateIndex();
+}
+
 function compute(){
   const w1=+document.getElementById('w1').value;
   const w2=+document.getElementById('w2').value;
@@ -1879,6 +1975,12 @@ function compute(){
   document.getElementById('w7v').textContent=Math.round(w7/wT*100)+'%';
   document.getElementById('w8v').textContent=Math.round(w8/wT*100)+'%';
   document.getElementById('w9v').textContent=Math.round(w9/wT*100)+'%';
+  document.getElementById('axXv').textContent=Math.round((w1+w3+w4+w5)/wT*100)+'%';
+  document.getElementById('axYv').textContent=Math.round((w2+w6+w7)/wT*100)+'%';
+  document.getElementById('axZv').textContent=Math.round((w8+w9)/wT*100)+'%';
+  document.getElementById('axX').value=w1+w3+w4+w5;
+  document.getElementById('axY').value=w2+w6+w7;
+  document.getElementById('axZ').value=w8+w9;
   data=raw.map(r=>{
     const ceN=r.ce/100,ppN=nPPP(r.ppp),ctN=Math.max(0,r.ct)/100,coN=r.co/100,ecN=nECI(r.eci),scN=r.sc/100,moN=nMO(r.mo);
     const rsN=r.rs/100;
@@ -1907,66 +2009,21 @@ function compute(){
   });
 }
 
-function renderTopEntry(c,rank,gc){
-  return`<div class="top-entry" data-country="${c.n}" onclick="openDetail('${c.n.replace(/'/g,"\\'")}')">
-      <span class="top-rank${gc}">${String(rank+1).padStart(2,'0')}</span>
-      <span class="top-name">${c.n}</span>
-      <span class="top-bars">
-        <span class="mini-bar energy" style="height:${Math.max(1,c.ceS/100*16)}px"></span>
-        <span class="mini-bar ppp" style="height:${Math.max(1,c.ppS/100*16)}px"></span>
-        <span class="mini-bar cleantech" style="height:${Math.max(1,c.ctS/100*16)}px"></span>
-        <span class="mini-bar compute" style="height:${Math.max(1,c.coS/100*16)}px"></span>
-        <span class="mini-bar eci" style="height:${Math.max(1,c.ecS/100*16)}px"></span>
-        <span class="mini-bar state" style="height:${Math.max(1,c.scS/100*16)}px"></span>
-        <span class="mini-bar momentum" style="height:${Math.max(1,c.moS/100*16)}px"></span>
-        <span class="mini-bar resource" style="height:${Math.max(1,c.rsS/100*16)}px"></span>
-        <span class="mini-bar climate" style="height:${Math.max(1,c.cxS/100*16)}px"></span>
-      </span>
-      <span class="top-score">${c.composite.toFixed(1)}</span>
-      <span class="top-breadth" title="Breadth: balanced capability across dimensions">${c.breadth.toFixed(0)}</span>
-    </div>`;
-}
-
 function renderTop(){
   const sorted=[...data].sort((a,b)=>b.composite-a.composite);
   const filtered=searchFilter?sorted.filter(c=>c.n.toLowerCase().includes(searchFilter)):sorted;
-
-  if(searchFilter){
-    document.getElementById('topCards').innerHTML=filtered.map(c=>{
-      const rank=sorted.indexOf(c);
-      const gc=rank<3?' g':'';
-      return renderTopEntry(c,rank,gc);
-    }).join('');
-    return;
-  }
-
-  const groupOrder=[
-    {key:'leader',label:'Balanced Leaders',desc:'Breadth across all dimensions',color:'#0a7058'},
-    {key:'latent',label:'Latent Electrostates',desc:'Capability without commitment',color:'#b45309'},
-    {key:'power',label:'Single-Dimension Powers',desc:'Monopoly positions',color:'#165a96'},
-    {key:'fragile',label:'Clean but Fragile',desc:'Clean energy, weak foundation',color:'#7c3aed'},
-    {key:'petro',label:'Petrostates',desc:'Wealth without transition',color:'#a82028'},
-    {key:'crisis',label:'Crisis States',desc:'Most exposed, least capable',color:'#991b1b'},
-    {key:'default',label:'Other',desc:'',color:'#6b7094'}
-  ];
-
-  let html='';
-  groupOrder.forEach(g=>{
-    const members=filtered.filter(c=>c.cluster===g.key);
-    if(members.length===0)return;
-    html+=`<div class="rank-group-header">
-      <span class="rank-group-dot" style="background:${g.color}"></span>
-      ${g.label}
-      <span class="rank-group-desc">${g.desc}</span>
+  document.getElementById('topCards').innerHTML=filtered.map(c=>{
+    const rank=sorted.indexOf(c)+1;
+    const gc=rank<=3?' g':'';
+    const tag=clusterTags[c.cluster]||'';
+    const tagColor=clusterColors[c.cluster]||clusterColors['default'];
+    return `<div class="top-entry" data-country="${c.n}" onclick="openDetail('${c.n.replace(/'/g,"\\'")}')">
+      <span class="top-rank${gc}">${String(rank).padStart(2,'0')}</span>
+      <span class="top-name">${c.n}</span>
+      ${tag?`<span class="cluster-tag" style="color:${tagColor};border-color:${tagColor}">${tag}</span>`:''}
+      <span class="top-score">${c.composite.toFixed(1)}</span>
     </div>`;
-    members.forEach(c=>{
-      const rank=sorted.indexOf(c);
-      const gc=rank<3?' g':'';
-      html+=renderTopEntry(c,rank,gc);
-    });
-  });
-
-  document.getElementById('topCards').innerHTML=html;
+  }).join('');
 }
 
 /* ═══ COUNTRY DETAIL PANEL ═══ */
@@ -2498,7 +2555,30 @@ function playStory(key) {
       }
       mesh.material.needsUpdate = true;
     });
-    if (renderer3D) requestRender3D();
+    // Update 3D labels for story
+    labelSprites3D.forEach(s => { scene3D.remove(s); s.material.map.dispose(); s.material.dispose(); });
+    labelSprites3D = [];
+
+    let labelCountries;
+    if (activeStory) {
+      labelCountries = data.filter(c => isTargetCountry(c));
+    } else {
+      const top10 = new Set([...data].sort((a,b) => b.composite - a.composite).slice(0,10).map(c => c.n));
+      labelCountries = data.filter(c => top10.has(c.n));
+    }
+
+    labelCountries.forEach(c => {
+      const cc = clusterColors[c.cluster] || clusterColors['default'];
+      const label = makeCountryLabel(c.n, cc);
+      const sphere = spheres3D.find(s => s.userData.country && s.userData.country.n === c.n);
+      if (sphere) {
+        label.position.set(sphere.position.x, sphere.position.y + sphere.scale.x + 1.2, sphere.position.z);
+        scene3D.add(label);
+        labelSprites3D.push(label);
+      }
+    });
+
+    requestRender3D();
   }
 
   if (key === 'reset') return;
