@@ -457,17 +457,17 @@ html,body{height:100%;overflow:hidden;}
 
 .story-popup {
   position: absolute;
-  bottom: 36px;
-  left: 10px;
-  right: 10px;
-  transform: none;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   z-index: 10;
-  background: rgba(246,248,251,0.95);
-  backdrop-filter: blur(4px);
+  background: rgba(246,248,251,0.92);
+  backdrop-filter: blur(6px);
   border: 1px solid var(--border);
   border-top: 3px solid var(--blue);
   padding: 1.2rem 1.5rem;
-  max-width: 500px;
+  max-width: 420px;
+  width: 85%;
   box-shadow: 0 12px 40px rgba(12,37,64,0.15);
   pointer-events: all;
 }
@@ -2079,7 +2079,13 @@ function toggle3D(){
 function toggleAnnotations(){
   showAnnotations=!showAnnotations;
   document.getElementById('toggleLabels').classList.toggle('active',showAnnotations);
-  if(!view3D) renderScatter();
+  if(view3D){
+    // Toggle 3D country name labels
+    labelSprites3D.forEach(s=>{ s.visible=showAnnotations; });
+    requestRender3D();
+  } else {
+    renderScatter();
+  }
 }
 
 function requestRender3D(){
@@ -2702,8 +2708,9 @@ const storyPresets = {
   usGamble: {
     weights: {w1:5,w2:5,w3:5,w4:50,w5:5,w6:5,w7:5,w8:5,w9:5},
     title: "America's Compute Gamble",
-    body: 'The US scores 100 on compute \u2014 half of global hyperscale data center capacity. But it\'s a net clean tech importer, sits at 20% clean energy, and its ECI ranking has been declining for a decade. Crank compute weight up and the US leads. Zero it out and it collapses to mid-table. A one-dimensional bet on AI supremacy.',
-    highlight: ['power'],
+    body: 'The US scores 100 on compute \u2014 half of global hyperscale data center capacity. But it\'s a net clean tech importer, sits at 20% clean energy, and its ECI ranking has been declining for a decade. China is the mirror image: 100 on clean tech, 60 on compute. Both are one-dimensional bets.',
+    highlight: null,
+    highlightFn: function(c){ return c.n === 'United States' || c.n === 'China'; },
     countries: 'United States (compute 100, clean tech 0, ECI rank declining 13th\u219220th) \u00b7 China (compute 60, clean tech 100 \u2014 the mirror image)'
   },
   moving: {
