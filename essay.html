@@ -4,36 +4,37 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Electrostate Dividend — Noah Raford</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <meta name="description" content="The 21st century belongs to nations that can connect cheap energy to cheap intelligence — and build the chain that turns electrons into everything else.">
 <meta property="og:title" content="The Electrostate Dividend">
 <meta property="og:description" content="The war in Iran exposes a deeper truth: the 21st century belongs to nations that can connect cheap energy to cheap intelligence.">
 <meta property="og:type" content="article">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════
    THE ELECTROSTATE DIVIDEND
-   Editorial longform — dark, precise, electric
+   Mineral Noir — editorial longform
+   Caravaggio lighting, industrial sublime
    ═══════════════════════════════════════════ */
 
 :root {
-  --bg: #0a0e14;
-  --bg-elevated: #111820;
-  --bg-surface: #161d28;
-  --bg-card: #1a2230;
-  --text: #e8ecf0;
-  --text-secondary: #8a95a5;
-  --text-dim: #4a5568;
-  --accent: #3b82f6;
-  --accent-glow: rgba(59, 130, 246, 0.15);
-  --accent-warm: #f59e0b;
-  --accent-red: #ef4444;
-  --accent-green: #10b981;
-  --rule: rgba(255,255,255,0.06);
-  --rule-accent: rgba(59, 130, 246, 0.3);
+  --bg: #080c12;
+  --bg-elevated: #0e1520;
+  --bg-surface: #141c28;
+  --text: #d8e0ea;
+  --text-secondary: #7a8899;
+  --text-dim: #3e4d5f;
+  --white: #eef2f7;
+  --accent: #3a7bd5;
+  --accent-glow: rgba(58, 123, 213, 0.12);
+  --accent-warm: #c98a0c;
+  --accent-red: #c43e3e;
+  --accent-green: #0ea572;
+  --rule: rgba(255,255,255,0.05);
   --serif: 'Cormorant Garamond', 'Georgia', serif;
-  --sans: 'Inter', -apple-system, sans-serif;
+  --sans: 'Outfit', -apple-system, sans-serif;
   --mono: 'JetBrains Mono', 'SF Mono', monospace;
 }
 
@@ -55,24 +56,42 @@ body {
   color: var(--text);
   font-family: var(--serif);
   font-weight: 400;
-  line-height: 1.75;
+  line-height: 1.78;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: rgba(59, 130, 246, 0.3);
-  color: #fff;
+  background: rgba(58, 123, 213, 0.3);
+  color: var(--white);
 }
 
-/* ═══ NOISE TEXTURE OVERLAY ═══ */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ═══ GRAIN OVERLAY ═══ */
 body::before {
   content: '';
   position: fixed;
   inset: 0;
-  opacity: 0.025;
+  opacity: 0.022;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   pointer-events: none;
-  z-index: 9999;
+  z-index: 100;
+}
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 1px;
+  background: var(--accent);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.08s linear;
 }
 
 /* ═══ ARTICLE CONTAINER ═══ */
@@ -82,82 +101,91 @@ body::before {
   padding: 0 24px;
 }
 
-/* ═══ HERO ═══ */
+/* ═══════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════ */
 .hero {
-  min-height: 100vh;
+  position: relative;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0 24px 80px;
-  position: relative;
   overflow: hidden;
 }
 
-.hero::before {
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+.hero-bg::after {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 100%;
+  inset: 0;
   background:
-    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 70%),
-    radial-gradient(ellipse 60% 40% at 70% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 60%);
-  pointer-events: none;
+    linear-gradient(to top, var(--bg) 0%, rgba(8,12,18,0.88) 35%, rgba(8,12,18,0.45) 65%, rgba(8,12,18,0.25) 100%),
+    radial-gradient(ellipse at center, transparent 30%, rgba(8,12,18,0.35) 100%);
 }
 
 .hero-inner {
+  position: relative;
+  z-index: 1;
   max-width: 900px;
   margin: 0 auto;
   width: 100%;
-  position: relative;
-  z-index: 1;
+  padding: 0 24px 80px;
 }
 
 .hero-kicker {
   font-family: var(--mono);
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 400;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.25em;
   text-transform: uppercase;
   color: var(--accent);
   margin-bottom: 32px;
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeUp 0.8s ease-out 0.3s forwards;
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
 }
 
 .hero-title {
   font-family: var(--serif);
-  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-size: clamp(2.8rem, 7.5vw, 5rem);
   font-weight: 600;
   line-height: 1.05;
   letter-spacing: -0.02em;
-  color: #fff;
+  color: var(--white);
   margin-bottom: 40px;
+  text-wrap: balance;
   opacity: 0;
   transform: translateY(30px);
-  animation: fadeUp 1s ease-out 0.5s forwards;
+  animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
 }
 
 .hero-title .accent {
-  background: linear-gradient(135deg, var(--accent) 0%, #60a5fa 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--accent);
 }
 
 .hero-dek {
   font-family: var(--serif);
-  font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+  font-size: clamp(1.1rem, 2.2vw, 1.35rem);
   font-weight: 400;
   font-style: italic;
   line-height: 1.6;
   color: var(--text-secondary);
-  max-width: 640px;
+  max-width: 600px;
   opacity: 0;
   transform: translateY(20px);
-  animation: fadeUp 0.8s ease-out 0.8s forwards;
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
 }
 
 .hero-byline {
@@ -165,14 +193,14 @@ body::before {
   padding-top: 24px;
   border-top: 1px solid var(--rule);
   font-family: var(--sans);
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 400;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--text-dim);
   opacity: 0;
   transform: translateY(15px);
-  animation: fadeUp 0.6s ease-out 1.1s forwards;
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1.1s forwards;
 }
 
 .hero-byline .author {
@@ -187,35 +215,85 @@ body::before {
   }
 }
 
-/* ═══ SECTION DIVIDERS ═══ */
+/* ═══════════════════════════════════════════
+   SECTION DIVIDERS
+   ═══════════════════════════════════════════ */
 .section-break {
   width: 100%;
   max-width: 720px;
   margin: 72px auto;
   padding: 0 24px;
   opacity: 0;
-  transition: opacity 0.8s ease;
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.section-break.visible {
-  opacity: 1;
-}
+.section-break.visible { opacity: 1; }
 
 .section-break-line {
   width: 100%;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, var(--rule) 20%, var(--accent) 50%, var(--rule) 80%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, var(--rule) 25%, rgba(58,123,213,0.2) 50%, var(--rule) 75%, transparent 100%);
 }
 
-/* ═══ BODY TEXT ═══ */
+/* ═══════════════════════════════════════════
+   FULL-BLEED SECTION IMAGES
+   ═══════════════════════════════════════════ */
+.section-image {
+  position: relative;
+  width: 100%;
+  height: 55vh;
+  min-height: 320px;
+  max-height: 600px;
+  overflow: hidden;
+  margin: 96px 0;
+}
+
+.section-image img {
+  width: 100%;
+  height: 120%;
+  object-fit: cover;
+  object-position: center;
+  position: absolute;
+  top: -10%;
+  left: 0;
+  will-change: transform;
+  transition: transform 0.1s linear;
+}
+
+.section-image::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom, var(--bg) 0%, transparent 18%, transparent 82%, var(--bg) 100%),
+    radial-gradient(ellipse at center, transparent 40%, rgba(8,12,18,0.3) 100%);
+  pointer-events: none;
+}
+
+.section-image-caption {
+  position: absolute;
+  bottom: 28px;
+  left: 28px;
+  z-index: 2;
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+/* ═══════════════════════════════════════════
+   BODY TEXT
+   ═══════════════════════════════════════════ */
 .body-text {
   font-size: 1.15rem;
   line-height: 1.8;
   color: var(--text);
   margin-bottom: 1.6em;
   opacity: 0;
-  transform: translateY(12px);
-  transition: all 0.6s ease;
+  transform: translateY(14px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .body-text.visible {
@@ -224,27 +302,30 @@ body::before {
 }
 
 .body-text strong {
-  color: #fff;
+  color: var(--white);
   font-weight: 600;
 }
 
 .body-text em {
   font-style: italic;
-  color: #c8d4e0;
+  color: #bcc8d6;
 }
 
-/* ═══ SECTION HEADINGS ═══ */
+/* ═══════════════════════════════════════════
+   SECTION HEADINGS
+   ═══════════════════════════════════════════ */
 .section-heading {
   font-family: var(--serif);
-  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
   font-weight: 600;
-  line-height: 1.2;
-  color: #fff;
-  margin-bottom: 36px;
+  line-height: 1.15;
+  color: var(--white);
+  margin-bottom: 40px;
   margin-top: 8px;
+  text-wrap: balance;
   opacity: 0;
-  transform: translateY(16px);
-  transition: all 0.7s ease;
+  transform: translateY(18px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .section-heading.visible {
@@ -252,15 +333,17 @@ body::before {
   transform: translateY(0);
 }
 
-/* ═══ PULL QUOTE ═══ */
+/* ═══════════════════════════════════════════
+   PULL QUOTES
+   ═══════════════════════════════════════════ */
 .pull-quote {
-  margin: 56px 0;
-  padding: 32px 0 32px 28px;
+  margin: 64px 0;
+  padding: 36px 0 36px 28px;
   border-left: 2px solid var(--accent);
   position: relative;
   opacity: 0;
-  transform: translateX(-12px);
-  transition: all 0.7s ease;
+  transform: translateX(-16px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .pull-quote.visible {
@@ -270,23 +353,25 @@ body::before {
 
 .pull-quote p {
   font-family: var(--serif);
-  font-size: 1.35rem;
+  font-size: 1.4rem;
   font-weight: 500;
   font-style: italic;
-  line-height: 1.55;
-  color: #fff;
+  line-height: 1.5;
+  color: var(--white);
 }
 
-/* ═══ THE CHAIN VISUALIZATION ═══ */
+/* ═══════════════════════════════════════════
+   THE CHAIN VISUALIZATION
+   ═══════════════════════════════════════════ */
 .chain-viz {
-  margin: 64px 0;
-  padding: 40px 32px;
+  margin: 72px 0;
+  padding: 44px 36px;
   background: var(--bg-elevated);
   border: 1px solid var(--rule);
   border-radius: 2px;
   opacity: 0;
-  transform: translateY(16px);
-  transition: all 0.8s ease;
+  transform: translateY(18px);
+  transition: all 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .chain-viz.visible {
@@ -296,11 +381,11 @@ body::before {
 
 .chain-label {
   font-family: var(--mono);
-  font-size: 0.6rem;
+  font-size: 0.58rem;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
 .chain-flow {
@@ -308,109 +393,173 @@ body::before {
   align-items: center;
   justify-content: center;
   gap: 0;
-  flex-wrap: wrap;
-  padding: 16px 0;
+  flex-wrap: nowrap;
+  padding: 12px 0;
 }
 
 .chain-node {
   font-family: var(--sans);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 500;
+  letter-spacing: 0.02em;
   color: var(--text);
-  padding: 10px 16px;
+  padding: 12px 18px;
   background: var(--bg-surface);
-  border: 1px solid rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(58,123,213,0.12);
   border-radius: 2px;
   white-space: nowrap;
-}
-
-.chain-arrow {
-  font-family: var(--mono);
-  font-size: 0.85rem;
-  color: var(--accent);
-  padding: 0 6px;
-  flex-shrink: 0;
-}
-
-/* ═══ COUNTRY CARDS ═══ */
-.country-card {
-  margin: 48px 0;
-  padding: 36px 32px;
-  background: var(--bg-elevated);
-  border: 1px solid var(--rule);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 2px 2px 0;
-  position: relative;
   opacity: 0;
-  transform: translateY(16px);
-  transition: all 0.7s ease;
+  transform: translateY(8px);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.country-card.visible {
+.chain-viz.visible .chain-node {
   opacity: 1;
   transform: translateY(0);
 }
 
-.country-header {
+.chain-viz.visible .chain-node:nth-child(1) { transition-delay: 0.1s; }
+.chain-viz.visible .chain-node:nth-child(3) { transition-delay: 0.25s; }
+.chain-viz.visible .chain-node:nth-child(5) { transition-delay: 0.4s; }
+.chain-viz.visible .chain-node:nth-child(7) { transition-delay: 0.55s; }
+
+.chain-connector {
+  width: 36px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(58,123,213,0.15), var(--accent), rgba(58,123,213,0.15));
+  flex-shrink: 0;
+  position: relative;
+}
+
+.chain-connector::after {
+  content: '';
+  position: absolute;
+  right: -1px;
+  top: -3px;
+  width: 6px;
+  height: 6px;
+  border-right: 1px solid var(--accent);
+  border-bottom: 1px solid var(--accent);
+  transform: rotate(-45deg);
+}
+
+/* ═══════════════════════════════════════════
+   COUNTRY FEATURES
+   ═══════════════════════════════════════════ */
+.country-feature {
+  margin: 80px 0;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.country-feature.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.country-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 21/9;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--bg-elevated);
+}
+
+.country-image-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.country-feature.visible .country-image-wrapper img {
+  transform: scale(1.04);
+}
+
+.country-image-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  padding: 16px 24px;
   display: flex;
-  align-items: baseline;
-  gap: 16px;
-  margin-bottom: 20px;
+  flex-direction: column;
+  align-items: flex-end;
+  background: linear-gradient(to top, rgba(8,12,18,0.85) 0%, transparent 100%);
+  min-width: 120px;
 }
 
-.country-name {
-  font-family: var(--serif);
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #fff;
-}
-
-.country-chain-score {
+.country-image-overlay .score-label {
   font-family: var(--mono);
-  font-size: 2rem;
+  font-size: 0.5rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.country-image-overlay .score-value {
+  font-family: var(--mono);
+  font-size: 3.5rem;
   font-weight: 500;
   line-height: 1;
 }
 
-.country-chain-score.high { color: var(--accent); }
-.country-chain-score.mid { color: var(--accent-warm); }
-.country-chain-score.low { color: var(--accent-red); }
+.score-value.high { color: var(--accent); }
+.score-value.mid { color: var(--accent-warm); }
+.score-value.low { color: var(--accent-red); }
 
-.country-chain-label {
-  font-family: var(--mono);
-  font-size: 0.55rem;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-left: auto;
+.country-text {
+  padding-top: 24px;
+}
+
+.country-name {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--rule);
 }
 
 .country-body {
   font-family: var(--serif);
-  font-size: 1rem;
+  font-size: 1.05rem;
   line-height: 1.8;
   color: var(--text);
 }
 
+.country-body p {
+  margin-bottom: 1.2em;
+}
+
+.country-body p:last-child {
+  margin-bottom: 0;
+}
+
 .country-body strong {
-  color: #fff;
+  color: var(--white);
   font-weight: 600;
 }
 
 .country-body em {
   font-style: italic;
-  color: #c8d4e0;
+  color: #bcc8d6;
 }
 
-/* ═══ SCORE CALLOUTS ═══ */
+/* ═══════════════════════════════════════════
+   SCORE CALLOUTS
+   ═══════════════════════════════════════════ */
 .score-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
-  margin: 56px 0;
+  margin: 64px 0;
   opacity: 0;
-  transform: translateY(12px);
-  transition: all 0.7s ease;
+  transform: translateY(14px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .score-grid.visible {
@@ -420,24 +569,19 @@ body::before {
 
 .score-cell {
   background: var(--bg-elevated);
-  padding: 24px 20px;
+  padding: 28px 20px;
   text-align: center;
 }
 
-.score-cell:first-child {
-  border-radius: 2px 0 0 2px;
-}
-
-.score-cell:last-child {
-  border-radius: 0 2px 2px 0;
-}
+.score-cell:first-child { border-radius: 2px 0 0 2px; }
+.score-cell:last-child { border-radius: 0 2px 2px 0; }
 
 .score-number {
   font-family: var(--mono);
-  font-size: 2.2rem;
+  font-size: 2.8rem;
   font-weight: 500;
   line-height: 1;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .score-number.blue { color: var(--accent); }
@@ -446,41 +590,45 @@ body::before {
 
 .score-country {
   font-family: var(--sans);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-secondary);
 }
 
-/* ═══ INLINE DATA ═══ */
+/* ═══════════════════════════════════════════
+   INLINE DATA
+   ═══════════════════════════════════════════ */
 .data-point {
   font-family: var(--mono);
-  font-size: 0.9em;
+  font-size: 0.88em;
   color: var(--accent);
   font-weight: 400;
 }
 
 .data-negative {
   font-family: var(--mono);
-  font-size: 0.9em;
+  font-size: 0.88em;
   color: var(--accent-red);
 }
 
 .data-positive {
   font-family: var(--mono);
-  font-size: 0.9em;
+  font-size: 0.88em;
   color: var(--accent-green);
 }
 
-/* ═══ FOOTER ═══ */
+/* ═══════════════════════════════════════════
+   FOOTER
+   ═══════════════════════════════════════════ */
 .essay-footer {
-  margin-top: 80px;
-  padding: 48px 0 96px;
+  margin-top: 96px;
+  padding: 56px 0 120px;
   border-top: 1px solid var(--rule);
   opacity: 0;
-  transform: translateY(12px);
-  transition: all 0.6s ease;
+  transform: translateY(14px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .essay-footer.visible {
@@ -490,7 +638,7 @@ body::before {
 
 .footer-bio {
   font-family: var(--sans);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   line-height: 1.7;
   color: var(--text-secondary);
   font-style: italic;
@@ -499,8 +647,8 @@ body::before {
 .footer-bio a {
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
-  transition: border-color 0.2s;
+  border-bottom: 1px solid rgba(58,123,213,0.25);
+  transition: border-color 0.3s;
 }
 
 .footer-bio a:hover {
@@ -511,18 +659,18 @@ body::before {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  margin-top: 24px;
+  margin-top: 28px;
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 400;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
   text-decoration: none;
-  padding: 12px 20px;
-  border: 1px solid rgba(59, 130, 246, 0.25);
+  padding: 14px 22px;
+  border: 1px solid rgba(58,123,213,0.2);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .footer-index-link:hover {
@@ -535,29 +683,20 @@ body::before {
   height: 14px;
 }
 
-/* ═══ PROGRESS BAR ═══ */
-.progress-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), #60a5fa);
-  width: 0%;
-  z-index: 1000;
-  transition: width 0.1s linear;
-}
-
-/* ═══ RESPONSIVE ═══ */
+/* ═══════════════════════════════════════════
+   RESPONSIVE
+   ═══════════════════════════════════════════ */
 @media (max-width: 768px) {
   html { font-size: 16px; }
 
-  .hero {
-    min-height: 90vh;
-    padding-bottom: 48px;
-  }
+  .hero-inner { padding-bottom: 48px; }
 
-  .article {
-    padding: 0 20px;
+  .article { padding: 0 20px; }
+
+  .section-image {
+    height: 40vh;
+    min-height: 240px;
+    margin: 64px 0;
   }
 
   .chain-flow {
@@ -565,9 +704,18 @@ body::before {
     gap: 0;
   }
 
-  .chain-arrow {
-    transform: rotate(90deg);
-    padding: 4px 0;
+  .chain-connector {
+    width: 1px;
+    height: 20px;
+    background: linear-gradient(180deg, rgba(58,123,213,0.15), var(--accent), rgba(58,123,213,0.15));
+  }
+
+  .chain-connector::after {
+    right: auto;
+    left: -3px;
+    top: auto;
+    bottom: -1px;
+    transform: rotate(45deg);
   }
 
   .score-grid {
@@ -575,38 +723,37 @@ body::before {
     gap: 1px;
   }
 
-  .country-header {
-    flex-wrap: wrap;
-    gap: 8px;
+  .score-cell:first-child { border-radius: 2px 2px 0 0; }
+  .score-cell:last-child { border-radius: 0 0 2px 2px; }
+
+  .country-feature { margin: 56px 0; }
+
+  .country-image-wrapper {
+    aspect-ratio: 16/9;
   }
 
-  .country-chain-label {
-    margin-left: 0;
-    width: 100%;
-    order: -1;
+  .country-image-overlay .score-value {
+    font-size: 2.5rem;
   }
 
-  .country-card {
-    padding: 24px 20px;
+  .chain-viz { padding: 28px 20px; }
+
+  .pull-quote {
+    margin: 48px 0;
+    padding-left: 20px;
   }
 
-  .chain-viz {
-    padding: 28px 20px;
-  }
+  .pull-quote p { font-size: 1.15rem; }
 
-  .pull-quote p {
-    font-size: 1.15rem;
-  }
+  .section-break { margin: 48px auto; }
+
+  .score-number { font-size: 2.2rem; }
 }
 
 @media (max-width: 480px) {
-  .hero-title {
-    font-size: 2.4rem;
-  }
-
-  .section-heading {
-    font-size: 1.6rem;
-  }
+  .hero-title { font-size: 2.2rem; }
+  .section-heading { font-size: 1.5rem; }
+  .country-name { font-size: 1.35rem; }
 }
 </style>
 </head>
@@ -614,8 +761,13 @@ body::before {
 
 <div class="progress-bar" id="progressBar"></div>
 
-<!-- ═══════════════════ HERO ═══════════════════ -->
+<!-- ═══════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════ -->
 <header class="hero">
+  <div class="hero-bg">
+    <img src="images/essay/01-hero-lithium-brine.jpg" alt="Aerial view of lithium brine evaporation pools at night, turquoise rectangles bisected by amber-lit transmission towers">
+  </div>
   <div class="hero-inner">
     <p class="hero-kicker">21st Century Resilience Index</p>
     <h1 class="hero-title">The <span class="accent">Electrostate</span> Dividend</h1>
@@ -626,7 +778,9 @@ body::before {
   </div>
 </header>
 
-<!-- ═══════════════════ BODY ═══════════════════ -->
+<!-- ═══════════════════════════════════════════
+     BODY
+     ═══════════════════════════════════════════ -->
 <main>
 
 <article class="article">
@@ -641,7 +795,10 @@ body::before {
 
 </article>
 
-<div class="section-break reveal"><div class="section-break-line"></div></div>
+<!-- ═══ SECTION IMAGE: Battery Factory ═══ -->
+<div class="section-image">
+  <img src="images/essay/02-compound-battery-factory.jpg" alt="Dark interior of automated battery manufacturing facility, robotic arms lit by individual task lights" loading="lazy">
+</div>
 
 <article class="article">
 
@@ -659,7 +816,10 @@ body::before {
 
 </article>
 
-<div class="section-break reveal"><div class="section-break-line"></div></div>
+<!-- ═══ SECTION IMAGE: Server Corridor ═══ -->
+<div class="section-image">
+  <img src="images/essay/03-chain-server-corridor.jpg" alt="Symmetrical data center corridor stretching to vanishing point, cold blue LED light reflected on polished floor" loading="lazy">
+</div>
 
 <article class="article">
 
@@ -673,11 +833,11 @@ body::before {
     <div class="chain-label">The Intelligence Chain</div>
     <div class="chain-flow">
       <div class="chain-node">Cheap Clean Energy</div>
-      <span class="chain-arrow">&rarr;</span>
+      <div class="chain-connector"></div>
       <div class="chain-node">Cheap Compute</div>
-      <span class="chain-arrow">&rarr;</span>
+      <div class="chain-connector"></div>
       <div class="chain-node">Abundant AI</div>
-      <span class="chain-arrow">&rarr;</span>
+      <div class="chain-connector"></div>
       <div class="chain-node">Productivity Transformation</div>
     </div>
   </div>
@@ -690,35 +850,35 @@ body::before {
 
   <div class="score-grid reveal">
     <div class="score-cell">
-      <div class="score-number blue">58</div>
+      <div class="score-number blue" data-target="58">0</div>
       <div class="score-country">China</div>
     </div>
     <div class="score-cell">
-      <div class="score-number blue">44</div>
+      <div class="score-number blue" data-target="44">0</div>
       <div class="score-country">Germany</div>
     </div>
     <div class="score-cell">
-      <div class="score-number blue">36</div>
+      <div class="score-number blue" data-target="36">0</div>
       <div class="score-country">South Korea</div>
     </div>
   </div>
 
   <div class="score-grid reveal" style="margin-top: 2px;">
     <div class="score-cell">
-      <div class="score-number amber">34</div>
+      <div class="score-number amber" data-target="34">0</div>
       <div class="score-country">Japan</div>
     </div>
     <div class="score-cell">
-      <div class="score-number red">11</div>
+      <div class="score-number red" data-target="11">0</div>
       <div class="score-country">United States</div>
     </div>
     <div class="score-cell">
-      <div class="score-number red">3</div>
+      <div class="score-number red" data-target="3">0</div>
       <div class="score-country">Qatar</div>
     </div>
   </div>
 
-  <p class="body-text reveal" style="margin-top: 48px;">These are not intuitive results. The US has more hyperscale data center capacity than any nation on earth. Singapore is one of the most technologically sophisticated city-states in history. But the geometric mean is unforgiving. A broken chain is a broken chain.</p>
+  <p class="body-text reveal" style="margin-top: 52px;">These are not intuitive results. The US has more hyperscale data center capacity than any nation on earth. Singapore is one of the most technologically sophisticated city-states in history. But the geometric mean is unforgiving. A broken chain is a broken chain.</p>
 
 </article>
 
@@ -728,73 +888,93 @@ body::before {
 
   <h2 class="section-heading reveal">Five Countries, Five Chains</h2>
 
-  <!-- CHINA -->
-  <div class="country-card reveal" style="border-left-color: var(--accent);">
-    <div class="country-header">
-      <span class="country-name">China</span>
-      <span class="country-chain-score high">58</span>
-      <span class="country-chain-label">Chain Score</span>
+  <!-- ═══ CHINA ═══ -->
+  <div class="country-feature reveal">
+    <div class="country-image-wrapper">
+      <img src="images/essay/04-china-solar-farm.jpg" alt="Aerial view of massive solar farm at dusk, geometric panels stretching to horizon bisected by a single road" loading="lazy">
+      <div class="country-image-overlay">
+        <span class="score-label">Chain Score</span>
+        <span class="score-value high" data-target="58">0</span>
+      </div>
     </div>
-    <div class="country-body">
-      <p>The only country on earth where the chain runs unbroken. It added <span class="data-point">278 GW</span> of solar in 2024 &mdash; more than the rest of the world combined &mdash; and manufactures <span class="data-point">80%</span> of global solar panels, <span class="data-point">83%</span> of batteries, and <span class="data-point">70%</span> of electric vehicles. Its compute infrastructure is scaling despite US export controls. Its economic complexity is deep enough to absorb AI across every industrial sector.</p>
-      <br>
-      <p>Execution capacity of <span class="data-point">81</span>, transition velocity of <span class="data-positive">+62</span>, capital mobilization of <span class="data-point">88</span>. China understood that completeness beats excellence. A chain with no zeroes beats a chain with one hundred and one zero. The blind spots are real: <span class="data-point">19.7%</span> clean energy (coal remains the backbone), climate exposure of <span class="data-point">66</span>, and a mineral refining monopoly built on extraction dependency it doesn't control. But the chain is connected. The dividend is flowing. And no other country is close.</p>
-    </div>
-  </div>
-
-  <!-- UNITED STATES -->
-  <div class="country-card reveal" style="border-left-color: var(--accent-red);">
-    <div class="country-header">
-      <span class="country-name">United States</span>
-      <span class="country-chain-score low">11</span>
-      <span class="country-chain-label">Chain Score</span>
-    </div>
-    <div class="country-body">
-      <p>The most dramatic inversion in the dataset. <span class="data-point">95</span> on compute and AI &mdash; half the world's hyperscale data center capacity, every frontier AI lab that matters, the undisputed leader in machine intelligence. And a chain score of eleven. Because the US manufactures almost no solar panels, almost no batteries, almost no EVs at scale. It is a net clean tech <em>importer</em> &mdash; the only country in the top tier of any dimension that produces none of the hardware the transition requires.</p>
-      <br>
-      <p>Execution capacity of <span class="data-point">50</span>. Transition velocity of <span class="data-positive">+2</span> &mdash; near-stagnant, with infrastructure decay actively eroding renewable gains. The IRA is real. The CHIPS Act is real. Whether American political culture permits these investments to compound across administrations &mdash; or whether each president partially reverses the last &mdash; is the question on which the chain hangs. An eleven is not a death sentence. It is a diagnosis.</p>
+    <div class="country-text">
+      <h3 class="country-name">China</h3>
+      <div class="country-body">
+        <p>The only country on earth where the chain runs unbroken. It added <span class="data-point">278 GW</span> of solar in 2024 &mdash; more than the rest of the world combined &mdash; and manufactures <span class="data-point">80%</span> of global solar panels, <span class="data-point">83%</span> of batteries, and <span class="data-point">70%</span> of electric vehicles. Its compute infrastructure is scaling despite US export controls. Its economic complexity is deep enough to absorb AI across every industrial sector.</p>
+        <p>Execution capacity of <span class="data-point">81</span>, transition velocity of <span class="data-positive">+62</span>, capital mobilization of <span class="data-point">88</span>. China understood that completeness beats excellence. A chain with no zeroes beats a chain with one hundred and one zero. The blind spots are real: <span class="data-point">19.7%</span> clean energy (coal remains the backbone), climate exposure of <span class="data-point">66</span>, and a mineral refining monopoly built on extraction dependency it doesn't control. But the chain is connected. The dividend is flowing. And no other country is close.</p>
+      </div>
     </div>
   </div>
 
-  <!-- SINGAPORE -->
-  <div class="country-card reveal" style="border-left-color: var(--accent-warm);">
-    <div class="country-header">
-      <span class="country-name">Singapore</span>
-      <span class="country-chain-score low">10</span>
-      <span class="country-chain-label">Chain Score</span>
+  <!-- ═══ UNITED STATES ═══ -->
+  <div class="country-feature reveal">
+    <div class="country-image-wrapper">
+      <img src="images/essay/05-usa-cracked-gpu.jpg" alt="Extreme macro of a GPU silicon die with iridescent circuit traces and a hairline fracture running through it" loading="lazy">
+      <div class="country-image-overlay">
+        <span class="score-label">Chain Score</span>
+        <span class="score-value low" data-target="11">0</span>
+      </div>
     </div>
-    <div class="country-body">
-      <p>The execution paradox. The highest execution capacity on earth &mdash; <span class="data-point">92</span> &mdash; with the lowest chain score in the top tier. Singapore can build anything. It proved this by transforming from a fishing village to a world-class city-state in forty years, deploying Temasek and GIC's <span class="data-point">$1.1T</span> with surgical precision. Its economic complexity (ECI <span class="data-point">1.83</span>) rivals Japan's. Its governance is without peer.</p>
-      <br>
-      <p>But clean energy share is <span class="data-negative">0.5%</span> &mdash; a tropical island with no wind, no hydro, no hinterland &mdash; and the geometric mean is unforgiving. Singapore's strategy &mdash; import clean energy from Australia via undersea cable, build AI infrastructure on regional power purchase agreements, leverage institutional quality to attract the chain rather than build every link domestically &mdash; is the most sophisticated workaround any nation has attempted. Whether a workaround can substitute for a chain remains the open question.</p>
-    </div>
-  </div>
-
-  <!-- GERMANY -->
-  <div class="country-card reveal" style="border-left-color: var(--accent);">
-    <div class="country-header">
-      <span class="country-name">Germany</span>
-      <span class="country-chain-score mid">44</span>
-      <span class="country-chain-label">Chain Score</span>
-    </div>
-    <div class="country-body">
-      <p>The quiet contender. The only major Western economy that both <em>designs and manufactures</em> clean technology at scale &mdash; a clean tech score of <span class="data-point">28</span>, more than double the next European country. The fourth-highest economic complexity on earth (ECI <span class="data-point">1.94</span>). Significant compute. Decent execution capacity at <span class="data-point">63</span>.</p>
-      <br>
-      <p>Germany's problem is not a broken chain but a <em>throttled</em> one: the nuclear exit dropped clean energy to <span class="data-point">24%</span>, gas dependency on Russia created an energy crisis, and permitting for renewables remains slower than physics demands. Transition velocity of <span class="data-positive">+20</span> is respectable but not fast enough. If Germany solves its energy input, its chain score could jump to <span class="data-point">55-60</span>, making it the only Western nation in China's tier. The Energiewende was the right instinct executed at the wrong speed.</p>
+    <div class="country-text">
+      <h3 class="country-name">United States</h3>
+      <div class="country-body">
+        <p>The most dramatic inversion in the dataset. <span class="data-point">95</span> on compute and AI &mdash; half the world's hyperscale data center capacity, every frontier AI lab that matters, the undisputed leader in machine intelligence. And a chain score of eleven. Because the US manufactures almost no solar panels, almost no batteries, almost no EVs at scale. It is a net clean tech <em>importer</em> &mdash; the only country in the top tier of any dimension that produces none of the hardware the transition requires.</p>
+        <p>Execution capacity of <span class="data-point">50</span>. Transition velocity of <span class="data-positive">+2</span> &mdash; near-stagnant, with infrastructure decay actively eroding renewable gains. The IRA is real. The CHIPS Act is real. Whether American political culture permits these investments to compound across administrations &mdash; or whether each president partially reverses the last &mdash; is the question on which the chain hangs. An eleven is not a death sentence. It is a diagnosis.</p>
+      </div>
     </div>
   </div>
 
-  <!-- UAE -->
-  <div class="country-card reveal" style="border-left-color: var(--accent-warm);">
-    <div class="country-header">
-      <span class="country-name">UAE</span>
-      <span class="country-chain-score low">7</span>
-      <span class="country-chain-label">Chain Score</span>
+  <!-- ═══ SINGAPORE ═══ -->
+  <div class="country-feature reveal">
+    <div class="country-image-wrapper">
+      <img src="images/essay/06-singapore-fiber-optic.jpg" alt="Fiber optic cable bundle with glass cores glowing teal against deep black" loading="lazy">
+      <div class="country-image-overlay">
+        <span class="score-label">Chain Score</span>
+        <span class="score-value low" data-target="10">0</span>
+      </div>
     </div>
-    <div class="country-body">
-      <p>The petrostate that understood the thesis before anyone else &mdash; and is building the chain from the hardest starting position. Execution capacity of <span class="data-point">82</span> (Barakah nuclear in twelve years, cities from desert). Transition velocity of <span class="data-positive">+28</span> (the fastest of any petrostate by a factor of three). Capital mobilization of <span class="data-point">70</span> (<span class="data-point">$1.7T</span> in deployable sovereign capital across ADIA, Mubadala, and ADQ).</p>
-      <br>
-      <p>The chain score of <span class="data-point">7</span> reflects the starting position: near-zero clean tech manufacturing and limited economic complexity. But the trajectory is the story. The UAE is betting that sovereign capital and execution speed can forge the chain faster than the oil clock runs out. If any petrostate makes the transition, it will be the UAE. Not because it has the chain today &mdash; it does not &mdash; but because it has the execution capacity and capital velocity to build one. The rest of the Gulf is watching. Most of them are not building.</p>
+    <div class="country-text">
+      <h3 class="country-name">Singapore</h3>
+      <div class="country-body">
+        <p>The execution paradox. The highest execution capacity on earth &mdash; <span class="data-point">92</span> &mdash; with the lowest chain score in the top tier. Singapore can build anything. It proved this by transforming from a fishing village to a world-class city-state in forty years, deploying Temasek and GIC's <span class="data-point">$1.1T</span> with surgical precision. Its economic complexity (ECI <span class="data-point">1.83</span>) rivals Japan's. Its governance is without peer.</p>
+        <p>But clean energy share is <span class="data-negative">0.5%</span> &mdash; a tropical island with no wind, no hydro, no hinterland &mdash; and the geometric mean is unforgiving. Singapore's strategy &mdash; import clean energy from Australia via undersea cable, build AI infrastructure on regional power purchase agreements, leverage institutional quality to attract the chain rather than build every link domestically &mdash; is the most sophisticated workaround any nation has attempted. Whether a workaround can substitute for a chain remains the open question.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ GERMANY ═══ -->
+  <div class="country-feature reveal">
+    <div class="country-image-wrapper">
+      <img src="images/essay/07-germany-welding.jpg" alt="Robotic welding arm in dark factory, brilliant arc throwing light across surrounding machinery" loading="lazy">
+      <div class="country-image-overlay">
+        <span class="score-label">Chain Score</span>
+        <span class="score-value mid" data-target="44">0</span>
+      </div>
+    </div>
+    <div class="country-text">
+      <h3 class="country-name">Germany</h3>
+      <div class="country-body">
+        <p>The quiet contender. The only major Western economy that both <em>designs and manufactures</em> clean technology at scale &mdash; a clean tech score of <span class="data-point">28</span>, more than double the next European country. The fourth-highest economic complexity on earth (ECI <span class="data-point">1.94</span>). Significant compute. Decent execution capacity at <span class="data-point">63</span>.</p>
+        <p>Germany's problem is not a broken chain but a <em>throttled</em> one: the nuclear exit dropped clean energy to <span class="data-point">24%</span>, gas dependency on Russia created an energy crisis, and permitting for renewables remains slower than physics demands. Transition velocity of <span class="data-positive">+20</span> is respectable but not fast enough. If Germany solves its energy input, its chain score could jump to <span class="data-point">55-60</span>, making it the only Western nation in China's tier. The Energiewende was the right instinct executed at the wrong speed.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ UAE ═══ -->
+  <div class="country-feature reveal">
+    <div class="country-image-wrapper">
+      <img src="images/essay/08-uae-nuclear.jpg" alt="Desert twilight with nuclear cooling towers in silhouette, narrow band of molten amber sky" loading="lazy">
+      <div class="country-image-overlay">
+        <span class="score-label">Chain Score</span>
+        <span class="score-value low" data-target="7">0</span>
+      </div>
+    </div>
+    <div class="country-text">
+      <h3 class="country-name">UAE</h3>
+      <div class="country-body">
+        <p>The petrostate that understood the thesis before anyone else &mdash; and is building the chain from the hardest starting position. Execution capacity of <span class="data-point">82</span> (Barakah nuclear in twelve years, cities from desert). Transition velocity of <span class="data-positive">+28</span> (the fastest of any petrostate by a factor of three). Capital mobilization of <span class="data-point">70</span> (<span class="data-point">$1.7T</span> in deployable sovereign capital across ADIA, Mubadala, and ADQ).</p>
+        <p>The chain score of <span class="data-point">7</span> reflects the starting position: near-zero clean tech manufacturing and limited economic complexity. But the trajectory is the story. The UAE is betting that sovereign capital and execution speed can forge the chain faster than the oil clock runs out. If any petrostate makes the transition, it will be the UAE. Not because it has the chain today &mdash; it does not &mdash; but because it has the execution capacity and capital velocity to build one. The rest of the Gulf is watching. Most of them are not building.</p>
+      </div>
     </div>
   </div>
 
@@ -814,7 +994,10 @@ body::before {
 
 </article>
 
-<div class="section-break reveal"><div class="section-break-line"></div></div>
+<!-- ═══ SECTION IMAGE: Oil Decomposition ═══ -->
+<div class="section-image">
+  <img src="images/essay/09-petrostate-oil.jpg" alt="Extreme macro of crude oil on water, iridescent rainbow sheen decomposing into droplets" loading="lazy">
+</div>
 
 <article class="article">
 
@@ -836,7 +1019,10 @@ body::before {
 
 </article>
 
-<div class="section-break reveal"><div class="section-break-line"></div></div>
+<!-- ═══ SECTION IMAGE: Cobalt Ore ═══ -->
+<div class="section-image">
+  <img src="images/essay/10-material-cobalt.jpg" alt="Chunk of raw cobalt ore, blue-black crystalline specimen lit like a Flemish still life" loading="lazy">
+</div>
 
 <article class="article">
 
@@ -882,7 +1068,7 @@ body::before {
 
   <p class="body-text reveal">China: <span class="data-point">58</span>. Germany: <span class="data-point">44</span>. South Korea: <span class="data-point">36</span>. Denmark: <span class="data-point">36</span>. The United States of America: <span class="data-point">11</span>. There are no adults in the room and no one is coming to save us. The only question is whether we can forge the chain fast enough to cross the gap between the world that is dying and the world that is struggling to be born.</p>
 
-  <div class="pull-quote reveal" style="border-left-color: #fff;">
+  <div class="pull-quote reveal" style="border-left-color: var(--white);">
     <p>The 21st century belongs to whoever connects the chain.</p>
   </div>
 
@@ -901,26 +1087,71 @@ body::before {
 
 <script>
 // ═══ SCROLL REVEAL ═══
-const observer = new IntersectionObserver((entries) => {
+const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
       entry.target.classList.add('visible');
     }
   });
 }, {
-  threshold: 0.1,
-  rootMargin: '0px 0px -40px 0px'
+  threshold: 0.08,
+  rootMargin: '0px 0px -30px 0px'
 });
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// ═══ SCORE COUNTER ANIMATION ═══
+const counterObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !entry.target.dataset.counted) {
+      entry.target.dataset.counted = 'true';
+      const target = parseInt(entry.target.dataset.target);
+      if (isNaN(target)) return;
+      const duration = 1200;
+      const start = performance.now();
+      const step = (now) => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        entry.target.textContent = Math.round(eased * target);
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe(el));
+
+// ═══ PARALLAX SECTION IMAGES ═══
+const sectionImages = document.querySelectorAll('.section-image img');
+const heroImg = document.querySelector('.hero-bg img');
+
+function updateParallax() {
+  const scrollY = window.scrollY;
+
+  if (heroImg) {
+    heroImg.style.transform = `translateY(${scrollY * 0.25}px) scale(1.05)`;
+  }
+
+  sectionImages.forEach(img => {
+    const rect = img.parentElement.getBoundingClientRect();
+    const viewH = window.innerHeight;
+    if (rect.bottom > 0 && rect.top < viewH) {
+      const progress = (viewH - rect.top) / (viewH + rect.height);
+      const offset = (progress - 0.5) * 60;
+      img.style.transform = `translateY(${offset}px)`;
+    }
+  });
+}
+
+window.addEventListener('scroll', updateParallax, { passive: true });
 
 // ═══ PROGRESS BAR ═══
 const progressBar = document.getElementById('progressBar');
 window.addEventListener('scroll', () => {
   const scrollTop = window.scrollY;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  const progress = (scrollTop / docHeight) * 100;
-  progressBar.style.width = progress + '%';
+  progressBar.style.width = (scrollTop / docHeight) * 100 + '%';
 }, { passive: true });
 </script>
 
