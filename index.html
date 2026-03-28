@@ -643,23 +643,18 @@ body::after {
   position: absolute;
   background: var(--surface-2);
   border: 1px solid var(--border);
-  border-top: 2px solid var(--blue);
-  padding: 0.65rem 0.8rem;
+  padding: 0.4rem 0.65rem;
   font-size: 0.72rem;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.12s;
+  transition: opacity 0.1s;
   z-index: 20;
-  min-width: 190px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+  min-width: 0;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
 
 .tooltip.visible { opacity: 1; }
-.tooltip .tt-name { font-family: var(--display); font-weight: 700; font-size: 0.88rem; margin-bottom: 0.35rem; color: var(--blue-dark); }
-.tooltip .tt-row { display: flex; justify-content: space-between; gap: 0.8rem; padding: 1.5px 0; }
-.tooltip .tt-label { color: var(--text-3); font-size: 0.62rem; }
-.tooltip .tt-val { font-family: var(--mono); font-weight: 600; font-size: 0.65rem; color: var(--text); }
-.tooltip .tt-divider { height: 1px; background: var(--border-faint); margin: 3px 0; }
+.tooltip .tt-name { font-family: var(--display); font-weight: 600; font-size: 0.78rem; color: var(--text); white-space: nowrap; }
 
 /* ═══ RIGHT PANEL ═══ */
 .right-panel {
@@ -1234,73 +1229,42 @@ body::after {
   padding: 0.8rem 1rem;
 }
 
-.detail-bars {
+.detail-scores {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  margin-bottom: 0.8rem;
+}
+
+.detail-score-cell {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
-  margin-bottom: 1rem;
-}
-
-.detail-bar-row {
-  display: flex;
   align-items: center;
-  gap: 0.5rem;
+  padding: 0.35rem 0;
+  flex: 1 0 20%;
+  min-width: 0;
+  background: var(--surface);
 }
 
-.detail-bar-label {
+.detail-score-val {
   font-family: var(--mono);
-  font-size: 0.62rem;
+  font-size: 0.7rem;
   font-weight: 600;
+  line-height: 1;
+  margin-bottom: 2px;
+}
+
+.detail-score-label {
+  font-family: var(--mono);
+  font-size: 0.5rem;
+  font-weight: 500;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  width: 4.5rem;
-  flex-shrink: 0;
-}
-
-.detail-bar-label.energy { color: var(--energy); }
-.detail-bar-label.ppp { color: var(--ppp); }
-.detail-bar-label.cleantech { color: var(--cleantech); }
-.detail-bar-label.compute { color: var(--compute); }
-.detail-bar-label.eci { color: var(--eci); }
-.detail-bar-label.state { color: var(--state); }
-.detail-bar-label.momentum { color: var(--momentum); }
-.detail-bar-label.resource { color: var(--resource); }
-.detail-bar-label.climate { color: var(--climate); }
-
-.detail-bar-track {
-  flex: 1;
-  height: 6px;
-  background: var(--border-faint);
-  position: relative;
+  color: var(--text-4);
+  white-space: nowrap;
   overflow: hidden;
-}
-
-.detail-bar-fill {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 100%;
-  transition: width 0.3s ease;
-}
-
-.detail-bar-fill.energy { background: var(--energy); }
-.detail-bar-fill.ppp { background: var(--ppp); }
-.detail-bar-fill.cleantech { background: var(--cleantech); }
-.detail-bar-fill.compute { background: var(--compute); }
-.detail-bar-fill.eci { background: var(--eci); }
-.detail-bar-fill.state { background: var(--state); }
-.detail-bar-fill.momentum { background: var(--momentum); }
-.detail-bar-fill.resource { background: var(--resource); }
-.detail-bar-fill.climate { background: var(--climate); }
-
-.detail-bar-val {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: var(--text-2);
-  width: 2rem;
-  text-align: right;
-  flex-shrink: 0;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .detail-desc {
@@ -2284,26 +2248,23 @@ function openDetail(name){
   }
 
   const dims=[
-    {key:'energy',label:'Energy',val:c.ceS},
-    {key:'capital',label:'Capital Mob.',val:c.cmS},
-    {key:'cleantech',label:'Clean Tech',val:c.ctS},
-    {key:'compute',label:'Compute & AI',val:c.coS},
-    {key:'eci',label:'ECI',val:c.ecS},
-    {key:'execution',label:'Exec. Cap.',val:c.exS},
-    {key:'velocity',label:'Velocity',val:c.tvS},
-    {key:'materials',label:'Materials',val:c.rmS},
-    {key:'climate',label:'Climate Exp.',val:c.cxS},
+    {color:'var(--energy)',label:'Energy',val:c.ceS},
+    {color:'var(--ppp)',label:'Capital',val:c.cmS},
+    {color:'var(--cleantech)',label:'ClnTech',val:c.ctS},
+    {color:'var(--compute)',label:'Compute',val:c.coS},
+    {color:'var(--eci)',label:'ECI',val:c.ecS},
+    {color:'var(--state)',label:'Exec',val:c.exS},
+    {color:'var(--momentum)',label:'Veloc',val:c.tvS},
+    {color:'var(--resource)',label:'Matrl',val:c.rmS},
+    {color:'var(--climate)',label:'Climate',val:c.cxS},
   ];
 
-  document.getElementById('detailBars').innerHTML=dims.map(d=>`
-    <div class="detail-bar-row">
-      <span class="detail-bar-label ${d.key}">${d.label}</span>
-      <div class="detail-bar-track">
-        <div class="detail-bar-fill ${d.key}" style="width:${d.val}%"></div>
-      </div>
-      <span class="detail-bar-val">${d.val.toFixed(0)}</span>
-    </div>
-  `).join('');
+  document.getElementById('detailBars').innerHTML='<div class="detail-scores">'+dims.map(d=>
+    `<div class="detail-score-cell">
+      <span class="detail-score-val" style="color:${d.color}">${d.val.toFixed(0)}</span>
+      <span class="detail-score-label">${d.label}</span>
+    </div>`
+  ).join('')+'</div>';
 
   document.getElementById('detailDesc').textContent=c.desc||'';
   panel.classList.add('open');
@@ -2320,27 +2281,23 @@ function renderComparison(primary, compare) {
   }
 
   var dims = [
-    {key:'energy',label:'Energy',v1:primary.ceS,v2:compare.ceS},
-    {key:'capital',label:'Capital Mob.',v1:primary.cmS,v2:compare.cmS},
-    {key:'cleantech',label:'Clean Tech',v1:primary.ctS,v2:compare.ctS},
-    {key:'compute',label:'Compute & AI',v1:primary.coS,v2:compare.coS},
-    {key:'eci',label:'ECI',v1:primary.ecS,v2:compare.ecS},
-    {key:'execution',label:'Exec. Cap.',v1:primary.exS,v2:compare.exS},
-    {key:'velocity',label:'Velocity',v1:primary.tvS,v2:compare.tvS},
-    {key:'materials',label:'Materials',v1:primary.rmS,v2:compare.rmS},
-    {key:'climate',label:'Climate Exp.',v1:primary.cxS,v2:compare.cxS}
+    {color:'var(--energy)',label:'Energy',v1:primary.ceS,v2:compare.ceS},
+    {color:'var(--ppp)',label:'Capital',v1:primary.cmS,v2:compare.cmS},
+    {color:'var(--cleantech)',label:'ClnTech',v1:primary.ctS,v2:compare.ctS},
+    {color:'var(--compute)',label:'Compute',v1:primary.coS,v2:compare.coS},
+    {color:'var(--eci)',label:'ECI',v1:primary.ecS,v2:compare.ecS},
+    {color:'var(--state)',label:'Exec',v1:primary.exS,v2:compare.exS},
+    {color:'var(--momentum)',label:'Veloc',v1:primary.tvS,v2:compare.tvS},
+    {color:'var(--resource)',label:'Matrl',v1:primary.rmS,v2:compare.rmS},
+    {color:'var(--climate)',label:'Climate',v1:primary.cxS,v2:compare.cxS}
   ];
 
-  document.getElementById('detailBars').innerHTML = dims.map(function(d) {
-    return '<div class="detail-bar-row">' +
-      '<span class="detail-bar-label ' + d.key + '">' + d.label + '</span>' +
-      '<div class="detail-bar-track" style="position:relative;">' +
-        '<div class="detail-bar-fill ' + d.key + '" style="width:' + d.v1 + '%;position:relative;z-index:2;"></div>' +
-        '<div style="width:' + d.v2 + '%;position:absolute;top:0;left:0;height:100%;background:var(--text-4);opacity:0.3;z-index:1;"></div>' +
-      '</div>' +
-      '<span class="detail-bar-val" style="font-size:0.6rem;">' + d.v1.toFixed(0) + '<span style="color:var(--text-4);"> / ' + d.v2.toFixed(0) + '</span></span>' +
+  document.getElementById('detailBars').innerHTML = '<div class="detail-scores">' + dims.map(function(d) {
+    return '<div class="detail-score-cell">' +
+      '<span class="detail-score-val" style="color:' + d.color + '">' + d.v1.toFixed(0) + '<span style="color:var(--text-4);font-size:0.55rem;"> /' + d.v2.toFixed(0) + '</span></span>' +
+      '<span class="detail-score-label">' + d.label + '</span>' +
     '</div>';
-  }).join('');
+  }).join('') + '</div>';
 
   document.getElementById('detailDesc').textContent = '';
 }
@@ -2616,9 +2573,7 @@ function update3DScene(){
 
   const sphereGeo=new THREE.SphereGeometry(1,12,8);
 
-  // Sort to find top 10 for labels
-  const sorted=[...data].sort((a,b)=>b.composite-a.composite);
-  const top10=new Set(sorted.slice(0,10).map(c=>c.n));
+  // No default labels on bubbles — hover shows name, click opens detail
 
   const w8=+document.getElementById('w8').value;
   const w9=+document.getElementById('w9').value;
@@ -2655,13 +2610,7 @@ function update3DScene(){
     scene3D.add(mesh);
     spheres3D.push(mesh);
 
-    // Top 10 labels
-    if(top10.has(c.n)){
-      const label=makeCountryLabel(c.n,cc);
-      label.position.set(px,py+radius+1.2,pz);
-      scene3D.add(label);
-      labelSprites3D.push(label);
-    }
+    // Labels added only on story highlight or hover — not by default
   });
 
   requestRender3D();
@@ -2695,22 +2644,7 @@ function on3DMouseMove(e){
     const c=obj.userData.country;
     if(c){
       const pr=canvasEl.closest('.viewscreen').getBoundingClientRect();
-      tt.innerHTML=`
-        <div class="tt-name">${c.n}</div>
-        <div class="tt-row"><span class="tt-label">Population</span><span class="tt-val">${c.pop}m</span></div>
-        <div class="tt-divider"></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--energy)">Energy</span><span class="tt-val">${c.ceS.toFixed(0)}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Clean Tech</span><span class="tt-val">${c.ctS.toFixed(0)}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute & AI</span><span class="tt-val">${c.coS.toFixed(0)}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--eci)">Complexity</span><span class="tt-val">${c.ecS.toFixed(0)}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--state)">Exec. Cap.</span><span class="tt-val">${c.exS.toFixed(0)}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--ppp)">Capital Mob.</span><span class="tt-val">${c.cmS.toFixed(0)}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--momentum)">Velocity</span><span class="tt-val">${c.tvS.toFixed(0)}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--resource)">Materials</span><span class="tt-val">${c.rmS.toFixed(0)}</span></div>
-        <div class="tt-row"><span class="tt-label" style="color:var(--climate)">Climate Exp.</span><span class="tt-val">${c.cxS.toFixed(0)}</span></div>
-        <div class="tt-divider"></div>
-        <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${c.composite.toFixed(1)}</span></div>
-        <div class="tt-row"><span class="tt-label">Chain</span><span class="tt-val" style="color:var(--energy)">${c.dividend.toFixed(0)}</span></div>`;
+      tt.innerHTML=`<div class="tt-name">${c.n}</div>`;
       positionTooltip(tt, e.clientX, e.clientY, canvasEl.closest('.viewscreen'));
       tt.classList.add('visible');
       canvasEl.style.cursor='pointer';
@@ -2814,13 +2748,7 @@ function render2D() {
     const opacity = (0.35 + c.composite / 100 * 0.5).toFixed(2);
     html += '<circle class="scatter-dot" cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+cc+'" fill-opacity="'+opacity+'" stroke="'+cc+'" stroke-opacity="0.3" stroke-width="0.5" data-country="'+c.n.replace(/"/g,'&quot;')+'"/>';
   });
-  // Top 10 labels
-  sorted.slice(0, 10).forEach(c => {
-    const cx = pad.left + (c.eSov / 100) * plotW;
-    const cy = pad.top + (1 - c.ePow / 100) * plotH;
-    const r = Math.max(3, 2 + Math.log10(Math.max(c.pop, 1)) * 2.5);
-    html += '<text x="'+(cx+r+3)+'" y="'+(cy-r)+'" class="annotation-text">'+c.n+'</text>';
-  });
+  // No default labels — hover shows name, click opens detail
   svg.innerHTML = html;
   // Event listeners
   svg.querySelectorAll('.scatter-dot').forEach(dot => {
@@ -2830,21 +2758,7 @@ function render2D() {
       if (!c) return;
       const tt = document.getElementById('tooltip');
       const pr = svg.closest('.viewscreen').getBoundingClientRect();
-      tt.innerHTML = '<div class="tt-name">'+c.n+'</div>'+
-        '<div class="tt-row"><span class="tt-label">Population</span><span class="tt-val">'+c.pop+'m</span></div>'+
-        '<div class="tt-divider"></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--energy)">Energy</span><span class="tt-val">'+c.ceS.toFixed(0)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--cleantech)">Clean Tech</span><span class="tt-val">'+c.ctS.toFixed(0)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--compute)">Compute & AI</span><span class="tt-val">'+c.coS.toFixed(0)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--eci)">Complexity</span><span class="tt-val">'+c.ecS.toFixed(0)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--state)">Exec. Cap.</span><span class="tt-val">'+c.exS.toFixed(0)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--ppp)">Capital Mob.</span><span class="tt-val">'+c.cmS.toFixed(0)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--momentum)">Velocity</span><span class="tt-val">'+c.tvS.toFixed(0)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--resource)">Materials</span><span class="tt-val">'+c.rmS.toFixed(0)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label" style="color:var(--climate)">Climate Exp.</span><span class="tt-val">'+c.cxS.toFixed(0)+'</span></div>'+
-        '<div class="tt-divider"></div>'+
-        '<div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">'+c.composite.toFixed(1)+'</span></div>'+
-        '<div class="tt-row"><span class="tt-label">Chain</span><span class="tt-val" style="color:var(--energy)">'+c.dividend.toFixed(0)+'</span></div>';
+      tt.innerHTML = '<div class="tt-name">'+c.n+'</div>';
       positionTooltip(tt, e.clientX, e.clientY, svg.closest('.viewscreen'));
       tt.classList.add('visible');
     });
