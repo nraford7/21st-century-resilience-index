@@ -1391,7 +1391,7 @@ html,body{height:100%;overflow:hidden;}
       <div class="section-label">Dimensions</div>
 
       <!-- X — Transition Readiness -->
-      <div class="slider-group-label">X — Transition Readiness <span class="axis-hint">What you have?</span></div>
+      <div class="slider-group-label">X — The Electrostate Chain <span class="axis-hint">Energy → Tech → Intelligence → Output</span></div>
       <div class="dim-compact energy">
         <span class="dim-tag">01</span>
         <div class="dim-info">
@@ -1558,6 +1558,7 @@ html,body{height:100%;overflow:hidden;}
       <button class="story-btn" data-story="moving">Who's Moving</button>
       <button class="story-btn" data-story="breadth">Breadth Wins</button>
       <button class="story-btn" data-story="crisis">Crisis States</button>
+      <button class="story-btn" data-story="chain">The Chain</button>
       <button class="story-btn" data-story="decay">Infrastructure Decay</button>
     </div>
     <svg id="scatter2D" style="display:none; width:100%; height:100%; position:absolute; top:0; left:0;"></svg>
@@ -2054,6 +2055,11 @@ function compute(){
     const _var=_dims.reduce((a,b)=>a+(b-_mean)**2,0)/_dims.length;
     const _std=Math.sqrt(_var);
     obj.breadth=Math.max(0,Math.min(100,(1-_std/0.35)*100));
+    // Electrostate Dividend: geometric mean of the chain (energy→manufacturing→intelligence→complexity).
+    // If any link is zero, the chain is broken and the dividend is zero.
+    // Rewards countries that CONNECT cheap energy to cheap compute to productive output.
+    const _chain=[Math.max(0.001,obj.ceN),Math.max(0.001,obj.ctN),Math.max(0.001,obj.coN),Math.max(0.001,obj.ecN)];
+    obj.dividend=Math.pow(_chain[0]*_chain[1]*_chain[2]*_chain[3],0.25)*100;
     obj.cluster=cluster(obj);
     return obj;
   });
@@ -2118,7 +2124,7 @@ function openDetail(name){
 
   const breadthEl=document.getElementById('detailBreadth');
   if(breadthEl){
-    breadthEl.innerHTML=`Breadth: <span style="font-weight:700;color:var(--blue)">${c.breadth.toFixed(0)}</span>/100 <span style="font-size:0.6rem;color:var(--text-4);margin-left:0.3rem;">${c.breadth>70?'Balanced':c.breadth>45?'Moderate':'Concentrated'}</span>`;
+    breadthEl.innerHTML=`Breadth: <span style="font-weight:700;color:var(--blue)">${c.breadth.toFixed(0)}</span> &nbsp; Chain: <span style="font-weight:700;color:var(--energy)">${c.dividend.toFixed(0)}</span> <span style="font-size:0.6rem;color:var(--text-4);margin-left:0.2rem;">${c.dividend>40?'Connected':c.dividend>20?'Partial':'Broken'}</span>`;
   }
 
   const dims=[
@@ -2547,7 +2553,8 @@ function on3DMouseMove(e){
         <div class="tt-row"><span class="tt-label" style="color:var(--resource)">Materials</span><span class="tt-val">${c.rmS.toFixed(0)}</span></div>
         <div class="tt-row"><span class="tt-label" style="color:var(--climate)">Climate Exp.</span><span class="tt-val">${c.cxS.toFixed(0)}</span></div>
         <div class="tt-divider"></div>
-        <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${c.composite.toFixed(1)}</span></div>`;
+        <div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">${c.composite.toFixed(1)}</span></div>
+        <div class="tt-row"><span class="tt-label">Chain</span><span class="tt-val" style="color:var(--energy)">${c.dividend.toFixed(0)}</span></div>`;
       positionTooltip(tt, e.clientX, e.clientY, canvasEl.closest('.viewscreen'));
       tt.classList.add('visible');
       canvasEl.style.cursor='pointer';
@@ -2680,7 +2687,8 @@ function render2D() {
         '<div class="tt-row"><span class="tt-label" style="color:var(--resource)">Materials</span><span class="tt-val">'+c.rmS.toFixed(0)+'</span></div>'+
         '<div class="tt-row"><span class="tt-label" style="color:var(--climate)">Climate Exp.</span><span class="tt-val">'+c.cxS.toFixed(0)+'</span></div>'+
         '<div class="tt-divider"></div>'+
-        '<div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">'+c.composite.toFixed(1)+'</span></div>';
+        '<div class="tt-row"><span class="tt-label">Composite</span><span class="tt-val" style="color:var(--blue-dark)">'+c.composite.toFixed(1)+'</span></div>'+
+        '<div class="tt-row"><span class="tt-label">Chain</span><span class="tt-val" style="color:var(--energy)">'+c.dividend.toFixed(0)+'</span></div>';
       positionTooltip(tt, e.clientX, e.clientY, svg.closest('.viewscreen'));
       tt.classList.add('visible');
     });
@@ -2755,6 +2763,14 @@ const storyPresets = {
     highlight: null,
     highlightFn: function(c){ return c.cxN > 0.60 && c.exN < 0.50; },
     countries: 'Bangladesh (climate 91.5, exec. cap. 32) \u00b7 Philippines (88.0, 45) \u00b7 India (87.5, 55) \u00b7 Pakistan (84.0, 30) \u00b7 Nigeria (78.5, 22)'
+  },
+  chain: {
+    weights: {w1:25,w2:25,w3:25,w4:25,w5:0,w6:0,w7:0,w8:0,w9:0},
+    title: 'The Electrostate Chain',
+    body: 'The electrostate thesis: cheap clean energy \u2192 clean tech manufacturing \u2192 cheap compute & AI \u2192 economic complexity & productivity. Weight only the four chain dimensions equally. Countries that connect all four links score highest. Countries with a broken link \u2014 the US (95 compute, 20% energy), China (100 clean tech, 20% energy), petrostates (zero on everything) \u2014 reveal where the chain snaps. The Chain score in the tooltip shows the geometric mean: if any link is zero, the dividend is zero.',
+    highlight: null,
+    highlightFn: function(c){ return c.dividend > 35; },
+    countries: 'China (chain 58 \u2014 only complete chain) \u00b7 Germany (44) \u00b7 S. Korea (36) \u00b7 Denmark (36) \u00b7 Japan (34) \u2014 vs US (11 \u2014 95 compute, zero clean tech) \u00b7 Singapore (10 \u2014 zero energy) \u00b7 Qatar (3)'
   },
   decay: {
     weights: {w1:0,w2:0,w3:0,w4:0,w5:30,w6:0,w7:50,w8:0,w9:0},
