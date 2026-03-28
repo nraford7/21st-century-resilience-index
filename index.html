@@ -2860,8 +2860,7 @@ function playStory(key) {
     if (activeStory) {
       labelCountries = data.filter(c => isTargetCountry(c));
     } else {
-      const top10 = new Set([...data].sort((a,b) => b.composite - a.composite).slice(0,10).map(c => c.n));
-      labelCountries = data.filter(c => top10.has(c.n));
+      labelCountries = [];
     }
 
     labelCountries.forEach(c => {
