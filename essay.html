@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Electrostate Dividend — Noah Raford</title>
+<meta name="description" content="The 21st century belongs to nations that can connect cheap energy to cheap intelligence — and build the chain that turns electrons into everything else.">
+<meta property="og:title" content="The Electrostate Dividend">
+<meta property="og:description" content="The war in Iran exposes a deeper truth: the 21st century belongs to nations that can connect cheap energy to cheap intelligence.">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   THE ELECTROSTATE DIVIDEND
+   Editorial longform — dark, precise, electric
+   ═══════════════════════════════════════════ */
+
+:root {
+  --bg: #0a0e14;
+  --bg-elevated: #111820;
+  --bg-surface: #161d28;
+  --bg-card: #1a2230;
+  --text: #e8ecf0;
+  --text-secondary: #8a95a5;
+  --text-dim: #4a5568;
+  --accent: #3b82f6;
+  --accent-glow: rgba(59, 130, 246, 0.15);
+  --accent-warm: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-green: #10b981;
+  --rule: rgba(255,255,255,0.06);
+  --rule-accent: rgba(59, 130, 246, 0.3);
+  --serif: 'Cormorant Garamond', 'Georgia', serif;
+  --sans: 'Inter', -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', 'SF Mono', monospace;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.75;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: rgba(59, 130, 246, 0.3);
+  color: #fff;
+}
+
+/* ═══ NOISE TEXTURE OVERLAY ═══ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ═══ ARTICLE CONTAINER ═══ */
+.article {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ═══ HERO ═══ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 24px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 40% at 70% 20%, rgba(245, 158, 11, 0.04) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+
+.hero-kicker {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 32px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease-out 0.3s forwards;
+}
+
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(3rem, 8vw, 5.5rem);
+  font-weight: 600;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 40px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s ease-out 0.5s forwards;
+}
+
+.hero-title .accent {
+  background: linear-gradient(135deg, var(--accent) 0%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-dek {
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 640px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.8s ease-out 0.8s forwards;
+}
+
+.hero-byline {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeUp 0.6s ease-out 1.1s forwards;
+}
+
+.hero-byline .author {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ═══ SECTION DIVIDERS ═══ */
+.section-break {
+  width: 100%;
+  max-width: 720px;
+  margin: 72px auto;
+  padding: 0 24px;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+
+.section-break.visible {
+  opacity: 1;
+}
+
+.section-break-line {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, var(--rule) 20%, var(--accent) 50%, var(--rule) 80%, transparent 100%);
+}
+
+/* ═══ BODY TEXT ═══ */
+.body-text {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--text);
+  margin-bottom: 1.6em;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.6s ease;
+}
+
+.body-text.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.body-text strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.body-text em {
+  font-style: italic;
+  color: #c8d4e0;
+}
+
+/* ═══ SECTION HEADINGS ═══ */
+.section-heading {
+  font-family: var(--serif);
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  font-weight: 600;
+  line-height: 1.2;
+  color: #fff;
+  margin-bottom: 36px;
+  margin-top: 8px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.7s ease;
+}
+
+.section-heading.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══ PULL QUOTE ═══ */
+.pull-quote {
+  margin: 56px 0;
+  padding: 32px 0 32px 28px;
+  border-left: 2px solid var(--accent);
+  position: relative;
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: all 0.7s ease;
+}
+
+.pull-quote.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.pull-quote p {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.55;
+  color: #fff;
+}
+
+/* ═══ THE CHAIN VISUALIZATION ═══ */
+.chain-viz {
+  margin: 64px 0;
+  padding: 40px 32px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.8s ease;
+}
+
+.chain-viz.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.chain-label {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 24px;
+}
+
+.chain-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-wrap: wrap;
+  padding: 16px 0;
+}
+
+.chain-node {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text);
+  padding: 10px 16px;
+  background: var(--bg-surface);
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.chain-arrow {
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  color: var(--accent);
+  padding: 0 6px;
+  flex-shrink: 0;
+}
+
+/* ═══ COUNTRY CARDS ═══ */
+.country-card {
+  margin: 48px 0;
+  padding: 36px 32px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 2px 2px 0;
+  position: relative;
+  opacity: 0;
+  transform: translateY(16px);
+  transition: all 0.7s ease;
+}
+
+.country-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.country-header {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.country-name {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.country-chain-score {
+  font-family: var(--mono);
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.country-chain-score.high { color: var(--accent); }
+.country-chain-score.mid { color: var(--accent-warm); }
+.country-chain-score.low { color: var(--accent-red); }
+
+.country-chain-label {
+  font-family: var(--mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+.country-body {
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--text);
+}
+
+.country-body strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.country-body em {
+  font-style: italic;
+  color: #c8d4e0;
+}
+
+/* ═══ SCORE CALLOUTS ═══ */
+.score-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin: 56px 0;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.7s ease;
+}
+
+.score-grid.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.score-cell {
+  background: var(--bg-elevated);
+  padding: 24px 20px;
+  text-align: center;
+}
+
+.score-cell:first-child {
+  border-radius: 2px 0 0 2px;
+}
+
+.score-cell:last-child {
+  border-radius: 0 2px 2px 0;
+}
+
+.score-number {
+  font-family: var(--mono);
+  font-size: 2.2rem;
+  font-weight: 500;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.score-number.blue { color: var(--accent); }
+.score-number.amber { color: var(--accent-warm); }
+.score-number.red { color: var(--accent-red); }
+
+.score-country {
+  font-family: var(--sans);
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+/* ═══ INLINE DATA ═══ */
+.data-point {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  color: var(--accent);
+  font-weight: 400;
+}
+
+.data-negative {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  color: var(--accent-red);
+}
+
+.data-positive {
+  font-family: var(--mono);
+  font-size: 0.9em;
+  color: var(--accent-green);
+}
+
+/* ═══ FOOTER ═══ */
+.essay-footer {
+  margin-top: 80px;
+  padding: 48px 0 96px;
+  border-top: 1px solid var(--rule);
+  opacity: 0;
+  transform: translateY(12px);
+  transition: all 0.6s ease;
+}
+
+.essay-footer.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-bio {
+  font-family: var(--sans);
+  font-size: 0.85rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.footer-bio a {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.3);
+  transition: border-color 0.2s;
+}
+
+.footer-bio a:hover {
+  border-color: var(--accent);
+}
+
+.footer-index-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 12px 20px;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.footer-index-link:hover {
+  background: var(--accent-glow);
+  border-color: var(--accent);
+}
+
+.footer-index-link svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* ═══ PROGRESS BAR ═══ */
+.progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), #60a5fa);
+  width: 0%;
+  z-index: 1000;
+  transition: width 0.1s linear;
+}
+
+/* ═══ RESPONSIVE ═══ */
+@media (max-width: 768px) {
+  html { font-size: 16px; }
+
+  .hero {
+    min-height: 90vh;
+    padding-bottom: 48px;
+  }
+
+  .article {
+    padding: 0 20px;
+  }
+
+  .chain-flow {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .chain-arrow {
+    transform: rotate(90deg);
+    padding: 4px 0;
+  }
+
+  .score-grid {
+    grid-template-columns: 1fr;
+    gap: 1px;
+  }
+
+  .country-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .country-chain-label {
+    margin-left: 0;
+    width: 100%;
+    order: -1;
+  }
+
+  .country-card {
+    padding: 24px 20px;
+  }
+
+  .chain-viz {
+    padding: 28px 20px;
+  }
+
+  .pull-quote p {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 2.4rem;
+  }
+
+  .section-heading {
+    font-size: 1.6rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<header class="hero">
+  <div class="hero-inner">
+    <p class="hero-kicker">21st Century Resilience Index</p>
+    <h1 class="hero-title">The <span class="accent">Electrostate</span> Dividend</h1>
+    <p class="hero-dek">The war in Iran exposes a deeper truth: the 21st century belongs to nations that can connect cheap energy to cheap intelligence &mdash; and build the chain that turns electrons into everything else.</p>
+    <div class="hero-byline">
+      By <span class="author">Noah Raford</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════════ BODY ═══════════════════ -->
+<main>
+
+<article class="article">
+
+  <p class="body-text reveal">In the spring of 1973, a dozen men in Riyadh made a decision that reshaped the global order for fifty years. The Arab oil embargo demonstrated, with devastating simplicity, that whoever controlled hydrocarbons controlled the world. Within months, the price of crude quadrupled. Western economies buckled. A generation of foreign policy was born.</p>
+
+  <p class="body-text reveal">Today, as American cruise missiles arc over the Strait of Hormuz and Iranian oil infrastructure burns, we are witnessing &mdash; in real time &mdash; the final convulsion of that order. Not because oil doesn't matter. It still does, desperately. But because the war in Iran is revealing, with brutal clarity, what a growing body of evidence has been whispering for a decade: the age of the petrostate is ending. And what replaces it will be determined not by who sits on the largest reserves of crude, but by who can forge a chain from clean energy to compute to intelligence to productivity &mdash; and keep every link intact.</p>
+
+  <div class="pull-quote reveal">
+    <p>The question is no longer <em>who has the oil</em>. It's <em>who can connect the chain</em>.</p>
+  </div>
+
+</article>
+
+<div class="section-break reveal"><div class="section-break-line"></div></div>
+
+<article class="article">
+
+  <h2 class="section-heading reveal">The Compound Problem</h2>
+
+  <p class="body-text reveal">I built what I call the 21st Century Resilience Index &mdash; a data-driven assessment of 85 nations across nine dimensions, designed to answer a deceptively simple question: who is structurally positioned to thrive in the century ahead?</p>
+
+  <p class="body-text reveal">The answer is uncomfortable. Not because it reveals a clear winner &mdash; it doesn't &mdash; but because it reveals that almost no one is ready.</p>
+
+  <p class="body-text reveal">The index measures three axes. <strong>Transition Readiness</strong>: do you have the technology? Clean energy share, clean tech manufacturing, compute and AI infrastructure, economic complexity. <strong>Power to Execute</strong>: can you actually build it? Execution capacity, capital mobilization, transition velocity. <strong>Compound Exposure</strong>: what are you up against? Climate vulnerability and resource and material security &mdash; including, critically, access to the lithium, cobalt, rare earths, and copper that the electrostate demands as hungrily as the petrostate demanded oil.</p>
+
+  <p class="body-text reveal">Put simply, the transition from fossil fuels to electrified infrastructure is not an energy problem. It is a <em>compound</em> capability problem. You need the technology, the money, the governance to deploy it, the materials to build it, and the velocity to do it all before climate exposure makes it moot. No single advantage is sufficient. And almost no one has all of them.</p>
+
+  <p class="body-text reveal">Only about eight to twelve countries are structurally positioned to lead: the Nordics, Switzerland, Singapore, South Korea, Japan, Germany, China, and arguably France, the Netherlands, and Australia. Below this top tier, the drop-off is steep &mdash; and it is getting steeper.</p>
+
+</article>
+
+<div class="section-break reveal"><div class="section-break-line"></div></div>
+
+<article class="article">
+
+  <h2 class="section-heading reveal">Cheap Electrons, Cheap Intelligence</h2>
+
+  <p class="body-text reveal">But the compound problem, as urgent as it is, understates the prize.</p>
+
+  <p class="body-text reveal">Here is the thesis the index forced me to confront: the electrostate transition is not ultimately about swapping one fuel source for another. It is about a <em>causal chain</em> &mdash; one that, if completed, produces a civilizational dividend so large it dwarfs anything the petrostate era delivered.</p>
+
+  <div class="chain-viz reveal">
+    <div class="chain-label">The Intelligence Chain</div>
+    <div class="chain-flow">
+      <div class="chain-node">Cheap Clean Energy</div>
+      <span class="chain-arrow">&rarr;</span>
+      <div class="chain-node">Cheap Compute</div>
+      <span class="chain-arrow">&rarr;</span>
+      <div class="chain-node">Abundant AI</div>
+      <span class="chain-arrow">&rarr;</span>
+      <div class="chain-node">Productivity Transformation</div>
+    </div>
+  </div>
+
+  <p class="body-text reveal">Healthcare. Manufacturing. Governance. Agriculture. Services. Finance. Education. Scientific research. All of it, transformed by cheap intelligence the way the 20th century was transformed by cheap oil.</p>
+
+  <p class="body-text reveal">This is not speculation. The economics are already visible. Training a frontier AI model costs tens of millions of dollars, and the majority of that cost is energy &mdash; powering the GPUs that do the work. Inference, the ongoing cost of <em>using</em> these models once trained, is even more energy-intensive at scale. Every dollar shaved off the price of a kilowatt-hour compounds across billions of queries, billions of decisions, billions of automated tasks. Cheap electrons are the substrate. Cheap compute is the mechanism. Cheap intelligence is the output.</p>
+
+  <p class="body-text reveal">I call this the <strong>Electrostate Dividend</strong> &mdash; and I measure it as the geometric mean of four chain dimensions: clean energy production, clean technology manufacturing, compute and AI infrastructure, and economic complexity. The geometric mean is deliberate. It is ruthless. A single zero in any dimension collapses the entire score, because a single broken link in the chain collapses the entire dividend.</p>
+
+  <div class="score-grid reveal">
+    <div class="score-cell">
+      <div class="score-number blue">58</div>
+      <div class="score-country">China</div>
+    </div>
+    <div class="score-cell">
+      <div class="score-number blue">44</div>
+      <div class="score-country">Germany</div>
+    </div>
+    <div class="score-cell">
+      <div class="score-number blue">36</div>
+      <div class="score-country">South Korea</div>
+    </div>
+  </div>
+
+  <div class="score-grid reveal" style="margin-top: 2px;">
+    <div class="score-cell">
+      <div class="score-number amber">34</div>
+      <div class="score-country">Japan</div>
+    </div>
+    <div class="score-cell">
+      <div class="score-number red">11</div>
+      <div class="score-country">United States</div>
+    </div>
+    <div class="score-cell">
+      <div class="score-number red">3</div>
+      <div class="score-country">Qatar</div>
+    </div>
+  </div>
+
+  <p class="body-text reveal" style="margin-top: 48px;">These are not intuitive results. The US has more hyperscale data center capacity than any nation on earth. Singapore is one of the most technologically sophisticated city-states in history. But the geometric mean is unforgiving. A broken chain is a broken chain.</p>
+
+</article>
+
+<div class="section-break reveal"><div class="section-break-line"></div></div>
+
+<article class="article">
+
+  <h2 class="section-heading reveal">Five Countries, Five Chains</h2>
+
+  <!-- CHINA -->
+  <div class="country-card reveal" style="border-left-color: var(--accent);">
+    <div class="country-header">
+      <span class="country-name">China</span>
+      <span class="country-chain-score high">58</span>
+      <span class="country-chain-label">Chain Score</span>
+    </div>
+    <div class="country-body">
+      <p>The only country on earth where the chain runs unbroken. It added <span class="data-point">278 GW</span> of solar in 2024 &mdash; more than the rest of the world combined &mdash; and manufactures <span class="data-point">80%</span> of global solar panels, <span class="data-point">83%</span> of batteries, and <span class="data-point">70%</span> of electric vehicles. Its compute infrastructure is scaling despite US export controls. Its economic complexity is deep enough to absorb AI across every industrial sector.</p>
+      <br>
+      <p>Execution capacity of <span class="data-point">81</span>, transition velocity of <span class="data-positive">+62</span>, capital mobilization of <span class="data-point">88</span>. China understood that completeness beats excellence. A chain with no zeroes beats a chain with one hundred and one zero. The blind spots are real: <span class="data-point">19.7%</span> clean energy (coal remains the backbone), climate exposure of <span class="data-point">66</span>, and a mineral refining monopoly built on extraction dependency it doesn't control. But the chain is connected. The dividend is flowing. And no other country is close.</p>
+    </div>
+  </div>
+
+  <!-- UNITED STATES -->
+  <div class="country-card reveal" style="border-left-color: var(--accent-red);">
+    <div class="country-header">
+      <span class="country-name">United States</span>
+      <span class="country-chain-score low">11</span>
+      <span class="country-chain-label">Chain Score</span>
+    </div>
+    <div class="country-body">
+      <p>The most dramatic inversion in the dataset. <span class="data-point">95</span> on compute and AI &mdash; half the world's hyperscale data center capacity, every frontier AI lab that matters, the undisputed leader in machine intelligence. And a chain score of eleven. Because the US manufactures almost no solar panels, almost no batteries, almost no EVs at scale. It is a net clean tech <em>importer</em> &mdash; the only country in the top tier of any dimension that produces none of the hardware the transition requires.</p>
+      <br>
+      <p>Execution capacity of <span class="data-point">50</span>. Transition velocity of <span class="data-positive">+2</span> &mdash; near-stagnant, with infrastructure decay actively eroding renewable gains. The IRA is real. The CHIPS Act is real. Whether American political culture permits these investments to compound across administrations &mdash; or whether each president partially reverses the last &mdash; is the question on which the chain hangs. An eleven is not a death sentence. It is a diagnosis.</p>
+    </div>
+  </div>
+
+  <!-- SINGAPORE -->
+  <div class="country-card reveal" style="border-left-color: var(--accent-warm);">
+    <div class="country-header">
+      <span class="country-name">Singapore</span>
+      <span class="country-chain-score low">10</span>
+      <span class="country-chain-label">Chain Score</span>
+    </div>
+    <div class="country-body">
+      <p>The execution paradox. The highest execution capacity on earth &mdash; <span class="data-point">92</span> &mdash; with the lowest chain score in the top tier. Singapore can build anything. It proved this by transforming from a fishing village to a world-class city-state in forty years, deploying Temasek and GIC's <span class="data-point">$1.1T</span> with surgical precision. Its economic complexity (ECI <span class="data-point">1.83</span>) rivals Japan's. Its governance is without peer.</p>
+      <br>
+      <p>But clean energy share is <span class="data-negative">0.5%</span> &mdash; a tropical island with no wind, no hydro, no hinterland &mdash; and the geometric mean is unforgiving. Singapore's strategy &mdash; import clean energy from Australia via undersea cable, build AI infrastructure on regional power purchase agreements, leverage institutional quality to attract the chain rather than build every link domestically &mdash; is the most sophisticated workaround any nation has attempted. Whether a workaround can substitute for a chain remains the open question.</p>
+    </div>
+  </div>
+
+  <!-- GERMANY -->
+  <div class="country-card reveal" style="border-left-color: var(--accent);">
+    <div class="country-header">
+      <span class="country-name">Germany</span>
+      <span class="country-chain-score mid">44</span>
+      <span class="country-chain-label">Chain Score</span>
+    </div>
+    <div class="country-body">
+      <p>The quiet contender. The only major Western economy that both <em>designs and manufactures</em> clean technology at scale &mdash; a clean tech score of <span class="data-point">28</span>, more than double the next European country. The fourth-highest economic complexity on earth (ECI <span class="data-point">1.94</span>). Significant compute. Decent execution capacity at <span class="data-point">63</span>.</p>
+      <br>
+      <p>Germany's problem is not a broken chain but a <em>throttled</em> one: the nuclear exit dropped clean energy to <span class="data-point">24%</span>, gas dependency on Russia created an energy crisis, and permitting for renewables remains slower than physics demands. Transition velocity of <span class="data-positive">+20</span> is respectable but not fast enough. If Germany solves its energy input, its chain score could jump to <span class="data-point">55-60</span>, making it the only Western nation in China's tier. The Energiewende was the right instinct executed at the wrong speed.</p>
+    </div>
+  </div>
+
+  <!-- UAE -->
+  <div class="country-card reveal" style="border-left-color: var(--accent-warm);">
+    <div class="country-header">
+      <span class="country-name">UAE</span>
+      <span class="country-chain-score low">7</span>
+      <span class="country-chain-label">Chain Score</span>
+    </div>
+    <div class="country-body">
+      <p>The petrostate that understood the thesis before anyone else &mdash; and is building the chain from the hardest starting position. Execution capacity of <span class="data-point">82</span> (Barakah nuclear in twelve years, cities from desert). Transition velocity of <span class="data-positive">+28</span> (the fastest of any petrostate by a factor of three). Capital mobilization of <span class="data-point">70</span> (<span class="data-point">$1.7T</span> in deployable sovereign capital across ADIA, Mubadala, and ADQ).</p>
+      <br>
+      <p>The chain score of <span class="data-point">7</span> reflects the starting position: near-zero clean tech manufacturing and limited economic complexity. But the trajectory is the story. The UAE is betting that sovereign capital and execution speed can forge the chain faster than the oil clock runs out. If any petrostate makes the transition, it will be the UAE. Not because it has the chain today &mdash; it does not &mdash; but because it has the execution capacity and capital velocity to build one. The rest of the Gulf is watching. Most of them are not building.</p>
+    </div>
+  </div>
+
+</article>
+
+<div class="section-break reveal"><div class="section-break-line"></div></div>
+
+<article class="article">
+
+  <h2 class="section-heading reveal">The Velocity Gap</h2>
+
+  <p class="body-text reveal">The chain scores tell you who has connected the links. The velocity scores tell you who is moving &mdash; and who is rotting.</p>
+
+  <p class="body-text reveal">China's transition velocity is <span class="data-positive">+62</span> &mdash; nearly double the next-highest country. The US is at <span class="data-positive">+2</span>. That gap is not a policy difference. It is a structural divergence. China is building the infrastructure to harvest cheap intelligence. The US is building the intelligence without the infrastructure to harvest it. As Francis Fukuyama argued in <em>Political Order and Political Decay</em>, institutional quality is not the same as institutional performance. America has the former. It has lost the latter.</p>
+
+  <p class="body-text reveal">The velocity gap makes the chain diagnosis dynamic. Germany at <span class="data-positive">+20</span> is closing links. Japan at <span class="data-positive">+18</span> is turning, slowly. The UAE at <span class="data-positive">+28</span> is forging a chain from the hardest starting position. Canada at <span class="data-negative">-2</span> is going backwards. And the US at <span class="data-positive">+2</span>, weighed down by a <span class="data-negative">-12</span> infrastructure condition delta (ASCE grade C-, bridges failing, grid aging), is essentially stagnant &mdash; deploying renewables with one hand while the built environment crumbles with the other.</p>
+
+</article>
+
+<div class="section-break reveal"><div class="section-break-line"></div></div>
+
+<article class="article">
+
+  <h2 class="section-heading reveal">The Petrostate Clock</h2>
+
+  <p class="body-text reveal">Which brings us back to the Strait of Hormuz.</p>
+
+  <p class="body-text reveal">The war in Iran has done what a thousand policy papers could not: it has made the petrostate vulnerability thesis <em>visceral</em>. The Houthi disruption of Red Sea shipping was a preview. Iranian retaliation against Gulf oil infrastructure is the main event. And the data underneath the headlines is merciless.</p>
+
+  <p class="body-text reveal">Qatar's Electrostate Dividend score is <span class="data-negative">3</span>. Its material security score is <span class="data-negative">7.6</span> out of 100. It imports <span class="data-point">90%</span> of its food. It desalinates virtually all of its water. It has zero critical mineral reserves. Its clean energy share is <span class="data-negative">0.2%</span>. The Qatar Investment Authority holds over <span class="data-point">$500B</span> in assets. It has invested approximately zero in the chain that connects energy to intelligence to productivity. Five hundred billion dollars, and not a single link forged.</p>
+
+  <p class="body-text reveal">Kuwait is worse: material security <span class="data-negative">9.1</span>, capital mobilization <span class="data-point">22</span>, transition velocity <span class="data-negative">-12</span>. That negative number means Kuwait is not merely stagnant &mdash; it is <em>regressing</em>. It is one of the wealthiest nations on earth per capita and it is moving backwards.</p>
+
+  <p class="body-text reveal">Saudi Arabia sits at <span class="data-negative">16.3</span> on material security, <span class="data-negative">-8</span> on velocity, <span class="data-negative">0.8%</span> clean energy. Vision 2030 is real &mdash; NEOM, the Red Sea Project, the PIF's <span class="data-point">$930B</span> &mdash; but the execution capacity score of <span class="data-point">55</span> tells the truth beneath the branding. Saudi Arabia can build prestige megaprojects. It has not demonstrated the ability to build the boring, essential infrastructure &mdash; transmission grids, rail networks, water systems, manufacturing supply chains &mdash; that the electrostate requires. You cannot leapfrog the chain. You have to build it.</p>
+
+  <p class="body-text reveal">The UAE is the sole exception, and the exception proves the rule. It scores <span class="data-point">82</span> on execution capacity, <span class="data-positive">+28</span> on transition velocity, <span class="data-point">70</span> on capital mobilization. It built the Barakah nuclear plant in twelve years. It has <span class="data-point">$1.7T</span> in deployable sovereign capital. If any petrostate forges the chain, it's the UAE. The rest are on a clock they can't buy their way off.</p>
+
+  <p class="body-text reveal">The Iran war accelerates this clock. Every missile strike on Kharg Island, every disrupted tanker in the strait, every insurance premium that spikes for Gulf shipping, makes the case for energy independence &mdash; for electrification &mdash; more urgent. The irony is exquisite: the war meant to protect oil infrastructure is accelerating the transition away from oil.</p>
+
+</article>
+
+<div class="section-break reveal"><div class="section-break-line"></div></div>
+
+<article class="article">
+
+  <h2 class="section-heading reveal">The Material Question</h2>
+
+  <p class="body-text reveal">But here is where the optimists need to be honest. The electrostate is not fossil-fuel-free. It is <em>different</em>-fuel-dependent.</p>
+
+  <p class="body-text reveal">Every solar panel requires silicon and silver. Every battery requires lithium, cobalt, and nickel. Every wind turbine requires rare earth magnets. Every EV requires copper &mdash; about four times as much as a combustion engine vehicle. Every data center requires staggering quantities of water for cooling and rare metals for the chips inside. The intelligence chain demands <em>more</em> material inputs than the energy transition alone, because it adds the compute layer &mdash; the GPUs, the networking hardware, the cooling infrastructure &mdash; on top of the generation and manufacturing layers.</p>
+
+  <p class="body-text reveal">And these minerals are concentrated in ways that mirror &mdash; and in some cases exceed &mdash; the concentration of oil. The Democratic Republic of Congo produces <span class="data-point">51%</span> of the world's cobalt. Indonesia produces <span class="data-point">24%</span> of nickel. Chile holds <span class="data-point">28%</span> of global copper reserves. Australia leads in lithium. China refines between <span class="data-point">60-80%</span> of virtually every critical mineral on the periodic table.</p>
+
+  <p class="body-text reveal">Australia jumps to <span class="data-positive">84.5</span> on material security &mdash; food-secure, water-secure, and sitting on the largest lithium reserves on earth plus significant rare earths, cobalt, and copper. Japan drops to <span class="data-negative">24.1</span> &mdash; near-total mineral import dependency, the same structural vulnerability as a petrostate but for different inputs. South Korea at <span class="data-negative">25.3</span>, Taiwan at <span class="data-negative">18.7</span> &mdash; the world's most sophisticated manufacturers, unable to source the materials for what they need to build. Their chains, like America's, have broken links. Different breaks. Same consequence.</p>
+
+  <p class="body-text reveal">As Joseph Tainter elaborated in <em>The Collapse of Complex Societies</em>, civilizations don't fail because they face challenges &mdash; they fail because they cannot maintain the complexity required to solve them. The intelligence chain is more complex than anything the petrostate era demanded. The countries that can manage this complexity will lead. The countries that cannot &mdash; regardless of their wealth, their military power, or their institutional heritage &mdash; will not.</p>
+
+</article>
+
+<div class="section-break reveal"><div class="section-break-line"></div></div>
+
+<article class="article">
+
+  <h2 class="section-heading reveal">What the Index Cannot See</h2>
+
+  <p class="body-text reveal">I want to be honest about the limits. The index measures structural position. It cannot measure political will. Japan has the highest manufacturing sophistication on earth and has not committed to the transition at the speed its capability allows. Germany has a dividend score of <span class="data-point">44</span> that could be <span class="data-point">60</span> if its energy transition hadn't stalled on gas dependency and nuclear phase-out. The index sees the capability. It cannot see the decision.</p>
+
+  <p class="body-text reveal">It cannot measure the compounding potential of scale. India at <span class="data-point">10.3%</span> clean energy looks mid-table. But India has 1.4 billion people, built the world's largest real-time payment system in eight years, and is adding renewable capacity at rates that will reshape global energy markets within a decade. If India connects even a partial chain &mdash; cheap solar to distributed compute to AI-augmented services for a billion people &mdash; the productivity implications dwarf anything a nation of five or fifty million could achieve. The index sees the snapshot. It cannot see the mass.</p>
+
+  <p class="body-text reveal">And it cannot model the single points of failure that could break everything. Taiwan's TSMC produces <span class="data-point">90%</span> of advanced semiconductors. ASML in the Netherlands is the sole supplier of extreme ultraviolet lithography machines. A single military incident in the Taiwan Strait doesn't just disrupt chip supply &mdash; it breaks the compute link of the intelligence chain for every country on earth. The chain is only as strong as its weakest link, and some links are shared across all nations simultaneously.</p>
+
+</article>
+
+<div class="section-break reveal"><div class="section-break-line"></div></div>
+
+<article class="article">
+
+  <p class="body-text reveal">The Iran war is a reminder that we are navigating the space between two worlds &mdash; the petrostate order that is dying and the electrostate order that has yet to be born. Karl Polanyi called such periods a <em>Great Transformation</em>: a time that "destroys old coping mechanisms and old safety nets, and creates new demands before new coping mechanisms are developed." We are in that space now. It is exciting, it is terrifying, and it will be, as the meme goes, a time of monsters.</p>
+
+  <p class="body-text reveal">Any diplomat will tell you the rules-based order is adapting. Give them a drink and they'll admit it's fracturing. The Iran war, the Red Sea blockade, the semiconductor standoff in the Taiwan Strait &mdash; these are not aberrations. They are the system reconfiguring itself around a new set of critical resources, a new hierarchy of capability, and a new prize: the Electrostate Dividend.</p>
+
+  <div class="pull-quote reveal">
+    <p>A nation with the world's best AI and no energy transition is a brain in a jar. A nation with cheap solar and no compute is a powerplant with nothing to power. A nation that manufactures everything but generates no intelligence is a factory running on yesterday's instructions.</p>
+  </div>
+
+  <p class="body-text reveal">China: <span class="data-point">58</span>. Germany: <span class="data-point">44</span>. South Korea: <span class="data-point">36</span>. Denmark: <span class="data-point">36</span>. The United States of America: <span class="data-point">11</span>. There are no adults in the room and no one is coming to save us. The only question is whether we can forge the chain fast enough to cross the gap between the world that is dying and the world that is struggling to be born.</p>
+
+  <div class="pull-quote reveal" style="border-left-color: #fff;">
+    <p>The 21st century belongs to whoever connects the chain.</p>
+  </div>
+
+  <div class="essay-footer reveal">
+    <p class="footer-bio">Noah Raford is a futurist and strategic advisor. The 21st Century Resilience Index is an open interactive tool.</p>
+    <a class="footer-index-link" href="https://nraford7.github.io/21st-century-resilience-index/">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Explore the Index
+    </a>
+  </div>
+
+</article>
+
+</main>
+
+<script>
+// ═══ SCROLL REVEAL ═══
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, {
+  threshold: 0.1,
+  rootMargin: '0px 0px -40px 0px'
+});
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ═══ PROGRESS BAR ═══
+const progressBar = document.getElementById('progressBar');
+window.addEventListener('scroll', () => {
+  const scrollTop = window.scrollY;
+  const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / docHeight) * 100;
+  progressBar.style.width = progress + '%';
+}, { passive: true });
+</script>
+
+</body>
+</html>
