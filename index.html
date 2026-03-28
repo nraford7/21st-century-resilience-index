@@ -2318,32 +2318,19 @@ function makeTextSprite(text,opts){
 function makeCountryLabel(text,color){
   const canvas=document.createElement('canvas');
   const ctx=canvas.getContext('2d');
-  const fontSize=80;
-  ctx.font='600 '+fontSize+'px IBM Plex Sans, sans-serif';
+  const fontSize=64;
+  ctx.font='500 '+fontSize+'px Outfit, sans-serif';
   const tw=ctx.measureText(text).width;
-  canvas.width=tw+24;
-  canvas.height=fontSize+16;
-  ctx.font='600 '+fontSize+'px IBM Plex Sans, sans-serif';
-  ctx.fillStyle='rgba(0,0,0,0.75)';
-  const r=6;
-  ctx.beginPath();
-  ctx.moveTo(r,0);ctx.lineTo(canvas.width-r,0);
-  ctx.quadraticCurveTo(canvas.width,0,canvas.width,r);
-  ctx.lineTo(canvas.width,canvas.height-r);
-  ctx.quadraticCurveTo(canvas.width,canvas.height,canvas.width-r,canvas.height);
-  ctx.lineTo(r,canvas.height);
-  ctx.quadraticCurveTo(0,canvas.height,0,canvas.height-r);
-  ctx.lineTo(0,r);
-  ctx.quadraticCurveTo(0,0,r,0);
-  ctx.closePath();
-  ctx.fill();
-  ctx.fillStyle='#080c12';
-  ctx.fillText(text,12,fontSize+2);
+  canvas.width=tw+16;
+  canvas.height=fontSize+12;
+  ctx.font='500 '+fontSize+'px Outfit, sans-serif';
+  ctx.fillStyle='rgba(255,255,255,0.9)';
+  ctx.fillText(text,8,fontSize);
   const tex=new THREE.CanvasTexture(canvas);
   tex.minFilter=THREE.LinearFilter;
   const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});
   const sprite=new THREE.Sprite(mat);
-  sprite.scale.set(canvas.width/canvas.height*1.4,1.4,1);
+  sprite.scale.set(canvas.width/canvas.height*1.2,1.2,1);
   return sprite;
 }
 
