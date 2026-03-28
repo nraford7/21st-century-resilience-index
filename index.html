@@ -1298,62 +1298,184 @@ html,body{height:100%;overflow:hidden;}
   .country-detail { width: 280px; }
 }
 
-@media (max-width: 900px) {
+.mobile-gate { display: none !important; }
+
+@media (max-width: 860px) {
+  .mobile-gate { display: none !important; }
+  html, body { overflow: auto; height: 100%; }
+
   .bridge {
-    grid-template-rows: 36px auto auto auto 26px;
-    height: auto;
-    overflow: auto;
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
   }
-  html,body { overflow: auto; }
+
+  .status-bar.top-bar {
+    flex-shrink: 0;
+    font-size: 0.6rem;
+    padding: 0 0.6rem;
+    height: 32px;
+  }
+
+  .status-bar.bottom-bar { display: none; }
+
   .command-area {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto 400px auto;
+    display: block;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background: var(--surface);
   }
-  .viewscreen { min-height: 400px; }
-  .analysis-scroll { padding: 0.5rem 0.8rem; }
+
+  .left-panel,
+  .viewscreen,
+  .right-panel,
+  .analysis-deck {
+    display: none;
+    width: 100%;
+    min-height: 0;
+  }
+
+  .left-panel.mob-active {
+    display: block;
+    height: auto;
+    overflow-y: auto;
+    padding-bottom: 60px;
+  }
+
+  .viewscreen.mob-active {
+    display: block;
+    height: calc(100dvh - 32px - 48px);
+    position: relative;
+  }
+
+  .right-panel.mob-active {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+    padding-bottom: 60px;
+  }
+
+  .analysis-deck.mob-active {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow-y: auto;
+    padding-bottom: 60px;
+  }
+
+  .analysis-deck .analysis-scroll {
+    max-height: none;
+    overflow: visible;
+  }
+
+  /* Story bar: horizontal scroll on mobile */
+  .story-bar {
+    position: absolute;
+    bottom: 4px;
+    left: 0;
+    right: 0;
+    transform: none;
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 0 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .story-btn { flex-shrink: 0; }
+
+  /* Detail panel: full screen on mobile */
   .country-detail {
     position: fixed;
-    top: 0; right: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     width: 100%;
-    height: 100vh;
+    height: 100%;
     z-index: 200;
+    overflow-y: auto;
+    padding-bottom: 60px;
   }
+
   .detail-backdrop {
     position: fixed;
     inset: 0;
     z-index: 195;
   }
+
+  /* Narrative overlay: full mobile treatment */
+  .narrative-overlay {
+    padding: 1.5rem 1rem;
+  }
+
+  .narrative-slide {
+    max-width: 100% !important;
+    padding-left: 1rem !important;
+    width: 100% !important;
+  }
+
+  .narrative-slide h2 { font-size: 1.3rem; }
+  .narrative-slide p { font-size: 0.85rem; }
+
+  /* Tooltip: fixed position on mobile */
+  .tooltip {
+    position: fixed;
+    bottom: 56px;
+    left: 8px;
+    right: 8px;
+    top: auto;
+    width: auto;
+    max-width: none;
+  }
+
+  /* Mobile tab bar */
+  .mobile-tabs {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 48px;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
+    z-index: 300;
+    gap: 0;
+  }
+
+  .mob-tab {
+    flex: 1;
+    border: none;
+    background: none;
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-4);
+    cursor: pointer;
+    transition: color 0.15s, background 0.15s;
+    padding: 0;
+  }
+
+  .mob-tab.active {
+    color: var(--blue);
+    background: var(--blue-wash);
+    border-top: 2px solid var(--blue);
+  }
+
+  .mob-tab:active { transform: scale(0.97); }
+
+  /* Hide vs-header excess on mobile */
+  .vs-header { gap: 0.3rem; }
+  .vs-label { font-size: 0.6rem; }
+
+  /* Legend: smaller on mobile */
+  .legend-3d { bottom: 32px; left: 4px; font-size: 0.6rem; padding: 4px 6px; }
 }
 
-.mobile-gate {
-  display: none;
-  padding: 2rem 1.5rem;
-  text-align: center;
-  font-family: var(--sans);
-  color: var(--text-2);
-  height: 100vh;
-  overflow-y: auto;
-  background: var(--surface);
-}
-.mobile-gate h2 {
-  font-family: var(--display);
-  font-size: 1.4rem;
-  font-weight: 800;
-  color: var(--blue-dark);
-  margin-bottom: 1rem;
-}
-.mobile-gate p {
-  font-size: 0.9rem;
-  line-height: 1.7;
-  margin-bottom: 0.8rem;
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
-}
-@media (max-width: 860px) {
-  .bridge { display: none !important; }
-  .mobile-gate { display: block; }
-  html, body { overflow: auto; }
+/* Hide mobile tabs on desktop */
+@media (min-width: 861px) {
+  .mobile-tabs { display: none; }
 }
 </style>
 </head>
@@ -1367,7 +1489,7 @@ html,body{height:100%;overflow:hidden;}
 <div class="bridge">
 
 <!-- ═══ TOP STATUS BAR ═══ -->
-<header class="status-bar">
+<header class="status-bar top-bar">
   <div class="status-left">
     <span class="pulse-dot"></span>
     <span class="sys-id">SYS.21CRI</span>
@@ -1910,6 +2032,7 @@ const annotations=[
 let data=[],sortCol='composite',sortDir=-1;
 let searchFilter='';
 let is3D = true;
+if (window.innerWidth <= 860) is3D = false;
 let activeStory=null;
 let compareCountry = null;
 
@@ -2957,6 +3080,66 @@ document.getElementById('topCards').addEventListener('click', function(e) {
   var entry = e.target.closest('.top-entry');
   if (entry && entry.dataset.country) openDetail(entry.dataset.country);
 });
+</script>
+<nav class="mobile-tabs" id="mobileTabs">
+  <button class="mob-tab active" data-panel="chart">Chart</button>
+  <button class="mob-tab" data-panel="rank">Rank</button>
+  <button class="mob-tab" data-panel="weights">Weights</button>
+  <button class="mob-tab" data-panel="analysis">Analysis</button>
+</nav>
+<script>
+// Mobile tab navigation
+(function() {
+  var tabs = document.getElementById('mobileTabs');
+  if (!tabs) return;
+
+  var panelMap = {
+    chart: document.querySelector('.viewscreen'),
+    rank: document.querySelector('.right-panel'),
+    weights: document.querySelector('.left-panel'),
+    analysis: document.querySelector('.analysis-deck')
+  };
+
+  function switchTab(tabName) {
+    // Remove active from all tabs
+    tabs.querySelectorAll('.mob-tab').forEach(function(t) { t.classList.remove('active'); });
+    // Remove mob-active from all panels
+    Object.values(panelMap).forEach(function(p) { if(p) p.classList.remove('mob-active'); });
+
+    // Activate selected
+    var btn = tabs.querySelector('[data-panel="' + tabName + '"]');
+    if (btn) btn.classList.add('active');
+    var panel = panelMap[tabName];
+    if (panel) panel.classList.add('mob-active');
+
+    // If switching to chart, trigger a resize for Three.js
+    if (tabName === 'chart') {
+      setTimeout(function() {
+        window.dispatchEvent(new Event('resize'));
+        if (typeof requestRender3D === 'function') requestRender3D();
+      }, 50);
+    }
+  }
+
+  tabs.addEventListener('click', function(e) {
+    var btn = e.target.closest('.mob-tab');
+    if (!btn) return;
+    switchTab(btn.dataset.panel);
+  });
+
+  // Default: show chart on mobile
+  if (window.innerWidth <= 860) {
+    switchTab('chart');
+  }
+
+  // Handle resize
+  window.addEventListener('resize', function() {
+    if (window.innerWidth <= 860) {
+      var hasActive = document.querySelector('.mob-active');
+      if (!hasActive) switchTab('chart');
+    }
+  });
+})();
 </script>
 </body>
 </html>
