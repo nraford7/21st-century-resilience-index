@@ -119,11 +119,11 @@ body::before {
   z-index: 0;
 }
 
-.hero-bg canvas {
+.hero-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  display: block;
+  object-position: center 40%;
 }
 
 .hero-bg::after {
@@ -131,10 +131,8 @@ body::before {
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to bottom, rgba(8,12,18,0.6) 0%, transparent 20%),
-    linear-gradient(to top, var(--bg) 0%, rgba(8,12,18,0.85) 25%, transparent 55%),
-    radial-gradient(ellipse at center, transparent 30%, rgba(8,12,18,0.3) 100%);
-  z-index: 1;
+    linear-gradient(to top, var(--bg) 0%, rgba(8,12,18,0.88) 35%, rgba(8,12,18,0.45) 65%, rgba(8,12,18,0.25) 100%),
+    radial-gradient(ellipse at center, transparent 30%, rgba(8,12,18,0.35) 100%);
 }
 
 .hero-inner {
@@ -768,7 +766,7 @@ body::before {
      ═══════════════════════════════════════════ -->
 <header class="hero">
   <div class="hero-bg">
-    <canvas id="heroCanvas" width="1280" height="720"></canvas>
+    <img src="images/essay/01-hero-lithium-brine.jpg" alt="Aerial view of lithium brine evaporation pools at night, turquoise rectangles bisected by amber-lit transmission towers">
   </div>
   <div class="hero-inner">
     <p class="hero-kicker">21st Century Resilience Index</p>
@@ -1088,88 +1086,6 @@ body::before {
 </main>
 
 <script>
-// ═══ HERO SCROLL-DRIVEN VIDEO (Frame Sequence) ═══
-(function() {
-  const FRAME_COUNT = 61;
-  const FRAME_PATH = 'images/essay/hero-frames/frame-';
-  const canvas = document.getElementById('heroCanvas');
-  const ctx = canvas.getContext('2d');
-  const frames = [];
-  let loaded = 0;
-  let currentFrame = -1;
-
-  // Preload all frames
-  for (let i = 1; i <= FRAME_COUNT; i++) {
-    const img = new Image();
-    img.src = FRAME_PATH + String(i).padStart(3, '0') + '.jpg';
-    img.onload = function() {
-      loaded++;
-      if (loaded === 1) drawFrame(0); // Show first frame immediately
-    };
-    frames.push(img);
-  }
-
-  function drawFrame(index) {
-    if (index === currentFrame) return;
-    if (index < 0 || index >= frames.length) return;
-    if (!frames[index].complete) return;
-    currentFrame = index;
-
-    const img = frames[index];
-    const cw = canvas.width;
-    const ch = canvas.height;
-    const canvasRatio = cw / ch;
-    const imgRatio = img.naturalWidth / img.naturalHeight;
-
-    // Cover-fit the image to the canvas
-    let sx = 0, sy = 0, sw = img.naturalWidth, sh = img.naturalHeight;
-    if (imgRatio > canvasRatio) {
-      sw = img.naturalHeight * canvasRatio;
-      sx = (img.naturalWidth - sw) / 2;
-    } else {
-      sh = img.naturalWidth / canvasRatio;
-      sy = (img.naturalHeight - sh) / 2;
-    }
-    ctx.drawImage(img, sx, sy, sw, sh, 0, 0, cw, ch);
-  }
-
-  // Resize canvas to match container
-  function resizeCanvas() {
-    const hero = canvas.closest('.hero-bg');
-    const rect = hero.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio, 2);
-    canvas.width = rect.width * dpr;
-    canvas.height = rect.height * dpr;
-    currentFrame = -1; // Force redraw
-  }
-
-  // Scroll handler — map scroll position to frame index
-  let ticking = false;
-  function onScroll() {
-    if (ticking) return;
-    ticking = true;
-    requestAnimationFrame(function() {
-      const hero = document.querySelector('.hero');
-      const heroH = hero.offsetHeight;
-      const scrollY = window.scrollY;
-      const progress = Math.min(Math.max(scrollY / heroH, 0), 1);
-      const frameIndex = Math.min(Math.floor(progress * FRAME_COUNT), FRAME_COUNT - 1);
-      drawFrame(frameIndex);
-      ticking = false;
-    });
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  window.addEventListener('resize', function() {
-    resizeCanvas();
-    onScroll();
-  });
-
-  // Initial setup
-  resizeCanvas();
-  onScroll();
-})();
-
 // ═══ SCROLL REVEAL ═══
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -1208,8 +1124,14 @@ document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe
 
 // ═══ PARALLAX SECTION IMAGES ═══
 const sectionImages = document.querySelectorAll('.section-image img');
+const heroImg = document.querySelector('.hero-bg img');
 
 function updateParallax() {
+  const scrollY = window.scrollY;
+  if (heroImg) {
+    heroImg.style.transform = `translateY(${scrollY * 0.25}px) scale(1.05)`;
+  }
+
   sectionImages.forEach(img => {
     const rect = img.parentElement.getBoundingClientRect();
     const viewH = window.innerHeight;
