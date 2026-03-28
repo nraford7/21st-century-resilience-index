@@ -541,59 +541,7 @@ body::after {
 .story-btn:active { transform: scale(0.97); }
 .story-btn.active { background: var(--blue); color: white; border-color: var(--blue); }
 
-.story-popup {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  background: rgba(14,21,32,0.92);
-  backdrop-filter: blur(6px);
-  border: 1px solid var(--border);
-  border-top: 3px solid var(--blue);
-  padding: 1.2rem 1.5rem;
-  max-width: 420px;
-  width: 85%;
-  box-shadow: 0 12px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
-  pointer-events: all;
-}
-
-.story-popup h3 {
-  font-family: var(--display);
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--blue-dark);
-  margin-bottom: 0.5rem;
-}
-
-.story-popup p {
-  font-size: 0.75rem;
-  color: var(--text-2);
-  line-height: 1.6;
-  margin-bottom: 0.4rem;
-}
-
-.story-popup .story-countries {
-  font-family: var(--mono);
-  font-size: 0.6rem;
-  color: var(--text-3);
-  margin-top: 0.5rem;
-  line-height: 1.6;
-}
-
-.story-popup .story-close {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-  font-size: 1rem;
-  color: var(--text-4);
-  cursor: pointer;
-  background: none;
-  border: none;
-  line-height: 1;
-}
-
-.story-popup .story-close:hover { color: var(--text); }
+/* Story content now renders in analysis deck — no popup needed */
 
 #scatter3D {
   width: 100%;
@@ -1494,6 +1442,7 @@ body::after {
   </div>
   <div class="status-center">Strategic Assessment // Compound Index // Oil Shock Resilience + Transition Readiness</div>
   <div class="status-right">
+    <a href="essay.html" style="color:var(--blue);text-decoration:none;border-bottom:1px solid rgba(58,123,213,0.3);transition:border-color 0.2s;" onmouseover="this.style.borderColor='var(--blue)'" onmouseout="this.style.borderColor='rgba(58,123,213,0.3)'">Read the Essay</a>
     <span>85 NAT</span>
     <span>9 DIM</span>
     <span>2024</span>
@@ -2421,8 +2370,8 @@ function init3DScene(){
   scene3D.background=new THREE.Color('#080c12');
 
   camera3D=new THREE.PerspectiveCamera(45,w/h,0.1,1000);
-  camera3D.position.set(70,60,70);
-  camera3D.lookAt(50,50,50);
+  camera3D.position.set(140,90,120);
+  camera3D.lookAt(50,40,50);
 
   const canvasEl=document.getElementById('scatter3D');
   renderer3D=new THREE.WebGLRenderer({canvas:canvasEl,antialias:true});
@@ -2682,8 +2631,8 @@ function resize3D(){
 
 function resetCamera() {
   if (!camera3D || !controls3D) return;
-  camera3D.position.set(70, 60, 70);
-  controls3D.target.set(50, 50, 50);
+  camera3D.position.set(140, 90, 120);
+  controls3D.target.set(50, 40, 50);
   controls3D.update();
   requestRender3D();
 }
@@ -2950,17 +2899,20 @@ function playStory(key) {
     }
   });
 
-  if (key === 'reset') return;
-
-  // Create popup
-  const popup = document.createElement('div');
-  popup.className = 'story-popup';
-  popup.innerHTML = '<button class="story-close">&times;</button>' +
-    '<h3>' + preset.title + '</h3>' +
-    '<p>' + preset.body + '</p>' +
-    '<div class="story-countries">' + preset.countries + '</div>';
-  document.querySelector('.viewscreen').appendChild(popup);
-  popup.querySelector('.story-close').addEventListener('click', function() { playStory('reset'); });
+  // Replace analysis deck content with story narrative (or restore on reset)
+  const analysisScroll = document.querySelector('.analysis-scroll');
+  if (!analysisScroll._originalHTML) {
+    analysisScroll._originalHTML = analysisScroll.innerHTML;
+  }
+  if (key === 'reset') {
+    analysisScroll.innerHTML = analysisScroll._originalHTML;
+    return;
+  }
+  analysisScroll.innerHTML =
+    '<h2>' + preset.title + '</h2>' +
+    '<p style="font-size:0.72rem;line-height:1.7;color:var(--text-2);max-width:900px;">' + preset.body + '</p>' +
+    '<div style="font-family:var(--mono);font-size:0.6rem;color:var(--text-4);margin-top:0.8rem;line-height:1.6;border-top:1px solid var(--border-faint);padding-top:0.6rem;">' + preset.countries + '</div>';
+  analysisScroll.scrollTop = 0;
 }
 
 let currentSlide = 0;
