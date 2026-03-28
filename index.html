@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>21CRI — 21st Century Resilience Index</title>
+<meta name="description" content="21CRI maps 85 nations across nine dimensions of transition resilience — clean energy, compute, economic complexity, execution capacity, and compound climate exposure.">
+<meta property="og:title" content="21CRI — 21st Century Resilience Index">
+<meta property="og:description" content="Which nations are actually built for the 21st century? Interactive 3D map of transition readiness, execution capacity, and climate exposure across 85 countries.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=IBM+Plex+Sans:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -11,41 +16,60 @@
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js" integrity="sha256-ArtK3nEPPmBzKeN6IfCYvDrHDrbjPa+KZeefTbeF57I=" crossorigin="anonymous"></script>
 <style>
 :root {
-  --bg: #e8edf4;
-  --surface: #f6f8fb;
-  --surface-2: #ffffff;
-  --border: #bcc6d4;
-  --border-light: #d4dce8;
-  --border-faint: #e4eaf2;
-  --text: #101820;
-  --text-2: #384458;
-  --text-3: #6e7c90;
-  --text-4: #9aa8b8;
-  --blue-dark: #0c2540;
-  --blue: #165a96;
-  --blue-mid: #2a80c0;
-  --blue-light: #5aace0;
-  --blue-pale: #a4cee8;
-  --blue-ghost: #d6e8f4;
-  --blue-wash: rgba(22,90,150,0.05);
-  --energy: #0a7058;
-  --ppp: #9a6508;
-  --cleantech: #4838a8;
-  --compute: #146098;
-  --eci: #b45309;
-  --state: #7c3aed;
-  --momentum: #dc2626;
-  --resource: #166534;
-  --climate: #b91c1c;
-  --danger: #a82028;
+  --bg: #080c12;
+  --surface: #0e1520;
+  --surface-2: #141c28;
+  --border: #1e2a3a;
+  --border-light: #1a2535;
+  --border-faint: #141e2c;
+  --text: #d8e0ea;
+  --text-2: #a8b4c4;
+  --text-3: #7a8899;
+  --text-4: #4a5a6e;
+  --blue-dark: #c8d8ec;
+  --blue: #3a7bd5;
+  --blue-mid: #5a9ae0;
+  --blue-light: #6aafe8;
+  --blue-pale: #2a4a6a;
+  --blue-ghost: #162030;
+  --blue-wash: rgba(58,123,213,0.08);
+  --energy: #10b981;
+  --ppp: #d4940a;
+  --cleantech: #7c6ce0;
+  --compute: #3a90d0;
+  --eci: #e0850a;
+  --momentum: #ef4444;
+  --state: #a78bfa;
+  --resource: #22c55e;
+  --climate: #f87171;
+  --danger: #dc3545;
   --sans: 'IBM Plex Sans', -apple-system, sans-serif;
   --mono: 'JetBrains Mono', 'SF Mono', monospace;
   --display: 'Outfit', sans-serif;
-  --cluster-crisis: #991b1b;
+  --cluster-crisis: #ef4444;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{height:100%;overflow:hidden;}
+
+/* ═══ GRAIN TEXTURE ═══ */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  opacity: 0.022;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 100;
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue-mid);
+  outline-offset: 2px;
+  border-radius: 1px;
+}
+
+.top-score, .axis-weight-val, .wv, .detail-composite { font-variant-numeric: tabular-nums; }
 
 /* ═══ BRIDGE LAYOUT ═══ */
 .bridge {
@@ -259,7 +283,6 @@ html,body{height:100%;overflow:hidden;}
 
 /* Dimension hover tooltips */
 .dim-tip {
-  display: none;
   position: absolute;
   left: 0;
   top: 100%;
@@ -271,10 +294,20 @@ html,body{height:100%;overflow:hidden;}
   color: var(--text-2);
   line-height: 1.5;
   z-index: 20;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
 }
 
-.dim-compact:hover .dim-tip { display: block; }
+.dim-compact:hover .dim-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0s;
+}
 
 /* Sliders vertical */
 .slider-v {
@@ -514,14 +547,14 @@ html,body{height:100%;overflow:hidden;}
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  background: rgba(246,248,251,0.92);
+  background: rgba(14,21,32,0.92);
   backdrop-filter: blur(6px);
   border: 1px solid var(--border);
   border-top: 3px solid var(--blue);
   padding: 1.2rem 1.5rem;
   max-width: 420px;
   width: 85%;
-  box-shadow: 0 12px 40px rgba(12,37,64,0.15), inset 0 1px 0 rgba(255,255,255,0.15);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.05);
   pointer-events: all;
 }
 
@@ -577,7 +610,7 @@ html,body{height:100%;overflow:hidden;}
   bottom: 36px;
   left: 10px;
   z-index: 6;
-  background: rgba(246,248,251,0.88);
+  background: rgba(14,21,32,0.88);
   backdrop-filter: blur(3px);
   border: 1px solid var(--border-light);
   padding: 6px 10px;
@@ -618,7 +651,7 @@ html,body{height:100%;overflow:hidden;}
   transition: opacity 0.12s;
   z-index: 20;
   min-width: 190px;
-  box-shadow: 0 6px 24px rgba(12,37,64,0.12);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
 }
 
 .tooltip.visible { opacity: 1; }
@@ -868,21 +901,21 @@ html,body{height:100%;overflow:hidden;}
 
 /* Profile tags */
 .tag-capable {
-  background: rgba(124,58,237,0.08);
+  background: rgba(167,139,250,0.1);
   color: var(--state);
-  border: 1px solid rgba(124,58,237,0.2);
+  border: 1px solid rgba(167,139,250,0.15);
 }
 .tag-momentum {
-  background: rgba(220,38,38,0.06);
+  background: rgba(239,68,68,0.08);
   color: var(--momentum);
-  border: 1px solid rgba(220,38,38,0.15);
+  border: 1px solid rgba(239,68,68,0.12);
 }
 
 /* ═══ MODAL ═══ */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(12,37,64,0.5);
+  background: rgba(0,0,0,0.5);
   backdrop-filter: blur(4px);
   z-index: 100;
   display: flex;
@@ -905,7 +938,7 @@ html,body{height:100%;overflow:hidden;}
   width: 90%;
   padding: 2rem 2.2rem;
   position: relative;
-  box-shadow: 0 20px 60px rgba(12,37,64,0.2);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
 }
 
 .modal h2 {
@@ -967,7 +1000,7 @@ html,body{height:100%;overflow:hidden;}
   transition: background 0.15s;
 }
 
-.modal-btn:hover { background: var(--blue-dark); }
+.modal-btn:hover { background: #2563eb; }
 .modal-btn:active { transform: scale(0.97); }
 
 .modal .src {
@@ -981,7 +1014,7 @@ html,body{height:100%;overflow:hidden;}
 .narrative-overlay {
   position: fixed;
   inset: 0;
-  background: linear-gradient(90deg, rgba(12,37,64,0.72) 0%, rgba(12,37,64,0.55) 50%, rgba(12,37,64,0.18) 100%);
+  background: linear-gradient(90deg, rgba(8,12,18,0.85) 0%, rgba(8,12,18,0.7) 50%, rgba(8,12,18,0.4) 100%);
   backdrop-filter: blur(6px);
   z-index: 100;
   display: flex;
@@ -999,7 +1032,7 @@ html,body{height:100%;overflow:hidden;}
   width: 45%;
   padding: 2.5rem 3rem;
   position: relative;
-  box-shadow: 0 24px 80px rgba(12,37,64,0.25);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.25);
   opacity: 0;
   transform: translateY(20px);
   transition: opacity 0.4s ease, transform 0.4s ease;
@@ -1073,7 +1106,7 @@ html,body{height:100%;overflow:hidden;}
   transition: background 0.15s;
 }
 
-.narrative-btn:hover { background: var(--blue-dark); }
+.narrative-btn:hover { background: #2563eb; }
 .narrative-btn:active { transform: scale(0.97); }
 
 .narrative-btn.skip {
@@ -1134,7 +1167,7 @@ html,body{height:100%;overflow:hidden;}
   z-index: 50;
   display: flex;
   flex-direction: column;
-  box-shadow: -8px 0 32px rgba(12,37,64,0.12);
+  box-shadow: -8px 0 32px rgba(0,0,0,0.12);
   transform: translateX(100%);
   transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
@@ -1285,7 +1318,7 @@ html,body{height:100%;overflow:hidden;}
   position: absolute;
   inset: 0;
   z-index: 45;
-  background: rgba(12,37,64,0.08);
+  background: rgba(0,0,0,0.08);
 }
 
 .detail-backdrop.open {
@@ -1686,13 +1719,13 @@ html,body{height:100%;overflow:hidden;}
     <svg id="scatter2D" style="display:none; width:100%; height:100%; position:absolute; top:0; left:0;"></svg>
     <canvas id="scatter3D"></canvas>
     <div class="legend-3d" id="legend3d">
-      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#0a7058"></span><span class="legend-3d-label">Balanced Leaders</span></div>
-      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#b45309"></span><span class="legend-3d-label">Emerging Electrostates</span></div>
-      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#165a96"></span><span class="legend-3d-label">Single-Dim Powers</span></div>
-      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#a82028"></span><span class="legend-3d-label">Petrostates</span></div>
-      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#991b1b"></span><span class="legend-3d-label">Crisis States</span></div>
-      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#7c3aed"></span><span class="legend-3d-label">Clean but Fragile</span></div>
-      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#6b7094"></span><span class="legend-3d-label">Other</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#10b981"></span><span class="legend-3d-label">Balanced Leaders</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#e0850a"></span><span class="legend-3d-label">Emerging Electrostates</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#3a7bd5"></span><span class="legend-3d-label">Single-Dim Powers</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#dc3545"></span><span class="legend-3d-label">Petrostates</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#ef4444"></span><span class="legend-3d-label">Crisis States</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#a78bfa"></span><span class="legend-3d-label">Clean but Fragile</span></div>
+      <div class="legend-3d-item"><span class="legend-3d-dot" style="background:#7a8899"></span><span class="legend-3d-label">Other</span></div>
     </div>
     <div class="tooltip" id="tooltip"></div>
   </div>
@@ -2087,13 +2120,13 @@ function cluster(c) {
 }
 
 const clusterColors = {
-  leader: '#0a7058',
-  latent: '#b45309',
-  power: '#165a96',
-  petro: '#a82028',
-  fragile: '#7c3aed',
-  crisis: '#991b1b',
-  default: '#6b7094'
+  leader: '#10b981',
+  latent: '#e0850a',
+  power: '#3a7bd5',
+  petro: '#dc3545',
+  fragile: '#a78bfa',
+  crisis: '#ef4444',
+  default: '#7a8899'
 };
 
 const clusterTags = {
@@ -2385,7 +2418,7 @@ function makeCountryLabel(text,color){
   canvas.width=tw+24;
   canvas.height=fontSize+16;
   ctx.font='600 '+fontSize+'px IBM Plex Sans, sans-serif';
-  ctx.fillStyle='rgba(12,37,64,0.75)';
+  ctx.fillStyle='rgba(0,0,0,0.75)';
   const r=6;
   ctx.beginPath();
   ctx.moveTo(r,0);ctx.lineTo(canvas.width-r,0);
@@ -2398,7 +2431,7 @@ function makeCountryLabel(text,color){
   ctx.quadraticCurveTo(0,0,r,0);
   ctx.closePath();
   ctx.fill();
-  ctx.fillStyle='#ffffff';
+  ctx.fillStyle='#080c12';
   ctx.fillText(text,12,fontSize+2);
   const tex=new THREE.CanvasTexture(canvas);
   tex.minFilter=THREE.LinearFilter;
@@ -2428,7 +2461,7 @@ function init3DScene(){
   const w=rect.width,h=rect.height;
 
   scene3D=new THREE.Scene();
-  scene3D.background=new THREE.Color('#ffffff');
+  scene3D.background=new THREE.Color('#080c12');
 
   camera3D=new THREE.PerspectiveCamera(45,w/h,0.1,1000);
   camera3D.position.set(70,60,70);
@@ -2448,12 +2481,12 @@ function init3DScene(){
   controls3D.addEventListener('change',requestRender3D);
 
   // Lights
-  const ambient=new THREE.AmbientLight(0xffffff,0.55);
+  const ambient=new THREE.AmbientLight(0xffffff,0.35);
   scene3D.add(ambient);
-  const dir=new THREE.DirectionalLight(0xffffff,0.65);
+  const dir=new THREE.DirectionalLight(0xffffff,0.45);
   dir.position.set(80,120,60);
   scene3D.add(dir);
-  const dir2=new THREE.DirectionalLight(0xffffff,0.25);
+  const dir2=new THREE.DirectionalLight(0xffffff,0.20);
   dir2.position.set(-40,80,-30);
   scene3D.add(dir2);
 
@@ -2489,7 +2522,7 @@ function build3DAxes(){
   // Wireframe box (data bounds 0-100 on each axis)
   const boxGeo=new THREE.BoxGeometry(100,100,100);
   const boxEdges=new THREE.EdgesGeometry(boxGeo);
-  const boxMat=new THREE.LineBasicMaterial({color:0xbcc6d4,transparent:true,opacity:0.3});
+  const boxMat=new THREE.LineBasicMaterial({color:0x1e2a3a,transparent:true,opacity:0.3});
   const boxLine=new THREE.LineSegments(boxEdges,boxMat);
   boxLine.position.set(50,50,50);
   axisGroup3D.add(boxLine);
@@ -2519,7 +2552,7 @@ function build3DAxes(){
 
   // Tick marks and labels at 25, 50, 75
   const tickVals=[25,50,75];
-  const tickMat=new THREE.LineBasicMaterial({color:0x9aa8b8,transparent:true,opacity:0.5});
+  const tickMat=new THREE.LineBasicMaterial({color:0x3a4a5e,transparent:true,opacity:0.5});
   tickVals.forEach(v=>{
     // X ticks
     const xTick=makeTextSprite(String(v),{textColor:'rgba(110,124,144,0.9)',fontSize:72,scale:0.4});
@@ -2536,7 +2569,7 @@ function build3DAxes(){
   });
 
   // Floor grid (XZ plane, at Y=0)
-  const gridMat=new THREE.LineBasicMaterial({color:0xd4dce8,transparent:true,opacity:0.25});
+  const gridMat=new THREE.LineBasicMaterial({color:0x1a2535,transparent:true,opacity:0.25});
   for(let i=0;i<=4;i++){
     const v=i*25;
     // Lines along X at Z=v
@@ -2548,7 +2581,7 @@ function build3DAxes(){
   }
 
   // Back wall grid (XY plane, at Z=0)
-  const wallMat=new THREE.LineBasicMaterial({color:0xd4dce8,transparent:true,opacity:0.15});
+  const wallMat=new THREE.LineBasicMaterial({color:0x1a2535,transparent:true,opacity:0.15});
   for(let i=0;i<=4;i++){
     const v=i*25;
     // Horizontal lines on back wall
@@ -2936,7 +2969,7 @@ function playStory(key) {
       if (!country) return;
       const cc = clusterColors[country.cluster] || clusterColors['default'];
       const col = new THREE.Color(cc);
-      const grey = new THREE.Color('#b0b8c4');
+      const grey = new THREE.Color('#3a4a5e');
 
       if (!activeStory) {
         mesh.material.color.copy(col);
@@ -2997,7 +3030,7 @@ function playStory(key) {
       dot.setAttribute('fill-opacity', '0.95');
       dot.setAttribute('stroke-width', '2');
     } else {
-      dot.setAttribute('fill', '#b0b8c4');
+      dot.setAttribute('fill', '#3a4a5e');
       dot.setAttribute('fill-opacity', '0.08');
       dot.setAttribute('stroke-width', '0');
     }
