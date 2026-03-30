@@ -257,7 +257,8 @@ body::before {
   top: -10%;
   left: 0;
   will-change: transform;
-  transition: transform 0.1s linear;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
 
 .section-image::after {
@@ -1128,6 +1129,7 @@ document.querySelectorAll('[data-target]').forEach(el => counterObserver.observe
 
 // ═══ PARALLAX SECTION IMAGES ═══
 const sectionImages = document.querySelectorAll('.section-image img');
+let parallaxTicking = false;
 
 function updateParallax() {
   sectionImages.forEach(img => {
@@ -1136,12 +1138,18 @@ function updateParallax() {
     if (rect.bottom > 0 && rect.top < viewH) {
       const progress = (viewH - rect.top) / (viewH + rect.height);
       const offset = (progress - 0.5) * 60;
-      img.style.transform = `translateY(${offset}px)`;
+      img.style.transform = `translate3d(0, ${offset}px, 0)`;
     }
   });
+  parallaxTicking = false;
 }
 
-window.addEventListener('scroll', updateParallax, { passive: true });
+window.addEventListener('scroll', () => {
+  if (!parallaxTicking) {
+    requestAnimationFrame(updateParallax);
+    parallaxTicking = true;
+  }
+}, { passive: true });
 
 // ═══ PROGRESS BAR ═══
 const progressBar = document.getElementById('progressBar');
